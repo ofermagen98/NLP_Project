@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from keras_layer_normalization import LayerNormalization
+from tensorflow.keras.layers import LayerNormalization
 
 def get_angles(pos, i, d_model):
   angle_rates = 1 / np.power(10000, (2 * (i//2)) / np.float32(d_model))

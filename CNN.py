@@ -10,9 +10,9 @@ class ConvolutionalNetwork(tf.keras.layers.Layer):
         self.cnn = Sequential()
         self.cnn.add(Conv2D(64, kernel_size=3, activation='relu'))
         self.cnn.add(Conv2D(32, kernel_size=3, activation='relu'))
-    
-    def call(self,img):
-        cnn_out = self.cnn(img)
+
+    def call(self,img,training = None):
+        cnn_out = self.cnn(img,training=training)
         channels_n = cnn_out.get_shape().as_list()[-1]
         
         channels = tf.split(cnn_out,num_or_size_splits=channels_n,axis=-1)
