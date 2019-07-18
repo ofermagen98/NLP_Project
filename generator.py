@@ -133,10 +133,3 @@ class DataGenerator(Sequence):
         index = self.indexs[index]
         return [self.imgL[index], self.imgR[index], self.sentence[index]], self.label[index]
 
-
-print('defining generator')
-
-gen = DataGenerator('/Users/ofermagen/Documents/formatted_images')
-
-print(gen[1][1])
-
