@@ -56,7 +56,7 @@ def sent2list(sent,size = 40):
 
 #######################
 
-orig_dir = '/home/ofermagen/'
+orig_dir = '/Users/ofermagen/Downloads/'
 img_dir = orig_dir + 'images/train'
 json_file = orig_dir + 'nlvr/nlvr2/data/train.json'
 hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/train_hashes.json'
@@ -88,6 +88,12 @@ for sent in examples:
       word2num[w] = tmp
 with open(os.path.join(DDIR,'word2num.json'),'w') as f:
   json.dump(word2num,f)
+
+params = dict()
+params['vocab_size'] = len(word2num)
+
+with open(os.pat.join(DDIR,"params.json"),"w") as f:
+    json.dump(params,f)
 
 #######################
 

@@ -119,7 +119,6 @@ class DataGenerator(Sequence):
             self.label = [bool(d['label']) for d in data]
             self.label = [np.stack(self.label[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
 
-        print(self.label)
         imgL = get_images(dir_path,"-img0.png")
         self.imgL = self.genL.flow(imgL,y=None,batch_size=self.batch_size,shuffle=False)
         imgR = get_images(dir_path,"-img1.png")
