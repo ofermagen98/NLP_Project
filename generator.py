@@ -121,7 +121,6 @@ class DataGenerator(Sequence):
 
         imgL = get_images(dir_path,"-img0.png")
         self.imgL = self.genL.flow(imgL,y=None,batch_size=self.batch_size,shuffle=False)
-        print(len(self.imgL))
         imgR = get_images(dir_path,"-img1.png")
         self.imgR = self.genR.flow(imgR,y=None,batch_size=self.batch_size,shuffle=False)
         self.last_dir  = j
@@ -131,5 +130,6 @@ class DataGenerator(Sequence):
         file = self.files[index]
         if self.last_dir != file: self.load_folder(file)
         index = self.indexs[index]
+        print(index)
         return [self.imgL[index], self.imgR[index], self.sentence[index]], self.label[index]
 
