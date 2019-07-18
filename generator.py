@@ -94,7 +94,6 @@ class DataGenerator(Sequence):
                 self.files.append(i)
                 self.indexs.append(j // self.batch_size)
 
-        print(self.indexs)
         self.files = np.array(self.files,dtype=np.dtype('int32'))
         self.indexs = np.array(self.indexs,dtype=np.dtype('int32'))
 
@@ -116,7 +115,10 @@ class DataGenerator(Sequence):
             data = json.load(f)
             sz = self.sizes[j]
             assert len(data) == sz
+
             self.sentence = [d['sentence'] for d in data]
+            tmp = [self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
+            print(list(map(len,tmp)))
             self.sentence = [np.stack(self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
 
             self.label = [bool(d['label']) for d in data]
