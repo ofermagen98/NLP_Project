@@ -12,7 +12,7 @@ from tensorflow.keras.layers import Input,Concatenate,Reshape
 from tensorflow.keras.utils import plot_model
 from tensorflow.keras.callbacks  import ModelCheckpoint
 
-data_dir = 'formatted'
+data_dir = '/home/ofermagen/formatted_images'
 with open(os.path.join(data_dir,'params.json'),'r') as f:
     input_vocab_size = json.load(f)
     input_vocab_size = input_vocab_size['vocab_size']
