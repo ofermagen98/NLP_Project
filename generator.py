@@ -92,7 +92,9 @@ class DataGenerator(Sequence):
             for j in range(0,sz,self.batch_size):
                 self.len += 1
                 self.files.append(i)
-                self.indexs.append(j)
+                self.indexs.append(j // self.batch_size)
+
+        print(self.indexes)
         self.files = np.array(self.files,dtype=np.dtype('int32'))
         self.indexs = np.array(self.indexs,dtype=np.dtype('int32'))
 
