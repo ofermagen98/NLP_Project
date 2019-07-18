@@ -117,7 +117,7 @@ class DataGenerator(Sequence):
             assert len(data) == sz
 
             self.sentence = [d['sentence'] for d in data]
-            tmp = [self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
+            tmp = [self.sentence[i:i+self.batch_size] for i in range(0,sz,self.batch_size)]
             print(list(map(len,tmp)))
             self.sentence = [np.stack(self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
 
