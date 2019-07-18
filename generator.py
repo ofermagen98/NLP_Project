@@ -121,6 +121,7 @@ class DataGenerator(Sequence):
 
         imgL = get_images(dir_path,"-img0.png")
         self.imgL = self.genL.flow(imgL,y=None,batch_size=self.batch_size,shuffle=False)
+        print(len(self.imgL))
         imgR = get_images(dir_path,"-img1.png")
         self.imgR = self.genR.flow(imgR,y=None,batch_size=self.batch_size,shuffle=False)
         self.last_dir  = j
