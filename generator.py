@@ -115,6 +115,7 @@ class DataGenerator(Sequence):
         with open(os.path.join(dir_path,'data.json'), 'r') as f:
             data = json.load(f)
             sz = self.sizes[j]
+            assert len(data) == sz
             self.sentence = [d['sentence'] for d in data]
             self.sentence = [np.stack(self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
 
