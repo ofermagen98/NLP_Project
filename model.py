@@ -29,6 +29,8 @@ fcnn = ResnetV1_FCNN(img_shape,20)
 em_imgL = fcnn(imgL)
 em_imgR = fcnn(imgR)
 em_imgs = tf.concat([em_imgL,em_imgR],axis=2)
+print(em_imgs.shape)
+exit()
 
 #embedding sentence
 print('creating transformer encoder')
