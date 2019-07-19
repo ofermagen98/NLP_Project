@@ -117,12 +117,10 @@ class DataGenerator(Sequence):
             assert len(data) == sz
 
             self.sentence = [np.array(d['sentence']) for d in data]
-            self.sentence = [self.sentence[i:i+self.batch_size] for i in range(0,sz,self.batch_size)]
-            print(self.sentence)
-            self.sentence = [np.stack(b) for b in self.sentence]
+            self.sentence = [np.stack(self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
 
             self.label = [bool(d['label']) for d in data]
-            self.label = [np.stack(self.label[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
+            self.label = [np.array(self.label[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
 
         imgL = get_images(dir_path,"-img0.png")
         self.imgL = self.genL.flow(imgL,y=None,batch_size=self.batch_size,shuffle=False)
