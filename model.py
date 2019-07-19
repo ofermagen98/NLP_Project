@@ -3,8 +3,7 @@ import os
 
 import tensorflow as tf
 from tensorflow.keras.models import Model, load_model
-from tensorflow.keras.layers import Input,Concatenate,Reshape,Dense
-from tensorflow.keras.utils import plot_model
+from tensorflow.keras.layers import Input,Dense
 from tensorflow.keras.callbacks  import ModelCheckpoint
 
 from generator import DataGenerator
@@ -29,7 +28,7 @@ sent = Input(shape=(40,), name="sent", dtype = tf.int32)
 fcnn = ResnetV1_FCNN(img_shape,20)
 em_imgL = fcnn(imgL)
 em_imgR = fcnn(imgR)
-em_imgs = Concatenate(2)([em_imgL,em_imgR])
+em_imgs = tf.concat([em_imgL,em_imgR],axis=2)
 
 #embedding sentence
 print('creating transformer encoder')
