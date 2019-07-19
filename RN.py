@@ -19,7 +19,7 @@ def relation_product(x1,x2):
 class ConvolutionalPerceptron(tf.keras.layers.Layer):
     def __init__(self,input_shape,layer_dims):
         super(ConvolutionalPerceptron,self).__init__()
-        self.input_shape = input_shape
+        self._input_shape = input_shape
         self.model = Sequential()
         for i,dim in enumerate(layer_dims):
             if i==0:
@@ -29,14 +29,14 @@ class ConvolutionalPerceptron(tf.keras.layers.Layer):
     
     def call(self,x):
         assert len(x.shape) == 3
-        assert x.shape[1:] == self.input_shape
+        assert x.shape[1:] == self._input_shape
         return self.model(x)
 
 
 class Perceptron(tf.keras.layers.Layer):
     def __init__(self,input_dim,layer_dims):
         super(Perceptron,self).__init__()
-        self.input_dim = input_dim
+        self._input_dim = input_dim
         self.model = Sequential()
         for i,dim in enumerate(layer_dims):
             if i==0:
@@ -46,5 +46,5 @@ class Perceptron(tf.keras.layers.Layer):
     
     def call(self,x):
         assert len(x.shape) == 2
-        assert x.shape[1] == self.input_dim
+        assert x.shape[1] == self._input_dim
         return self.model(x)
