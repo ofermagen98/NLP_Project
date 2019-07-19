@@ -110,6 +110,9 @@ class DataGenerator(Sequence):
 
     def load_folder(self,j):
         dir_path = os.path.join(self.ddir,str(j))
+        
+        if self.last_dir is not None: del self.sentence,self.label,self.imgL,self.imgR
+
         with open(os.path.join(dir_path,'data.json'), 'r') as f:
             data = json.load(f)
             sz = self.sizes[j]

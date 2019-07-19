@@ -2,6 +2,11 @@ import json
 import os
 from progressbar import progressbar
 
+#data sources
+#data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
+data_dir = '/home/ofermagen/formatted_images'
+assert os.path.isdir(data_dir)
+
 import tensorflow as tf
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import Input,Dense
@@ -12,9 +17,7 @@ from RN import relation_product,ConvolutionalPerceptron,Perceptron
 from resnet import ResnetV1_FCNN
 from transformer import Encoder,create_padding_mask
 
-#data sources
-#data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
-data_dir = '/home/ofermagen/formatted_images'
+#load params
 with open(os.path.join(data_dir,'params.json'),'r') as f:
     input_vocab_size = json.load(f)
     input_vocab_size = input_vocab_size['vocab_size']
