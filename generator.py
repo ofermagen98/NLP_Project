@@ -101,7 +101,6 @@ class DataGenerator(Sequence):
         sampled_images = os.path.join(ddir,str(sampled_images))
         sampled_images = get_images(sampled_images,"-img0.png")
 
-        print('fitting generators')
         self.genL.fit(sampled_images)
         self.genR.fit(sampled_images)
 
@@ -130,8 +129,6 @@ class DataGenerator(Sequence):
 
     def __getitem__(self, index):
         'Generate one batch of data'
-        print(index)
-        
         file = self.files[index]
         if self.last_dir != file: self.load_folder(file)
         index = self.indexs[index]

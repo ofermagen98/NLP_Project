@@ -52,6 +52,10 @@ model.compile('adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 model_path = 'checkpoints/first_model.{epoch:03d}.h5'
 checkpoint = ModelCheckpoint(filepath=model_path,save_best_only=True)
+
+print('creating generators')
 datagen = DataGenerator(data_dir)
 callbacks = [checkpoint]
+
+print('training model')
 model.fit_generator(datagen, epochs=200, verbose=1, workers=4,callbacks=callbacks,shuffle=False)
