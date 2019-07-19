@@ -116,8 +116,8 @@ class DataGenerator(Sequence):
             sz = self.sizes[j]
             assert len(data) == sz
 
-            self.sentence = [np.array(d['sentence']) for d in data]
-            self.sentence = [np.stack(self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
+            self.sentence = [d['sentence'] for d in data]
+            self.sentence = [np.array(self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
 
             self.label = [bool(d['label']) for d in data]
             self.label = [np.array(self.label[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
@@ -133,6 +133,5 @@ class DataGenerator(Sequence):
         file = self.files[index]
         if self.last_dir != file: self.load_folder(file)
         index = self.indexs[index]
-        print(index)
         return [self.imgL[index], self.imgR[index], self.sentence[index]], self.label[index]
 
