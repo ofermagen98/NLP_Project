@@ -116,9 +116,7 @@ class DataGenerator(Sequence):
             sz = self.sizes[j]
             assert len(data) == sz
 
-            self.sentence = [d['sentence'] for d in data]
-            tmp = [self.sentence[i:i+self.batch_size] for i in range(0,sz,self.batch_size)]
-            print(list(map(len,tmp)))
+            self.sentence = [np.array(d['sentence']) for d in data]
             self.sentence = [np.stack(self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
 
             self.label = [bool(d['label']) for d in data]
