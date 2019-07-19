@@ -1,16 +1,16 @@
 import json
 import os
 
-from generator import DataGenerator
 import tensorflow as tf
-
-from RN import relation_product,ConvolutionalPerceptron,Perceptron
-from resnet import ResnetV1_FCNN
-from transformer import Encoder,create_padding_mask
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import Input,Concatenate,Reshape,Dense
 from tensorflow.keras.utils import plot_model
 from tensorflow.keras.callbacks  import ModelCheckpoint
+
+from generator import DataGenerator
+from RN import relation_product,ConvolutionalPerceptron,Perceptron
+from resnet import ResnetV1_FCNN
+from transformer import Encoder,create_padding_mask
 
 data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
 #data_dir = '/home/ofermagen/formatted_images'
