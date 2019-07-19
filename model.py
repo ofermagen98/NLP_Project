@@ -49,4 +49,4 @@ model_path = 'checkpoints/first_model.{epoch:03d}.h5'
 checkpoint = ModelCheckpoint(filepath=model_path,save_best_only=True)
 datagen = DataGenerator(data_dir)
 callbacks = [checkpoint]
-model.fit_generator(datagen, epochs=200, verbose=1, workers=4,callbacks=callbacks)
+model.fit_generator(datagen, epochs=200, verbose=1, workers=4,callbacks=callbacks,shuffle=False)
