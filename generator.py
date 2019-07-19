@@ -135,5 +135,6 @@ class DataGenerator(Sequence):
         j = self.files[index]
         if self.last_dir != j: self.load_folder(j)
         i = self.indexs[index]
+        print(self.sentence[i].shape)
         return [self.imgL[i], self.imgR[i], self.sentence[i]], self.label[i]
 
