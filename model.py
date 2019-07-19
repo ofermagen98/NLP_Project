@@ -11,9 +11,10 @@ from generator import DataGenerator
 from RN import relation_product,ConvolutionalPerceptron,Perceptron
 from resnet import ResnetV1_FCNN
 from transformer import Encoder,create_padding_mask
+
 #data sources
-data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
-#data_dir = '/home/ofermagen/formatted_images'
+#data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
+data_dir = '/home/ofermagen/formatted_images'
 with open(os.path.join(data_dir,'params.json'),'r') as f:
     input_vocab_size = json.load(f)
     input_vocab_size = input_vocab_size['vocab_size']
