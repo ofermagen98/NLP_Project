@@ -1,14 +1,48 @@
 """This class include the basic Relational Neural Network Model""" 
 import tensorflow as tf
-from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Dense,Input,Concatenate,Lambda,Flatten
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv1D,Dense,Input,Concatenate,Lambda,Flatten
 
-def objectify(fcnn_out):
-    shape = fcnn_out.shape.as_list()
-    res = tf.reshape(fcnn_out,(-1,shape[1]*shape[2],shape[3]))
-    return res
+def relation_product(x1,x2):
+    n1 = int(x1.shape[1])
+    n2 = int(x2.shape[1])
+    O1 = tf.expand_dims(x1,axis=1)
+    O1 = tf.tile(O1,multiples=(1,n2,1,1))
+    O2 = tf.expand_dims(x2,axis=2)
+    O2 = tf.tile(O2,multiples=(1,1,n1,1))
+    relation_matrix = tf.concat([O1,O2],axis=3)
+    d = int(relation_matrix.shape[3])
+    relation_matrix = tf.reshape(relation_matrix,shape=(-1,n1*n2,d),name="relation_matrix")
+    return relation_matrix
 
-class RelationalNetwork(tf.keras.layers.Layer):
+class ConvolutionalPerceptron(tf.keras.layers.Layer):
+    def __init__(self,input_shape,layer_dims):
+        super(ConvolutionalPerceptron,self).__init__()
+        self.model = Sequential()
+        for i,dim in enumerate(layer_dims):
+            if i==0:
+                self.model.add(Conv1D(filters=dim,kernel_size=1,input_shape=input_shape))
+            else:
+                self.model.add(Conv1D(filters=dim,kernel_size=1))
+    
+    def call(self,x):
+        return self.model(x)
+
+
+class Perceptron(tf.keras.layers.Layer):
+    def __init__(self,input_dim,layer_dims):
+        super(Perceptron,self).__init__()
+        self.model = Sequential()
+        for i,dim in enumerate(layer_dims):
+            if i==0:
+                self.model.add(Dense(units=dim,input_shape=(input_dim,)))
+            else:
+                self.model.add(Dense(units=dim))
+    
+    def call(self,x):
+        return self.model(x)
+
+'''class RelationalNetwork(tf.keras.layers.Layer):
     """
     """
     def __init__(self,d_o1,d_o2):
@@ -60,3 +94,4 @@ class RelationalNetwork(tf.keras.layers.Layer):
         output = self.f(g, training=training)
         #output = tf.squeeze(output)
         return output
+'''

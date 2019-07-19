@@ -4,15 +4,15 @@ import os
 from generator import DataGenerator
 import tensorflow as tf
 
-from RN import RelationalNetwork,objectify
+from RN import relation_product,ConvolutionalPerceptron,Perceptron
 from resnet import ResnetV1_FCNN
 from transformer import Encoder,create_padding_mask
 from tensorflow.keras.models import Model, load_model
-from tensorflow.keras.layers import Input,Concatenate,Reshape
+from tensorflow.keras.layers import Input,Concatenate,Reshape,Dense
 from tensorflow.keras.utils import plot_model
 from tensorflow.keras.callbacks  import ModelCheckpoint
 
-data_dir = '/home/ofermagen/formatted_images'
+data_dir = '/Users/ofermagen/Documents/formatted_images'
 with open(os.path.join(data_dir,'params.json'),'r') as f:
     input_vocab_size = json.load(f)
     input_vocab_size = input_vocab_size['vocab_size']
@@ -37,8 +37,13 @@ em_sent = encoder(sent,training=True,mask=enc_mask)
 
 #getting prediction from the Relational Neural Network 
 print('creating relational network')
-RN = RelationalNetwork(em_sent.shape[2],em_imgs.shape[2])
-pred = RN([em_sent,em_imgs],training=True)
+relation_matrix = relation_product(em_sent,em_imgs)
+g = ConvolutionalPerceptron(relation_matrix.shape[1:],[256,256])
+em_relations = g(relation_matrix)
+relation_out = tf.reduce_mean(em_relations,axis=1)
+f = Perceptron(relation_out.shape[1],[256,256])
+relation_out = f(relation_out)
+pred = Dense(1,activation='sigmoid')(relation_out)
 
 #compile model
 print('compiling model')
