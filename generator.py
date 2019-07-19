@@ -111,7 +111,8 @@ class DataGenerator(Sequence):
     def load_folder(self,j):
         dir_path = os.path.join(self.ddir,str(j))
         
-        if self.last_dir is not None: del self.sentence,self.label,self.imgL,self.imgR
+        if self.last_dir is not None: 
+            del self.sentence,self.label,self.imgL,self.imgR
 
         with open(os.path.join(dir_path,'data.json'), 'r') as f:
             data = json.load(f)
@@ -138,3 +139,7 @@ class DataGenerator(Sequence):
         print(self.sentence[i].shape)
         return [self.imgL[i], self.imgR[i], self.sentence[i]], self.label[i]
 
+if __name__ == "__main__":
+    gen = DataGenerator('/Users/ofermagen/Coding/NLP_Project_Data/formatted_images')
+    for x in gen:
+        print(x[0][0].shape)
