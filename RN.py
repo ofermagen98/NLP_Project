@@ -28,8 +28,8 @@ class ConvolutionalPerceptron(tf.keras.layers.Layer):
                 self.model.add(Conv1D(filters=dim,kernel_size=1))
     
     def call(self,x):
-        assert len(x1.shape) == 3
-        assert x1.shape[1:] == self.input_shape
+        assert len(x.shape) == 3
+        assert x.shape[1:] == self.input_shape
         return self.model(x)
 
 
@@ -45,6 +45,6 @@ class Perceptron(tf.keras.layers.Layer):
                 self.model.add(Dense(units=dim))
     
     def call(self,x):
-        assert len(x1.shape) == 2
-        assert x1.shape[1] == self.input_dim
+        assert len(x.shape) == 2
+        assert x.shape[1] == self.input_dim
         return self.model(x)
