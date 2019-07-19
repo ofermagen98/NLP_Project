@@ -1,5 +1,6 @@
 import json
 import os
+from progressbar import progressbar
 
 import tensorflow as tf
 from tensorflow.keras.models import Model, load_model
@@ -10,7 +11,6 @@ from generator import DataGenerator
 from RN import relation_product,ConvolutionalPerceptron,Perceptron
 from resnet import ResnetV1_FCNN
 from transformer import Encoder,create_padding_mask
-
 #data sources
 data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
 #data_dir = '/home/ofermagen/formatted_images'
@@ -29,8 +29,6 @@ fcnn = ResnetV1_FCNN(img_shape,20)
 em_imgL = fcnn(imgL)
 em_imgR = fcnn(imgR)
 em_imgs = tf.concat([em_imgL,em_imgR],axis=2)
-print(em_imgs.shape)
-exit()
 
 #embedding sentence
 print('creating transformer encoder')
@@ -60,5 +58,9 @@ print('creating generators')
 datagen = DataGenerator(data_dir)
 callbacks = [checkpoint]
 
+
+for _ in progressbar(datagen):
+    pass
+exit()
 print('training model')
 model.fit_generator(datagen, epochs=200, verbose=1, workers=4,callbacks=callbacks,shuffle=False)

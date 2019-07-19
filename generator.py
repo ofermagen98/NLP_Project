@@ -129,8 +129,8 @@ class DataGenerator(Sequence):
 
     def __getitem__(self, index):
         'Generate one batch of data'
-        file = self.files[index]
-        if self.last_dir != file: self.load_folder(file)
-        index = self.indexs[index]
-        return [self.imgL[index], self.imgR[index], self.sentence[index]], self.label[index]
+        j = self.files[index]
+        if self.last_dir != j: self.load_folder(j)
+        i = self.indexs[index]
+        return [self.imgL[i], self.imgR[i], self.sentence[i]], self.label[i]
 
