@@ -58,9 +58,5 @@ print('creating generators')
 datagen = DataGenerator(data_dir)
 callbacks = [checkpoint]
 
-
-for _ in progressbar(datagen):
-    pass
-exit()
 print('training model')
 model.fit_generator(datagen, epochs=200, verbose=1, workers=4,callbacks=callbacks,shuffle=False)
