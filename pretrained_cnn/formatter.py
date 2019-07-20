@@ -50,7 +50,7 @@ json_file = orig_dir + 'nlvr/nlvr2/data/dev.json'
 imgs_dir = orig_dir + 'unformatted_images/dev'
 hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/dev_hashes.json'
 
-DDIR = '/home/ofermagen/data/pretraining_data/dev'
+DDIR = '/home/ofermagen/data/pretraining_data_formatted/dev'
 if not os.path.isdir(DDIR): os.mkdir(DDIR)
 #####################
 
