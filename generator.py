@@ -12,8 +12,8 @@ def get_images(dir_path,suffix):
     paths = filter(lambda s: s[-len(suffix):] == suffix, paths)
     paths = map(lambda s: os.path.join(dir_path,s), paths)
     paths = list(paths)
-    key = lambda s: int(os.path.basename(s)[:-len(suffix)])
-    paths.sort(key = key)
+    #key = lambda s: int(os.path.basename(s)[:-len(suffix)])
+    #paths.sort(key = key)
     images = [np.array(Image.open(im)) for im in paths]
     images = np.stack(images)
     return images
@@ -21,14 +21,14 @@ def get_images(dir_path,suffix):
 class DataGenerator(Sequence):
     '''
     '''
-    def __init__(self, ddir, batch_size = 32, augmentation = True):
+    def __init__(self, ddir, batch_size = 32,  shuffle = True, augmentation = True):
         assert os.path.isdir(ddir)
         super(DataGenerator,self).__init__()
         self.ddir = ddir
         self.batch_size = batch_size
         self.last_dir = None
 
-        self.genL = ImageDataGenerator(
+        self.gen = ImageDataGenerator(
         # set input mean to 0 over the dataset
         featurewise_center=True,
         # set each sample mean to 0
@@ -69,75 +69,56 @@ class DataGenerator(Sequence):
         data_format=None,
         # fraction of images reserved for validation (strictly between 0 and 1)
         validation_split=0.0)
-        self.genR = deepcopy(self.genL)
 
-        self.dirnum = os.listdir(ddir)
-        self.dirnum = map(lambda s: os.path.join(ddir,s), self.dirnum)
-        self.dirnum = filter(os.path.isdir, self.dirnum)
-        self.dirnum = len(list(self.dirnum))
+        self.dir_num = os.listdir(ddir)
+        self.dir_num = map(lambda s: os.path.join(ddir,s), self.dir_num)
+        self.dir_num = filter(os.path.isdir, self.dir_num)
+        self.dir_num = len(list(self.dir_num))
 
-        suffix = "-img0.png"
-        def dir_size(i,ddir,suffix):
-            lst = os.listdir(os.path.join(ddir,str(i)))
-            lst = filter(lambda s: s[-len(suffix):] == suffix,lst)
-            return sum(1 for _ in lst)
 
-        self.sizes = map(lambda i: dir_size(i,ddir,suffix), range(self.dirnum))
-        self.sizes = list(self.sizes)
+        self.sizes = []
+        self.sentences = []
+        self.labels = []
+        self.paths = []
 
-        self.len = 0
-        self.files = []
-        self.indexs = []
-        for i,sz in enumerate(self.sizes):
-            for j in range(0,sz,self.batch_size):
-                self.len += 1
-                self.files.append(i)
-                self.indexs.append(j // self.batch_size)
+        for i in range(self.dir_num):
+            path = os.path.join(ddir,str(i))
+            with open(os.path.join(path,"data.json"),"r") as f:
+                data = json.load(f)
+            self.sizes.append(len(data))
+            for i,d in enumerate(data):
+                self.sentences.append(d['sentence'])
+                self.labels.append(d['label'])
+                self.paths.append(os.path.join(path,str(i)))
 
-        self.files = np.array(self.files,dtype=np.dtype('int32'))
-        self.indexs = np.array(self.indexs,dtype=np.dtype('int32'))
+            
+        self.sizes = np.array(self.sizes)
+        self.sentences = np.array(self.sentences)
+        self.labels = np.array(self.labels)
+
+        self.sample_num = len(self.labels)
+        self.batch_num = len(range(0,self.sample_num,batch_size))
 
         sampled_images = 0
         sampled_images = os.path.join(ddir,str(sampled_images))
-        sampled_images = get_images(sampled_images,"-img0.png")
-
-        self.genL.fit(sampled_images)
-        self.genR.fit(sampled_images)
+        sampled_images = get_images(sampled_images,".png")
+        self.gen.fit(sampled_images)
 
     def __len__(self):
         'Denotes the number of batches per epoch'
-        return self.len
-
-    def load_folder(self,j):
-        dir_path = os.path.join(self.ddir,str(j))
-        
-        if self.last_dir is not None: 
-            del self.sentence,self.label,self.imgL,self.imgR
-
-        with open(os.path.join(dir_path,'data.json'), 'r') as f:
-            data = json.load(f)
-            sz = self.sizes[j]
-            assert len(data) == sz
-
-            self.sentence = [d['sentence'] for d in data]
-            self.sentence = [np.array(self.sentence[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
-
-            self.label = [bool(d['label']) for d in data]
-            self.label = [np.array(self.label[i:i+self.batch_size]) for i in range(0,sz,self.batch_size)]
-
-        imgL = get_images(dir_path,"-img0.png")
-        self.imgL = self.genL.flow(imgL,y=None,batch_size=self.batch_size,shuffle=False)
-        imgR = get_images(dir_path,"-img1.png")
-        self.imgR = self.genR.flow(imgR,y=None,batch_size=self.batch_size,shuffle=False)
-        self.last_dir  = j
+        return self.batch_num
 
     def __getitem__(self, index):
         'Generate one batch of data'
-        j = self.files[index]
-        if self.last_dir != j: self.load_folder(j)
-        i = self.indexs[index]
-        print(self.sentence[i].shape)
-        return [self.imgL[i], self.imgR[i], self.sentence[i]], self.label[i]
+        idx = range(index*self.batch_size, min((index+1)*self.batch_size, self.sample_num))
+        idx = np.array(list(idx))
+
+        imgL = [self.paths[i] + "-img0.png" for i in idx]
+        imgL = np.stack([np.array(Image.open(path)) for path in imgL])
+        imgR = [self.paths[i] + "-img1.png" for i in idx]
+        imgR = np.stack([np.array(Image.open(path)) for path in imgR])
+
+        return [imgL, imgR, self.sentences[idx,:]], self.labels[idx]
 
 if __name__ == "__main__":
     gen = DataGenerator('/Users/ofermagen/Coding/NLP_Project_Data/formatted_images')
