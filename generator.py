@@ -18,6 +18,7 @@ def get_images(dir_path,suffix):
     images = np.stack(images)
     return images
 
+#TODO shuffle
 class DataGenerator(Sequence):
     '''
     '''
@@ -75,7 +76,6 @@ class DataGenerator(Sequence):
         self.dir_num = filter(os.path.isdir, self.dir_num)
         self.dir_num = len(list(self.dir_num))
 
-
         self.sizes = []
         self.sentences = []
         self.labels = []
@@ -90,7 +90,6 @@ class DataGenerator(Sequence):
                 self.sentences.append(d['sentence'])
                 self.labels.append(d['label'])
                 self.paths.append(os.path.join(path,str(i)))
-
             
         self.sizes = np.array(self.sizes)
         self.sentences = np.array(self.sentences)
