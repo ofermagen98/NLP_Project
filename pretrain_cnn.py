@@ -100,7 +100,7 @@ sample_images = np.stack([Image.open(path) for path in sample_images])
 train_gen.fit(sample_images)
 val_gen.fit(sample_images)
 
-train_it = train_it.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='training')
+train_it = train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='training')
 classes = list(map(str,range(class_num)))
 val_it =   train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='validation')
 
