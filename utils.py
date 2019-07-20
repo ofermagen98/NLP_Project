@@ -7,18 +7,17 @@ class HistorySaver(tf.keras.callbacks.Callback):
 		self.fname = fname
 		self.save_every = save_every
 
-
-    def on_train_begin(self, logs={}):
-        self.losses = []
+	def on_train_begin(self, logs={}):
+		self.losses = []
 		self.accs = []
 
-    def on_batch_end(self, batch, logs={}):
-        self.losses.append(logs.get('loss'))
+	def on_batch_end(self, batch, logs={}):
+		self.losses.append(logs.get('loss'))
 		self.accs.append(logs.get('acc'))
 
-		if len(self.losses) % self.save_every == 0:
-			with open(fname,'w') as f:
-				json.dump({'acc' : self.accs, 'loss' : self.losses})
+	if len(self.losses) % self.save_every == 0:
+		with open(fname,'w') as f:
+			json.dump({'acc' : self.accs, 'loss' : self.losses})
 
 class Pad(tf.keras.layers.Layer):
 	"""
