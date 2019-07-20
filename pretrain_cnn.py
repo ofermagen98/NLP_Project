@@ -100,12 +100,12 @@ sample_images = np.stack([Image.open(path) for path in sample_images])
 train_gen.fit(sample_images)
 val_gen.fit(sample_images)
 
-train_gen = train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='training')
+train_it = train_it.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='training')
 classes = list(map(str,range(class_num)))
-val_gen =   train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='validation')
+val_it =   train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='validation')
 
 checkpoint = ModelCheckpoint(filepath=model_path,monitor='val_acc',verbose=1,save_best_only=True,mode='max')
 history_saver = HistorySaver(history_path)
 callbacks = [checkpoint,history_saver]
 
-model.fit_generator(train_gen, validation_data = val_gen, epochs=200, verbose=1, workers=4,callbacks=callbacks,shuffle=False)
+model.fit_generator(train_it, validation_data = val_it, epochs=200, verbose=1, workers=4,callbacks=callbacks,shuffle=False)
