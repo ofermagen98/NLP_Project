@@ -3,7 +3,7 @@ import json
 import os
 
 DROPOUT_BOOL = True
-DROPOUT_RATE = 0.5
+DROPOUT_RATE = 0.4
 
 class HistorySaver(tf.keras.callbacks.Callback):
 	def __init__(self,fname,save_every = 32,*a,**kw):
