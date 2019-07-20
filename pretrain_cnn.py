@@ -3,6 +3,7 @@ import os
 from progressbar import progressbar
 from PIL import Image
 import numpy as np
+
 #data sources
 orig_dir = '/Users/ofermagen/Coding/NLP_Project_Data/'
 orig_dir = '/home/ofermagen/'
@@ -18,6 +19,7 @@ with open(os.path.join(data_dir,"synset2num.json")) as f:
 import tensorflow as tf
 from resnet import ResnetV1_FCNN
 from RN import Perceptron
+from utils import HistorySaver
 
 from tensorflow.keras.layers import Input,Dense,Flatten
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -40,6 +42,7 @@ pred = Dense(class_num,activation='softmax')(X)
 model = Model(inputs=img,outputs=pred)
 model.compile('adam', loss='categorical_crossentropy', metrics=['accuracy'])
 model_path = 'pretrain_cnn/checkpoints/cnn_model.{epoch:03d}.h5'
+history_path = 'pretrain_cnn/checkpoints/history.json'
 
 gen = ImageDataGenerator(
         # set input mean to 0 over the dataset
@@ -94,6 +97,7 @@ gen.fit(sample_images)
 gen = gen.flow_from_directory(data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2])
 
 checkpoint = ModelCheckpoint(filepath=model_path,monitor='acc',verbose=1,save_best_only=True,mode='max')
-callbacks = [checkpoint]
+history_saver = HistorySaver(history_path)
+callbacks = [checkpoint,history_saver]
 
 model.fit_generator(gen, epochs=200, verbose=1, workers=4,callbacks=callbacks,shuffle=False)
