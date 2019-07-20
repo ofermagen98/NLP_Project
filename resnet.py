@@ -1,9 +1,10 @@
 import tensorflow as tf
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, Conv2D, Flatten,Input,BatchNormalization,Activation,AveragePooling2D
+from tensorflow.keras.layers import Input,Dense, Conv2D, 
+from tensorflow.keras.layers import Dropout,BatchNormalization,Flatten
+from tensorflow.keras.layers import Activation,AveragePooling2D
 from tensorflow.keras.regularizers import l2
 from tensorflow import keras
-
 
 #https://keras.io/examples/cifar10_resnet/
 
@@ -13,7 +14,8 @@ def resnet_layer(inputs,
                 strides=1,
                 activation='relu',
                 batch_normalization=True,
-                conv_first=True):
+                conv_first=True,
+                droput=False):
     """2D Convolution-Batch Normalization-Activation stack builder
 
     # Arguments
@@ -34,7 +36,8 @@ def resnet_layer(inputs,
             strides=strides,
             padding='same',
             kernel_initializer='he_normal',
-            kernel_regularizer=l2(1e-4))
+            kernel_regularizer=l2(1e-4)
+            )
 
     x = inputs
     if conv_first:
@@ -49,6 +52,10 @@ def resnet_layer(inputs,
         if activation is not None:
             x = Activation(activation)(x)
         x = conv(x)
+
+    if droput:
+        x = Dropout(rate= 0.3)(x)
+
     return x
 
 

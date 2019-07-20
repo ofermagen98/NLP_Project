@@ -1,7 +1,7 @@
 """This class include the basic Relational Neural Network Model""" 
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv1D,Dense,Input
+from tensorflow.keras.layers import Conv1D,Dense,Input,Dropout
 
 def relation_product(x1,x2):
     assert len(x1.shape) == 3 and len(x2.shape) == 3
@@ -34,7 +34,7 @@ class ConvolutionalPerceptron(tf.keras.layers.Layer):
 
 
 class Perceptron(tf.keras.layers.Layer):
-    def __init__(self,input_dim,layer_dims):
+    def __init__(self,input_dim,layer_dims,dropout = False):
         super(Perceptron,self).__init__()
         self._input_dim = input_dim
         self.model = Sequential()
@@ -43,6 +43,8 @@ class Perceptron(tf.keras.layers.Layer):
                 self.model.add(Dense(units=dim,input_shape=(input_dim,)))
             else:
                 self.model.add(Dense(units=dim))
+            if dropout:
+                self.model.add(Dropout(rate = 0.3))
     
     def call(self,x):
         assert len(x.shape) == 2
