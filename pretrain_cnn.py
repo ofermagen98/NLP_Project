@@ -97,7 +97,7 @@ sample_images = np.stack([Image.open(path) for path in sample_images])
 gen.fit(sample_images)
 
 train_gen = gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2])
-val_gen = gen.flow_from_directory()
+val_gen = gen.flow_from_directory(dev_data_dir,batch_size=32,classes=list(range(class_num)),target_size=img_shape[:2])
 
 checkpoint = ModelCheckpoint(filepath=model_path,monitor='val_acc',verbose=1,save_best_only=True,mode='max')
 history_saver = HistorySaver(history_path)
