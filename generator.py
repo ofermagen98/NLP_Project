@@ -120,5 +120,5 @@ class DataGenerator(Sequence):
 
 if __name__ == "__main__":
     gen = DataGenerator('/Users/ofermagen/Coding/NLP_Project_Data/formatted_images')
-    for x in gen:
-        print(x[0][0].shape)
+    for i,x in enumerate(gen):
+        print(i,x[0][0].shape)
