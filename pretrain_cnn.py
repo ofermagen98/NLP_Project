@@ -42,7 +42,7 @@ pred = Dense(class_num,activation='softmax')(X)
 model = Model(inputs=img,outputs=pred)
 model.compile('adam', loss='categorical_crossentropy', metrics=['accuracy'])
 model_path = 'pretrain_cnn/checkpoints/cnn_model.{epoch:03d}.h5'
-history_path = 'pretrain_cnn/checkpoints/history.json'
+history_path = 'pretrained_cnn/checkpoints/history.json'
 
 gen = ImageDataGenerator(
         # set input mean to 0 over the dataset

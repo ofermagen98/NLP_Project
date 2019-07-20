@@ -1,5 +1,6 @@
 import tensorflow as tf
 import json
+import os
 
 class HistorySaver(tf.keras.callbacks.Callback):
 	def __init__(self,fname,save_every = 32,*a,**kw):
