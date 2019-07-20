@@ -13,8 +13,8 @@ class HistorySaver(tf.keras.callbacks.Callback):
 		self.accs = []
 
 	def on_batch_end(self, batch, logs={}):
-		self.losses.append(logs.get('loss'))
-		self.accs.append(logs.get('acc'))
+		self.losses.append(float(logs.get('loss')))
+		self.accs.append(float(logs.get('acc')))
 
 		if len(self.losses) % self.save_every == 0:
 			with open(self.fname,'w') as f:
