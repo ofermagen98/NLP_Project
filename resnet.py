@@ -3,7 +3,7 @@ from utils import DROPOUT_BOOL
 
 import tensorflow as tf
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input,Dense, Conv2D, 
+from tensorflow.keras.layers import Input,Dense, Conv2D
 from tensorflow.keras.layers import Dropout,BatchNormalization,Flatten
 from tensorflow.keras.layers import Activation,AveragePooling2D
 from tensorflow.keras.regularizers import l2

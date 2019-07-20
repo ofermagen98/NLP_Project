@@ -13,6 +13,7 @@ val_data_dir = '/home/ofermagen/data/pretraining_data_formatted/dev'
 assert os.path.isdir(train_data_dir)
 assert os.path.isdir(dev_data_dir)
 assert os.path.isdir(sample_dir)
+assert os.path.isdir(val_data_dir)
 
 with open(os.path.join("/home/ofermagen/data/pretraining_data_formatted/synset2num.json")) as f:
     classes = json.load(f)
