@@ -17,7 +17,7 @@ class HistorySaver(tf.keras.callbacks.Callback):
 
 		if len(self.losses) % self.save_every == 0:
 			with open(self.fname,'w') as f:
-				json.dump({'acc' : self.accs, 'loss' : self.losses})
+				json.dump({'acc' : self.accs, 'loss' : self.losses},f)
 
 class Pad(tf.keras.layers.Layer):
 	"""
