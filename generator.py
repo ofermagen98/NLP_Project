@@ -7,17 +7,6 @@ from copy import deepcopy
 from PIL import Image
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-def get_images(dir_path,suffix):
-    paths = os.listdir(dir_path)
-    paths = filter(lambda s: s[-len(suffix):] == suffix, paths)
-    paths = map(lambda s: os.path.join(dir_path,s), paths)
-    paths = list(paths)
-    #key = lambda s: int(os.path.basename(s)[:-len(suffix)])
-    #paths.sort(key = key)
-    images = [np.array(Image.open(im)) for im in paths]
-    images = np.stack(images)
-    return images
-
 #TODO shuffle
 class DataGenerator(Sequence):
     '''
@@ -98,10 +87,19 @@ class DataGenerator(Sequence):
         self.sample_num = len(self.labels)
         self.batch_num = len(range(0,self.sample_num,batch_size))
 
-        sampled_images = 0
-        sampled_images = os.path.join(ddir,str(sampled_images))
-        sampled_images = get_images(sampled_images,".png")
+        if shuffle: self.shuffle()
+
+        sampled_images = range(0, min(1000, self.sample_num))
+        sampled_images = map(lambda i: self.paths[i] + "-img0.png",sampled_images)
+        sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
         self.gen.fit(sampled_images)
+
+
+    def shuffle(self):
+        self.permutation = np.random.permutation(self.sample_num)
+        self.sentences =  self.sentences[self.permutation,:]
+        self.labels = self.labels[self.permutation]
+        self.paths = [self.paths[i] for i in self.permutation]
 
     def __len__(self):
         'Denotes the number of batches per epoch'
@@ -109,12 +107,13 @@ class DataGenerator(Sequence):
 
     def __getitem__(self, index):
         'Generate one batch of data'
-        idx = range(index*self.batch_size, min((index+1)*self.batch_size, self.sample_num))
+        idx = min((index+1)*self.batch_size, self.sample_num)
+        idx = range(index*self.batch_size, idx)
         idx = np.array(list(idx))
 
-        imgL = [self.paths[i] + "-img0.png" for i in idx]
+        imgL = map(lambda i: self.paths[i] + "-img0.png",idx)
         imgL = np.stack([np.array(Image.open(path)) for path in imgL])
-        imgR = [self.paths[i] + "-img1.png" for i in idx]
+        imgR = map(lambda i: self.paths[i] + "-img1.png",idx)
         imgR = np.stack([np.array(Image.open(path)) for path in imgR])
 
         return [imgL, imgR, self.sentences[idx,:]], self.labels[idx]
