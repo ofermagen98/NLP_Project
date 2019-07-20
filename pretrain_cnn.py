@@ -6,12 +6,12 @@ import numpy as np
 
 #data sources
 train_data_dir = '/home/ofermagen/data/pretraining_data_formatted/train'
-dev_data_dir = '/home/ofermagen/data/pretraining_data_formatted/dev'
+#dev_data_dir = '/home/ofermagen/data/pretraining_data_formatted/dev'
 sample_dir =  '/home/ofermagen/data/training_data_formatted/train/0'
 #val_data_dir = '/home/ofermagen/data/pretraining_data_formatted/dev'
 
 assert os.path.isdir(train_data_dir)
-assert os.path.isdir(dev_data_dir)
+#assert os.path.isdir(dev_data_dir)
 assert os.path.isdir(sample_dir)
 #assert os.path.isdir(val_data_dir)
 
