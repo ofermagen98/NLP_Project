@@ -5,6 +5,7 @@ from PIL import Image
 import numpy as np
 #data sources
 orig_dir = '/Users/ofermagen/Coding/NLP_Project_Data/'
+orig_dir = '/home/ofermagen/'
 data_dir = orig_dir + 'pretraining_data'
 sample_dir = orig_dir + 'formatted_images/0'
 assert os.path.isdir(data_dir)
