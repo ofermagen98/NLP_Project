@@ -1,3 +1,6 @@
+from utils import DROPOUT_RATE
+from utils import DROPOUT_BOOL 
+
 import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input,Dense, Conv2D, 
@@ -15,7 +18,7 @@ def resnet_layer(inputs,
                 activation='relu',
                 batch_normalization=True,
                 conv_first=True,
-                droput=False):
+                droput=DROPOUT_BOOL):
     """2D Convolution-Batch Normalization-Activation stack builder
 
     # Arguments
@@ -54,7 +57,7 @@ def resnet_layer(inputs,
         x = conv(x)
 
     if droput:
-        x = Dropout(rate= 0.3)(x)
+        x = Dropout(rate= DROPOUT_RATE)(x)
 
     return x
 

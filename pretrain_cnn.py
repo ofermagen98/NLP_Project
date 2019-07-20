@@ -5,14 +5,16 @@ from PIL import Image
 import numpy as np
 
 #data sources
-orig_dir = '/Users/ofermagen/Coding/NLP_Project_Data/'
-orig_dir = '/home/ofermagen/'
-data_dir = orig_dir + 'pretraining_data'
-sample_dir = orig_dir + 'formatted_images/0'
-assert os.path.isdir(data_dir)
+train_data_dir = '/home/ofermagen/data/pretraining_data_formatted/train'
+dev_data_dir = '/home/ofermagen/data/pretraining_data_formatted/dev'
+sample_dir =  '/home/ofermagen/data/training_data_formatted/train/0'
+val_data_dir = '/home/ofermagen/data/pretraining_data_formatted/dev'
+
+assert os.path.isdir(train_data_dir)
+assert os.path.isdir(dev_data_dir)
 assert os.path.isdir(sample_dir)
 
-with open(os.path.join(data_dir,"synset2num.json")) as f:
+with open(os.path.join("/home/ofermagen/data/pretraining_data_formatted/synset2num.json")) as f:
     classes = json.load(f)
     class_num = len(classes)
 
@@ -94,10 +96,11 @@ sample_images = list(sample_images)[:1000]
 sample_images = np.stack([Image.open(path) for path in sample_images])
 gen.fit(sample_images)
 
-gen = gen.flow_from_directory(data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2])
+train_gen = gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2])
+val_gen = gen.flow_from_directory()
 
-checkpoint = ModelCheckpoint(filepath=model_path,monitor='acc',verbose=1,save_best_only=True,mode='max')
+checkpoint = ModelCheckpoint(filepath=model_path,monitor='val_acc',verbose=1,save_best_only=True,mode='max')
 history_saver = HistorySaver(history_path)
 callbacks = [checkpoint,history_saver]
 
-model.fit_generator(gen, epochs=200, verbose=1, workers=4,callbacks=callbacks,shuffle=False)
+model.fit_generator(train_gen, validation_data = val_gen, epochs=200, verbose=1, workers=4,callbacks=callbacks,shuffle=False)

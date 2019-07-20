@@ -49,6 +49,7 @@ assert os.path.isdir(orig_dir)
 json_file = orig_dir + 'nlvr/nlvr2/data/dev.json'
 imgs_dir = orig_dir + 'unformatted_images/dev'
 hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/dev_hashes.json'
+synset2num_path = orig_dir + 'pretraining_data_formatted/synset2num.json'
 
 DDIR = '/home/ofermagen/data/pretraining_data_formatted/dev'
 if not os.path.isdir(DDIR): os.mkdir(DDIR)
@@ -58,21 +59,26 @@ examples = [json.loads(s) for s in open(json_file).readlines()]
 hashes = json.loads(open(hash_file).read())
 
 #####################
+if not os.path.isfile(synset2num_path):
+    synset2num = set(ex['synset'] for ex in examples)
+    synset2num = {synset:i for i,synset in enumerate(synset2num)}
 
-synset2num = set(ex['synset'] for ex in examples)
-synset2num = {synset:i for i,synset in enumerate(synset2num)}
-
-with open(os.path.join(DDIR,'synset2num.json'),'w') as f:
-    json.dump(synset2num,f)
+    with open(synset2num_path,'w') as f:
+        json.dump(synset2num,f)
+else:
+    with open(synset2num_path,'r') as f:
+        synset2num = json.load(f)
 
 id2synet = dict()
 for ex in examples:
+    if ex['synset'] not in synset2num: continue
     ID = ex['identifier']
     ID = "-".join(ID.split("-")[:3])
     for _ID in [ID + "-img0.png", ID + "-img1.png"]:
         if _ID not in id2synet:
             id2synet[_ID] = set()
         id2synet[_ID].add(synset2num[ex['synset']])
+
 lens = set(len(k) for _,k in id2synet.items())
 assert lens == {1}
 
