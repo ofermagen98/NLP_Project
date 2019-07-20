@@ -87,7 +87,7 @@ train_gen = ImageDataGenerator(
         # image data format, either "channels_first" or "channels_last"
         data_format=None,
         # fraction of images reserved for validation (strictly between 0 and 1)
-        validation_split=0.0)
+        validation_split=0.2)
 
 val_gen = ImageDataGenerator(featurewise_center=True,featurewise_std_normalization=True)
 
@@ -100,9 +100,9 @@ sample_images = np.stack([Image.open(path) for path in sample_images])
 train_gen.fit(sample_images)
 val_gen.fit(sample_images)
 
-train_gen = train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2])
+train_gen = train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='training')
 classes = list(map(str,range(class_num)))
-val_gen = val_gen.flow_from_directory(dev_data_dir,batch_size=32,classes=classes,target_size=img_shape[:2])
+val_gen =   train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='validation')
 
 checkpoint = ModelCheckpoint(filepath=model_path,monitor='val_acc',verbose=1,save_best_only=True,mode='max')
 history_saver = HistorySaver(history_path)
