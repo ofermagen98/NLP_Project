@@ -1,8 +1,9 @@
 """This class include the basic Relational Neural Network Model""" 
+from utils import DROPOUT_RATE, DROPOUT_BOOL 
+
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D,Dense,Input,Dropout
-from utils import DROPOUT_RATE
 
 def relation_product(x1,x2):
     assert len(x1.shape) == 3 and len(x2.shape) == 3

@@ -1,5 +1,4 @@
-from utils import DROPOUT_RATE
-from utils import DROPOUT_BOOL 
+from utils import DROPOUT_RATE, DROPOUT_BOOL 
 
 import tensorflow as tf
 from tensorflow.keras.models import Model
