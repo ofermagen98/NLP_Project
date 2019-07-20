@@ -2,7 +2,7 @@ import tensorflow as tf
 import json
 
 class HistorySaver(tf.keras.callbacks.Callback):
-	def __init__(fname,save_every = 32,*a,**kw):
+	def __init__(self,fname,save_every = 32,*a,**kw):
 		super(HistorySaver,self).__init__(*a,**kw)
 		self.fname = fname
 		self.save_every = save_every
@@ -15,9 +15,9 @@ class HistorySaver(tf.keras.callbacks.Callback):
 		self.losses.append(logs.get('loss'))
 		self.accs.append(logs.get('acc'))
 
-	if len(self.losses) % self.save_every == 0:
-		with open(fname,'w') as f:
-			json.dump({'acc' : self.accs, 'loss' : self.losses})
+		if len(self.losses) % self.save_every == 0:
+			with open(fname,'w') as f:
+				json.dump({'acc' : self.accs, 'loss' : self.losses})
 
 class Pad(tf.keras.layers.Layer):
 	"""
