@@ -47,7 +47,7 @@ model.compile('adam', loss='categorical_crossentropy', metrics=['accuracy'])
 model_path = 'pretrained_cnn/checkpoints/cnn_model.{epoch:03d}.h5'
 history_path = 'pretrained_cnn/checkpoints/history.json'
 
-gen = ImageDataGenerator(
+train_gen = ImageDataGenerator(
         # set input mean to 0 over the dataset
         featurewise_center=True,
         # set each sample mean to 0
@@ -61,7 +61,7 @@ gen = ImageDataGenerator(
         # epsilon for ZCA whitening
         zca_epsilon=1e-06,
         # randomly rotate images in the range (deg 0 to 180)
-        rotation_range=0,
+        rotation_range=10,
         # randomly shift images horizontally
         width_shift_range=0.1,
         # randomly shift images vertically
@@ -69,7 +69,7 @@ gen = ImageDataGenerator(
         # set range for random shear
         shear_range=0.,
         # set range for random zoom
-        zoom_range=0.,
+        zoom_range=0.1,
         # set range for random channel shifts
         channel_shift_range=0.,
         # set mode for filling points outside the input boundaries
@@ -89,17 +89,20 @@ gen = ImageDataGenerator(
         # fraction of images reserved for validation (strictly between 0 and 1)
         validation_split=0.0)
 
+val_gen = ImageDataGenerator(featurewise_center=True,featurewise_std_normalization=True)
+
 suffix = ".png"
 sample_images = os.listdir(sample_dir)
 sample_images = filter(lambda p: len(p) > len(suffix) and p[-len(suffix):] == suffix, sample_images)
 sample_images = map(lambda s: os.path.join(sample_dir,s), sample_images)
 sample_images = list(sample_images)[:1000]
 sample_images = np.stack([Image.open(path) for path in sample_images])
-gen.fit(sample_images)
+train_gen.fit(sample_images)
+val_gen.fit(sample_images)
 
-train_gen = gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2])
+train_gen = train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2])
 classes = list(map(str,range(class_num)))
-val_gen = gen.flow_from_directory(dev_data_dir,batch_size=32,classes=classes,target_size=img_shape[:2])
+val_gen = val_gen.flow_from_directory(dev_data_dir,batch_size=32,classes=classes,target_size=img_shape[:2])
 
 checkpoint = ModelCheckpoint(filepath=model_path,monitor='val_acc',verbose=1,save_best_only=True,mode='max')
 history_saver = HistorySaver(history_path)
