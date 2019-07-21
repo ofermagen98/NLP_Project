@@ -6,7 +6,7 @@ import numpy as np
 
 #data sources
 train_data_dir = '/home/ofermagen/data/pretraining_data_formatted/train'
-#dev_data_dir = '/home/ofermagen/data/pretraining_data_formatted/dev'
+dev_data_dir = '/home/ofermagen/data/pretraining_data_formatted/dev'
 sample_dir =  '/home/ofermagen/data/training_data_formatted/train/0'
 #val_data_dir = '/home/ofermagen/data/pretraining_data_formatted/dev'
 
@@ -21,10 +21,10 @@ with open(os.path.join("/home/ofermagen/data/pretraining_data_formatted/synset2n
 
 import tensorflow as tf
 from resnet import ResnetV1_FCNN
-from RN import Perceptron
-from utils import HistorySaver
+#from RN import Perceptron
+from utils import HistorySaver, DROPOUT_RATE, DROPOUT_BOOL 
 
-from tensorflow.keras.layers import Input,Dense,Flatten
+from tensorflow.keras.layers import Input,Dense,Flatten,Dropout
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks  import ModelCheckpoint
 from tensorflow.keras.models import Model
@@ -38,8 +38,8 @@ fcnn = ResnetV1_FCNN(img_shape,20)
 em_img = fcnn(img)
 em_img = Flatten()(em_img)
 
-preceptron = Perceptron(em_img.shape[1],[1024,512,512])
-X = preceptron(em_img)
+X = Dense(512)(em_img)
+if DROPOUT_BOOL: X = Dropout(rate = DROPOUT_RATE)
 pred = Dense(class_num,activation='softmax')(X)
 
 model = Model(inputs=img,outputs=pred)
@@ -87,7 +87,7 @@ train_gen = ImageDataGenerator(
         # image data format, either "channels_first" or "channels_last"
         data_format=None,
         # fraction of images reserved for validation (strictly between 0 and 1)
-        validation_split=0.2)
+        validation_split=0.0)
 
 val_gen = ImageDataGenerator(featurewise_center=True,featurewise_std_normalization=True)
 
@@ -100,9 +100,9 @@ sample_images = np.stack([Image.open(path) for path in sample_images])
 train_gen.fit(sample_images)
 val_gen.fit(sample_images)
 
-train_it = train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='training')
+train_it = train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2])
 classes = list(map(str,range(class_num)))
-val_it =   train_gen.flow_from_directory(train_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2], subset='validation')
+val_it =   val_gen.flow_from_directory(dev_data_dir,batch_size=32,class_mode='categorical',target_size=img_shape[:2])
 
 checkpoint = ModelCheckpoint(filepath=model_path,monitor='val_acc',verbose=1,save_best_only=True,mode='max')
 history_saver = HistorySaver(history_path)
