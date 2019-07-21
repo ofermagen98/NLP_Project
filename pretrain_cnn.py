@@ -39,7 +39,7 @@ em_img = fcnn(img)
 em_img = Flatten()(em_img)
 
 X = Dense(512)(em_img)
-if DROPOUT_BOOL: X = Dropout(rate = DROPOUT_RATE)
+if DROPOUT_BOOL: X = Dropout(rate = DROPOUT_RATE)(X)
 pred = Dense(class_num,activation='softmax')(X)
 
 model = Model(inputs=img,outputs=pred)
