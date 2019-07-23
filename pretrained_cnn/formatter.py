@@ -6,7 +6,7 @@ from progressbar import progressbar
 from PIL import Image
 import imagehash
 
-def resize(im, desired_size = 224):
+def resize(im, desired_size = 256):
 	old_size = im.shape[:2] # old_size is in (height, width) format
 	ratio = float(desired_size)/max(old_size)
 	new_size = tuple([int(x*ratio) for x in old_size])
@@ -45,7 +45,7 @@ def read_img(path):
 #####################
 
 orig_dir = '/Users/ofermagen/Coding/NLP_Project_Data/data/'
-orig_dir = '/home/ofermagen/data/'
+#orig_dir = '/home/ofermagen/data/'
 assert os.path.isdir(orig_dir)
 json_file = orig_dir + 'nlvr/nlvr2/data/dev.json'
 imgs_dir = orig_dir + 'unformatted_images/dev'
@@ -96,12 +96,12 @@ for root, _, files in os.walk(imgs_dir):
 
 examples = [json.loads(line) for line in open(json_file).readlines()]
 hashes = json.loads(open(hash_file).read())
-paths = os.listdir(imgs_dir)
+
+res_dict = dict()
 
 for ID in progressbar(id2path):
     img = read_img(id2path[ID])
     if img is None: continue
-
     C = id2synet[ID]
     res_dir = os.path.join(DDIR,str(C))
     if not os.path.isdir(res_dir): os.mkdir(res_dir)
@@ -111,5 +111,8 @@ for ID in progressbar(id2path):
     path = sum(1 for _ in path)
     path = os.path.join(res_dir,str(path) + ".png")
 
+    res_dict[ID] = path
     cv2.imwrite(path,img)
     
+with open(os.path.join(DDIR,'ID2path.json'),'w') as f:
+    json.dump(res_dict,f)
