@@ -13,7 +13,8 @@ from time import time
 
 INDEX = 0
 if len(sys.argv) > 1: INDEX = sys.argv[0]
-CONFIG_PATH = '/Users/ofermagen/Coding/NLP_Project/get_boxes/config.json'
+CONFIG_PATH = '/specific/disk1/home/gamir/ofer/NLP_Project/get_boxes/config.json'
+MODELS_DIR =  '/specific/disk1/home/gamir/ofer/models/'
 with open(CONFIG_PATH,'r') as f:
   CONFIG = json.load(f)
   OBJ = CONFIG['OBJS'][INDEX]
@@ -25,7 +26,6 @@ assert os.path.isdir(CONFIG['DDIR'])
 # This is needed since the notebook is stored in the object_detection folder.
 sys.path.append("..")
 MODEL_NAME = 'faster_rcnn_inception_resnet_v2_atrous_oid_v4_2018_12_12'
-MODELS_DIR = '/Users/ofermagen/Coding/NLP_Project_Data/models/'
 MODEL_PATH = os.path.join(MODELS_DIR,MODEL_NAME)
 PATH_TO_FROZEN_GRAPH = os.path.join(MODEL_PATH,'frozen_inference_graph.pb')
 assert os.path.isfile(PATH_TO_FROZEN_GRAPH)
