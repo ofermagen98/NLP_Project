@@ -1,8 +1,9 @@
 import os
 DEVICE_NUM = 8
-SDIR = '/Users/ofermagen/Coding/NLP_Project_Data/data/pretraining_data_formatted/dev/'
-DDIR = '/Users/ofermagen/Coding/NLP_Project_Data/data/pretraining_boxes/dev/'
-json_file = '/Users/ofermagen/Coding/NLP_Project/get_boxes/config.json'
+SOURCE = '/specific/disk1/home/gamir/ofer/'
+SDIR = SOURCE + 'data/pretraining_data_formatted/dev/'
+DDIR = SOURCE + 'data/pretraining_boxes/dev/'
+json_file = SOURCE + 'NLP_Project/get_boxes/config.json'
 
 assert os.path.isdir(SDIR)
 assert os.path.isdir(DDIR)

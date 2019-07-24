@@ -3,15 +3,16 @@ import os
 import sys
 import tensorflow as tf
 from PIL import Image
+#import cv2
 
 from progressbar import progressbar
 import json
 import pickle
 from time import time
 
-import cv2
 
 INDEX = 0
+if len(sys.argv) > 1: INDEX = sys.argv[0]
 CONFIG_PATH = '/Users/ofermagen/Coding/NLP_Project/get_boxes/config.json'
 with open(CONFIG_PATH,'r') as f:
   CONFIG = json.load(f)
