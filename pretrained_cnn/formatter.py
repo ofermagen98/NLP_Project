@@ -2,7 +2,7 @@ import json
 import os
 import cv2
 import numpy as np
-from progressbar import progressbar
+from tqdm import tqdm as progressbar
 from PIL import Image
 import imagehash
 
