@@ -18,11 +18,13 @@ def get_available_gpus():
     return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
 GPUS  = get_available_gpus()
+
 if len(GPUS) == 0:
     print('no available GPUs')
     DEVICE_NUM = 1
     DEVICES = ['/device:cpu:0']
 else:
+    print(GPUS)
     print('found GPUs')
     shuffle(GPUS)
     DEVICE_NUM = min(DEVICE_NUM,len(GPUS))
