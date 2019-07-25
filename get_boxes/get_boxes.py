@@ -10,7 +10,6 @@ import json
 import pickle
 from time import time
 
-
 INDEX = 0
 if len(sys.argv) > 1: INDEX = sys.argv[0]
 CONFIG_PATH = '/home/ofermagen/NLP_Project/get_boxes/config.json'
