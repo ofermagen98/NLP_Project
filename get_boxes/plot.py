@@ -16,13 +16,10 @@ def plot(img,boxes):
 
   return cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
 
-
-img = '/Users/ofermagen/Desktop/56.png'
-img = np.array(Image.open(img))
 pickle_file = '/Users/ofermagen/Coding/NLP_Project/get_boxes/0.pickle'
-local_dict = '/Users/ofermagen/Coding/NLP_Project_Data/data/pretraining_data_formatted/dev/ID2path.json'
+local_dict = '/Users/ofermagen/Coding/NLP_Project_Data/data/pretraining_data_formatted/train/ID2path.json'
 with open(local_dict,'r') as f: local_dict = json.load(f)
-global_dict = '/Users/ofermagen/Coding/NLP_Project/get_boxes/google_dev_ID2path.json'
+global_dict = '/Users/ofermagen/Coding/NLP_Project/get_boxes/google_train_ID2path.json'
 with open(global_dict,'r') as f: global_dict = json.load(f)
 
 finished = False
