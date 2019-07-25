@@ -12,7 +12,7 @@ tar -xvf yourfile.tar
 https://www.cs.tau.ac.il/system/node/289
 
 #Creating condav
-conda3 create --prefix /specific/disk1/home/gamir/ofer/venv python=3.6
+conda3 create --prefix /specific/netapp5_2/gamir/advml19/ofer/venv python=3.6
 
 #Running conda
 ssh ofermagen@gate.tau.ac.il
@@ -21,3 +21,6 @@ ssh rack-gamir-g07
 cd /specific/disk1/home/gamir/ofer/NLP_Project
 exec bash
 source activate3 /specific/disk1/home/gamir/ofer/venv
+
+
+source activate3 /specific/netapp5_2/gamir/advml19/ofer

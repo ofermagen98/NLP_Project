@@ -44,7 +44,7 @@ def read_img(path):
 
 #####################
 
-orig_dir = '/specific/disk1/home/gamir/ofer/data/'
+orig_dir = '/home/ofermagen/data/data/'
 assert os.path.isdir(orig_dir)
 json_file = orig_dir + 'nlvr/nlvr2/data/dev.json'
 imgs_dir = orig_dir + 'unformatted_images/dev'
