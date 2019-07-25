@@ -29,7 +29,7 @@ finished = False
 
 while not finished:
     ID = sample(local_dict.keys(),1)[0]
-    img = np.array(Image.open(local_dict[ID]))
+    
     getfile_cmd = global_dict[ID]
     getfile_cmd = getfile_cmd.split('/')
     getfile_cmd[-4] = 'pretraining_boxes'
@@ -37,8 +37,9 @@ while not finished:
     getfile_cmd = os.path.splitext(getfile_cmd)[0] + ".pickle"
     getfile_cmd = 'gcloud compute --project "craft-216310" scp --zone "us-west1-b" "nlp-project-vm":' + getfile_cmd
     getfile_cmd = getfile_cmd + ' ' + pickle_file
-    finished = os.system(getfile_cmd)
-    finished = (finished == 0)
+    finished = not bool(os.system(getfile_cmd))
+
+img = np.array(Image.open(local_dict[ID]))
 
 with open(pickle_file,'rb') as f:
     OBJ = pickle.load(f)
