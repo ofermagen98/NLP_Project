@@ -86,7 +86,6 @@ in_paths = progressbar(in_paths)
 count = 0
 
 for in_batch, out_batch in zip(in_paths,out_paths):
-  pbar.update(count)
   print('remaining',img_num)
   start = time()
   print(in_batch)
