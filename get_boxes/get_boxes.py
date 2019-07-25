@@ -5,7 +5,7 @@ import tensorflow as tf
 from PIL import Image
 #import cv2
 
-from progressbar import progressbar
+from progressbar import Progressbar
 import json
 import pickle
 from time import time
@@ -83,7 +83,11 @@ batch_size = 35
 in_paths =  [OBJ['in_paths'][i:i+batch_size]  for i in range(0,img_num,batch_size)]
 out_paths = [OBJ['out_paths'][i:i+batch_size] for i in range(0,img_num,batch_size)]
 
+pbar = Progressbar(max_value=img_num)
+count = 0
+
 for in_batch, out_batch in zip(in_paths,out_paths):
+  pbar.update(count)
   print('remaining',img_num)
   start = time()
   print(in_batch)
@@ -98,4 +102,4 @@ for in_batch, out_batch in zip(in_paths,out_paths):
       pickle.dump(res,f,pickle.HIGHEST_PROTOCOL)
 
   print('took', time() - start)
-  img_num -= len(in_batch)
+  count += len(in_batch)
