@@ -46,12 +46,12 @@ def read_img(path):
 
 orig_dir = '/home/ofermagen/data/'
 assert os.path.isdir(orig_dir)
-json_file = orig_dir + 'nlvr/nlvr2/data/dev.json'
-imgs_dir = orig_dir + 'unformatted_images/dev'
-hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/dev_hashes.json'
+json_file = orig_dir + 'nlvr/nlvr2/data/train.json'
+imgs_dir = orig_dir + 'unformatted_images/train'
+hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/train_hashes.json'
 synset2num_path = orig_dir + '/synset2num.json'
 
-DDIR = orig_dir + 'pretraining_data_formatted/dev'
+DDIR = orig_dir + 'pretraining_data_formatted/train'
 if not os.path.isdir(DDIR): os.mkdir(DDIR)
 #####################
 
