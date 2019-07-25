@@ -85,6 +85,7 @@ in_paths =  [OBJ['in_paths'][i:i+batch_size]  for i in range(0,img_num,batch_siz
 out_paths = [OBJ['out_paths'][i:i+batch_size] for i in range(0,img_num,batch_size)]
 
 for in_batch, out_batch in zip(in_paths,out_paths):
+  print('remaining',img_num)
   start = time()
   print(in_batch)
   imgs = [Image.open(os.path.join(CONFIG['SDIR'],path)) for path in in_batch]
@@ -98,3 +99,4 @@ for in_batch, out_batch in zip(in_paths,out_paths):
       pickle.dump(res,f,pickle.HIGHEST_PROTOCOL)
 
   print('took', time() - start)
+  img_num -= len(in_batch)
