@@ -99,6 +99,7 @@ for in_batch, out_batch in zip(in_paths,out_paths):
   imgs = [Image.open(os.path.join(CONFIG['SDIR'],path)) for path in in_batch]
   imgs = np.stack(imgs)
   
+  print('estimating')
   output_dict = run_inference(imgs, detection_graph,OBJ['device'])
   
   for res,out_path in zip(output_dict,out_batch):
