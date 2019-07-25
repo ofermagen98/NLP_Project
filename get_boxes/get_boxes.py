@@ -5,7 +5,7 @@ import tensorflow as tf
 from PIL import Image
 #import cv2
 
-from progressbar import Progressbar
+from progressbar import progressbar
 import json
 import pickle
 from time import time
@@ -82,8 +82,7 @@ img_num = len(non_existing)
 batch_size = 35
 in_paths =  [OBJ['in_paths'][i:i+batch_size]  for i in range(0,img_num,batch_size)]
 out_paths = [OBJ['out_paths'][i:i+batch_size] for i in range(0,img_num,batch_size)]
-
-pbar = Progressbar(max_value=img_num)
+in_paths = progressbar(in_paths)
 count = 0
 
 for in_batch, out_batch in zip(in_paths,out_paths):
