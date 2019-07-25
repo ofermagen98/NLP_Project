@@ -90,7 +90,7 @@ OBJ['out_paths'] = [OBJ['out_paths'][i] for i in non_existing]
 img_num = len(non_existing)
 print(img_num)
 #32,40
-batch_size = 36
+batch_size = int(sys.argv[1])
 in_paths =  [OBJ['in_paths'][i:i+batch_size]  for i in range(0,img_num,batch_size)]
 out_paths = [OBJ['out_paths'][i:i+batch_size] for i in range(0,img_num,batch_size)]
 
