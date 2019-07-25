@@ -11,7 +11,7 @@ import pickle
 from time import time
 
 INDEX = 0
-#if len(sys.argv) > 1: INDEX = sys.argv[0]
+if len(sys.argv) > 1: INDEX = int(sys.argv[0])
 CONFIG_PATH = '/home/ofermagen/NLP_Project/get_boxes/config.json'
 MODELS_DIR =  '/home/ofermagen/models/'
 with open(CONFIG_PATH,'r') as f:
@@ -90,7 +90,7 @@ OBJ['out_paths'] = [OBJ['out_paths'][i] for i in non_existing]
 img_num = len(non_existing)
 print(img_num)
 #36,40
-batch_size = int(sys.argv[1])
+batch_size = 35
 in_paths =  [OBJ['in_paths'][i:i+batch_size]  for i in range(0,img_num,batch_size)]
 out_paths = [OBJ['out_paths'][i:i+batch_size] for i in range(0,img_num,batch_size)]
 
