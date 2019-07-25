@@ -13,8 +13,8 @@ from time import time
 
 INDEX = 0
 if len(sys.argv) > 1: INDEX = sys.argv[0]
-CONFIG_PATH = '/specific/disk1/home/gamir/ofer/NLP_Project/get_boxes/config.json'
-MODELS_DIR =  '/specific/dispk1/home/gamir/ofer/models/'
+CONFIG_PATH = '/home/ofermagen/NLP_Project/get_boxes/config.json'
+MODELS_DIR =  '/home/ofermagen/models/'
 with open(CONFIG_PATH,'r') as f:
   CONFIG = json.load(f)
   OBJ = CONFIG['OBJS'][INDEX]
