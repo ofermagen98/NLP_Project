@@ -76,9 +76,8 @@ non_existing = lambda i: not os.path.isfile(os.path.join(CONFIG['DDIR'],OBJ['out
 non_existing = list(filter(non_existing,range(len(OBJ['in_paths']))))
 OBJ['in_paths'] = [OBJ['in_paths'][i] for i in non_existing]
 OBJ['out_paths'] = [OBJ['out_paths'][i] for i in non_existing]
-
 img_num = len(non_existing)
-print(img_num)
+
 #36,40
 batch_size = 35
 in_paths =  [OBJ['in_paths'][i:i+batch_size]  for i in range(0,img_num,batch_size)]
