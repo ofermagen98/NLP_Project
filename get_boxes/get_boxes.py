@@ -72,16 +72,6 @@ def run_inference(images, graph,device):
   
   return res
 
-def plot(img,boxes):
-  for x0,y0,x1,y1 in boxes:
-    x0 = int(x0*img.shape[0])
-    x1 = int(x1*img.shape[0])
-    y0 = int(y0*img.shape[1])
-    y1 = int(y1*img.shape[1])
-    cv2.rectangle(img,(y0,x0),(y1,x1),color=(255,0,0),thickness=2)
-
-  return cv2.cvtColor(img,cv2.COLOR_RGB2BGR)
-
 non_existing = lambda i: not os.path.isfile(os.path.join(CONFIG['DDIR'],OBJ['out_paths'][i]))
 non_existing = list(filter(non_existing,range(len(OBJ['in_paths']))))
 OBJ['in_paths'] = [OBJ['in_paths'][i] for i in non_existing]
