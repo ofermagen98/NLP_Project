@@ -86,7 +86,7 @@ in_paths = progressbar(in_paths)
 count = 0
 
 for in_batch, out_batch in zip(in_paths,out_paths):
-  print('\nremaining',img_num)
+  print('\nremaining',img_num-count)
   start = time()
   imgs = [Image.open(os.path.join(CONFIG['SDIR'],path)) for path in in_batch]
   imgs = np.stack(imgs)
