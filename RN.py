@@ -13,7 +13,7 @@ def relation_product(x1,x2):
     O1 = tf.tile(O1,multiples=(1,n2,1,1))
     O2 = tf.expand_dims(x2,axis=2)
     O2 = tf.tile(O2,multiples=(1,1,n1,1))
-    relation_matrix = tf.concat([O1,O2],axis=3)
+    relation_matrix = tf.keras.layers.Concatenate(axis=3)([O1,O2])
     d = int(relation_matrix.shape[3])
     relation_matrix = tf.reshape(relation_matrix,shape=(-1,n1*n2,d),name="relation_matrix")
     return relation_matrix

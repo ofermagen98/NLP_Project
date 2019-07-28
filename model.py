@@ -40,7 +40,7 @@ sent = Input(shape=(40,), name="sent", dtype = "int32")
 fcnn = ResnetV1_FCNN(img_shape,20)
 em_imgL = fcnn(imgL)
 em_imgR = fcnn(imgR)
-em_imgs = tf.concat([em_imgL,em_imgR],axis=2)
+em_imgs = tf.keras.layers.Concatenate(axis=2)([em_imgL,em_imgR])
 
 #embedding sentence
 print('creating transformer encoder')
