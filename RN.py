@@ -7,6 +7,7 @@ from tensorflow.keras.layers import Conv1D,Dense,Input,Dropout
 
 def expand_dims(A,axis):
     shape = A.shape.as_list()
+    shape = list(map(lambda x: -1 if x is None else x,shape))
     shape = shape[:axis] + [1] + shape[axis:]
     return tf.reshape(A,shape=shape)
 
