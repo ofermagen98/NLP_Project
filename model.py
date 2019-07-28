@@ -56,7 +56,7 @@ model = Model(inputs=[imgL,imgR,sent],outputs=pred)
 model.compile('adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 model_path = '/home/ofermagen/checkpoints/model.{epoch:03d}.h5'
-model.load_weights(model_path)
+#model.load_weights(model_path)
 checkpoint = ModelCheckpoint(filepath=model_path,save_best_only=True)
 
 print('creating generators')
