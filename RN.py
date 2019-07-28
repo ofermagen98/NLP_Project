@@ -8,7 +8,7 @@ from tensorflow.keras.layers import Conv1D,Dense,Input,Dropout
 
 class RelationalProduct(tf.keras.layers.Layer):
     def __init__(self):
-        super(ConvolutionalPerceptron,self).__init__()
+        super(RelationalProduct,self).__init__()
     
     def call(self,X):
         x1,x2 = X
