@@ -4,7 +4,7 @@ from progressbar import progressbar
 
 #data sources
 #data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
-data_dir = '/home/ofermagen/data/training_data_formatted'
+data_dir = '/home/ofermagen/data/training_data_formatted/train/'
 assert os.path.isdir(data_dir)
 
 import tensorflow as tf
