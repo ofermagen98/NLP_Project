@@ -32,9 +32,9 @@ with open(os.path.join(data_dir,'params.json'),'r') as f:
     
 #defining model's inputs 
 img_shape = (224,224,3) 
-imgL = Input(shape=img_shape, name="imgL", dtype = tf.float32)
-imgR = Input(shape=img_shape, name="imgR", dtype = tf.float32)
-sent = Input(shape=(40,), name="sent", dtype = tf.int32)
+imgL = Input(shape=img_shape, name="imgL", dtype = "float32")
+imgR = Input(shape=img_shape, name="imgR", dtype = "float32")
+sent = Input(shape=(40,), name="sent", dtype = "int32")
 
 #embedding images
 fcnn = ResnetV1_FCNN(img_shape,20)
