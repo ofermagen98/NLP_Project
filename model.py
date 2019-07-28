@@ -1,12 +1,20 @@
 import json
 import os
 from progressbar import progressbar
+import sys
 
 #data sources
 #data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
-data_dir = '/home/ofermagen/data/training_data_formatted/train/'
+assert len(sys.argv) > 1
+if sys.argv[0] == 'J':
+    data_dir = '/specific/netapp5/joberant/home/ofermagen/'
+    model_path = '/specific/netapp5/joberant/home/ofermagen/checkpoints/model.{epoch:03d}.h5'
+elif sys.argv[0] == 'O':
+    data_dir = '/home/ofermagen/data/training_data_formatted/train/'
+    model_path = '/home/ofermagen/checkpoints/model.{epoch:03d}.h5'
+else:
+    raise NotImplementedError
 assert os.path.isdir(data_dir)
-
 import tensorflow as tf
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import Input,Dense
@@ -55,7 +63,6 @@ print('compiling model')
 model = Model(inputs=[imgL,imgR,sent],outputs=pred)
 model.compile('adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-model_path = '/home/ofermagen/checkpoints/model.{epoch:03d}.h5'
 #model.load_weights(model_path)
 checkpoint = ModelCheckpoint(filepath=model_path,monitor='acc',verbose=1,save_best_only=True,mode='max')
 print('creating generators')
