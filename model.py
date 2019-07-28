@@ -21,7 +21,7 @@ from tensorflow.keras.layers import Input,Dense
 from tensorflow.keras.callbacks  import ModelCheckpoint
 
 from generator import DataGenerator
-from RN import relation_product,ConvolutionalPerceptron,Perceptron
+from RN import RelationalProduct,ConvolutionalPerceptron,Perceptron
 from resnet import ResnetV1_FCNN
 from transformer import Encoder,create_padding_mask
 
@@ -50,7 +50,7 @@ em_sent = encoder(sent,training=True,mask=enc_mask)
 
 #getting prediction from the Relational Neural Network 
 print('creating relational network')
-relation_matrix = relation_product(em_sent,em_imgs)
+relation_matrix = RelationalProduct()([em_sent,em_imgs])
 g = ConvolutionalPerceptron(relation_matrix.shape[1:],[256,256])
 em_relations = g(relation_matrix)
 relation_out = tf.reduce_mean(em_relations,axis=1)

@@ -5,24 +5,24 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D,Dense,Input,Dropout
 
-def expand_dims(A,axis):
-    shape = A.shape.as_list()
-    shape = list(map(lambda x: -1 if x is None else x,shape))
-    shape = shape[:axis] + [1] + shape[axis:]
-    return tf.reshape(A,shape=shape)
 
-def relation_product(x1,x2):
-    assert len(x1.shape) == 3 and len(x2.shape) == 3
-    n1 = int(x1.shape[1])
-    n2 = int(x2.shape[1])
-    O1 = expand_dims(x1,axis=1)
-    O1 = tf.keras.backend.tile(O1,[1,n2,1,1])
-    O2 = expand_dims(x2,axis=2)
-    O2 = tf.keras.backend.tile(O2,[1,1,n1,1])
-    relation_matrix = tf.keras.layers.Concatenate(axis=3)([O1,O2])
-    d = int(relation_matrix.shape[3])
-    relation_matrix = tf.reshape(relation_matrix,shape=(-1,n1*n2,d),name="relation_matrix")
-    return relation_matrix
+class RelationalProduct(tf.keras.layers.Layer):
+    def __init__(self):
+        super(ConvolutionalPerceptron,self).__init__()
+    
+    def call(self,X):
+        x1,x2 = X
+        assert len(x1.shape) == 3 and len(x2.shape) == 3
+        n1 = int(x1.shape[1])
+        n2 = int(x2.shape[1])
+        O1 = tf.expand_dims(x1,axis=1)
+        O1 = tf.tile(O1,multiples=(1,n2,1,1))
+        O2 = tf.expand_dims(x2,axis=2)
+        O2 = tf.tile(O2,multiples=(1,1,n1,1))
+        relation_matrix = tf.concat([O1,O2],axis=3)
+        d = int(relation_matrix.shape[3])
+        relation_matrix = tf.reshape(relation_matrix,shape=(-1,n1*n2,d),name="relation_matrix")
+        return relation_matrix
 
 class ConvolutionalPerceptron(tf.keras.layers.Layer):
     def __init__(self,input_shape,layer_dims):
