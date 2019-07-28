@@ -5,7 +5,7 @@ import json
 import os
 import imagehash
 import numpy as np
-from progressbar import progressbar
+from tqdm import tqdm as progressbar
 from random import shuffle
 
 def resize(im, desired_size = 224):
