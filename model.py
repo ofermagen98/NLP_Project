@@ -57,8 +57,7 @@ model.compile('adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 model_path = '/home/ofermagen/checkpoints/model.{epoch:03d}.h5'
 #model.load_weights(model_path)
-checkpoint = ModelCheckpoint(filepath=model_path,save_best_only=True)
-
+checkpoint = ModelCheckpoint(filepath=model_path,monitor='acc',verbose=1,save_best_only=True,mode='max')
 print('creating generators')
 datagen = DataGenerator(data_dir)
 callbacks = [checkpoint]
