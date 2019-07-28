@@ -6,7 +6,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D,Dense,Input,Dropout
 
 def expand_dims(A,axis):
-    shape = A.shape
+    shape = A.shape.as_list()
     shape = shape[:axis] + [1] + shape[axis:]
     return tf.reshape(A,shape=shape)
 
