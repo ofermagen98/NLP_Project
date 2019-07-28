@@ -6,10 +6,11 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D,Dense,Input,Dropout
 
 class ReduceMean(tf.keras.layers.Layer):
-    def __init__(self):
+    def __init__(self,axis):
         super(ReduceMean,self).__init__()
+        self.axis = axis
     def call(self,X):
-        return tf.reduce_mean(X,axis=-1)
+        return tf.reduce_mean(X,axis=self.axis)
     
 
 class RelationalProduct(tf.keras.layers.Layer):
