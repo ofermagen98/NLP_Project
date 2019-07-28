@@ -103,6 +103,7 @@ class DataGenerator(Sequence):
 
     def __len__(self):
         'Denotes the number of batches per epoch'
+        
         return self.batch_num
 
     def __getitem__(self, index):
