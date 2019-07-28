@@ -56,8 +56,8 @@ def sent2list(sent,size = 40):
 
 #######################
 
-orig_dir = '/Users/ofermagen/Coding/NLP_Project_Data/data/'
-res_dir = '/Users/ofermagen/Coding/NLP_Project_Data/data/'
+orig_dir = '/specific/netapp5/joberant/home/ofermagen/'
+res_dir = '/specific/netapp5/joberant/home/ofermagen/'
 img_dir = orig_dir + 'unformatted_images/train'
 json_file = orig_dir + 'nlvr/nlvr2/data/train.json'
 hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/train_hashes.json'
