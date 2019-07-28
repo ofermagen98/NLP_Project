@@ -68,9 +68,9 @@ if not os.path.isdir(DDIR): os.mkdir(DDIR)
 
 id2path = dict()
 for root, _, files in os.walk(img_dir):
-        for file in files:
-            if os.path.splitext(file)[1] == '.png':
-                id2path[file] = os.path.join(root,file)
+        for f in files:
+            if os.path.splitext(f)[1] == '.png':
+                id2path[f] = os.path.join(root,f)
 
 examples = [json.loads(line) for line in open(json_file).readlines()]
 hashes = json.loads(open(hash_file).read())
