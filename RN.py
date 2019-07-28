@@ -5,13 +5,18 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D,Dense,Input,Dropout
 
+def expand_dims(A,axis):
+    shape = A.shape
+    shape = shape[:axis] + [1] + shape[axis:]
+    return tf.reshape(A,shape=shape)
+
 def relation_product(x1,x2):
     assert len(x1.shape) == 3 and len(x2.shape) == 3
     n1 = int(x1.shape[1])
     n2 = int(x2.shape[1])
-    O1 = tf.keras.backend.expand_dims(x1,axis=1)
+    O1 = expand_dims(x1,axis=1)
     O1 = tf.keras.backend.tile(O1,[1,n2,1,1])
-    O2 = tf.keras.backend.expand_dims(x2,axis=2)
+    O2 = expand_dims(x2,axis=2)
     O2 = tf.keras.backend.tile(O2,[1,1,n1,1])
     relation_matrix = tf.keras.layers.Concatenate(axis=3)([O1,O2])
     d = int(relation_matrix.shape[3])
