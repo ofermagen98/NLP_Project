@@ -22,25 +22,26 @@ with open(local_dict,'r') as f: local_dict = json.load(f)
 global_dict = '/Users/ofermagen/Coding/NLP_Project/get_boxes/google_train_ID2path.json'
 with open(global_dict,'r') as f: global_dict = json.load(f)
 
-finished = False
+key = None
+while key != 27:
+    found = False
+    while not found:
+        ID = sample(local_dict.keys(),1)[0]
+        
+        getfile_cmd = global_dict[ID]
+        getfile_cmd = getfile_cmd.split('/')
+        getfile_cmd[-4] = 'pretraining_boxes'
+        getfile_cmd = '/'.join(getfile_cmd)
+        getfile_cmd = os.path.splitext(getfile_cmd)[0] + ".pickle"
+        getfile_cmd = 'gcloud compute --project "craft-216310" scp --zone "us-west1-b" "nlp-project-vm":' + getfile_cmd
+        getfile_cmd = getfile_cmd + ' ' + pickle_file
+        found = not bool(os.system(getfile_cmd))
 
-while not finished:
-    ID = sample(local_dict.keys(),1)[0]
-    
-    getfile_cmd = global_dict[ID]
-    getfile_cmd = getfile_cmd.split('/')
-    getfile_cmd[-4] = 'pretraining_boxes'
-    getfile_cmd = '/'.join(getfile_cmd)
-    getfile_cmd = os.path.splitext(getfile_cmd)[0] + ".pickle"
-    getfile_cmd = 'gcloud compute --project "craft-216310" scp --zone "us-west1-b" "nlp-project-vm":' + getfile_cmd
-    getfile_cmd = getfile_cmd + ' ' + pickle_file
-    finished = not bool(os.system(getfile_cmd))
+    img = np.array(Image.open(local_dict[ID]))
 
-img = np.array(Image.open(local_dict[ID]))
+    with open(pickle_file,'rb') as f: OBJ = pickle.load(f)
+    print(OBJ['num_detections'])
+    img = plot(img,OBJ['detection_boxes'])
+    cv2.imshow('img',img)
+    key = cv2.waitKey() & 0xff 
 
-with open(pickle_file,'rb') as f:
-    OBJ = pickle.load(f)
-
-img = plot(img,OBJ['detection_boxes'])
-cv2.imshow('img',img)
-cv2.waitKey()
