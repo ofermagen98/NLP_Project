@@ -2,7 +2,7 @@ import tensorflow as tf
 import json
 import os
 
-DROPOUT_BOOL = True
+DROPOUT_BOOL = False
 DROPOUT_RATE = 0.4
 
 class HistorySaver(tf.keras.callbacks.Callback):
