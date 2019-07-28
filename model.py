@@ -6,10 +6,10 @@ import sys
 #data sources
 #data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
 assert len(sys.argv) > 1
-if sys.argv[0] == 'J':
+if sys.argv[1] == 'J':
     data_dir = '/specific/netapp5/joberant/home/ofermagen/semiformatted_images/train'
     model_path = '/specific/netapp5/joberant/home/ofermagen/checkpoints/model.{epoch:03d}.h5'
-elif sys.argv[0] == 'O':
+elif sys.argv[1] == 'O':
     data_dir = '/home/ofermagen/data/training_data_formatted/train/'
     model_path = '/home/ofermagen/checkpoints/model.{epoch:03d}.h5'
 else:
