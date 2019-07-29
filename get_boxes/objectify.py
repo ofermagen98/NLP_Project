@@ -74,7 +74,7 @@ def id2_objects(ID):
 
     images = np.stack(images)
     boxes = np.concatenate(
-        [np.asarray([0, 1, 0, 1], dtype=float), OBJ["detection_boxes"]], axis=0
+        [np.asarray([[0, 1, 0, 1]], dtype=float), OBJ["detection_boxes"]], axis=0
     )
     classes = [0] + [get_class(c) for c in OBJ["detection_classes"]]
     classes = np.asarray(classes)
