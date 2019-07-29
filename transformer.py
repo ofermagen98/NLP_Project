@@ -187,13 +187,13 @@ class DecoderLayer(tf.keras.layers.Layer):
 
 class Encoder(tf.keras.layers.Layer):
   def __init__(self, num_layers, d_model, num_heads, dff, input_vocab_size, 
-               rate=0.1):
+               rate=0.1, embeddings_initializer='uniform'):
     super(Encoder, self).__init__()
 
     self.d_model = d_model
     self.num_layers = num_layers
     
-    self.embedding = tf.keras.layers.Embedding(input_vocab_size, d_model)
+    self.embedding = tf.keras.layers.Embedding(input_vocab_size, d_model,embeddings_initializer=embeddings_initializer)
     self.pos_encoding = positional_encoding(input_vocab_size, self.d_model)
     
     

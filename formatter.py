@@ -56,12 +56,12 @@ def sent2list(sent,size = 40):
 
 #######################
 
-orig_dir = '/specific/netapp5/joberant/home/ofermagen/'
-res_dir = '/specific/netapp5/joberant/home/ofermagen/'
-img_dir = orig_dir + 'unformatted_images/train'
-json_file = orig_dir + 'nlvr/nlvr2/data/train.json'
-hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/train_hashes.json'
-DDIR =  res_dir + 'semiformatted_images/train'
+orig_dir = '/Users/ofermagen/Coding/NLP_Project_Data/data/'
+res_dir = '/Users/ofermagen/Desktop/'
+img_dir = orig_dir + 'unformatted_images/dev'
+json_file = orig_dir + 'nlvr/nlvr2/data/dev.json'
+hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/dev_hashes.json'
+DDIR =  res_dir + 'semiformatted_images/dev'
 if not os.path.isdir(DDIR): os.mkdir(DDIR)
 
 #######################
@@ -96,6 +96,7 @@ params['vocab_size'] = len(word2num)
 with open(os.path.join(DDIR,"params.json"),"w") as f:
     json.dump(params,f)
 
+exit()
 #######################
 
 shuffle(examples)
