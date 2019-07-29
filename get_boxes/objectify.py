@@ -115,7 +115,8 @@ special_classes = 1
 print("formatting")
 res_dict = dict()
 
-for ID in progressbar(id2_image_path.keys()[:100]):
+pbar = list(id2_image_path.keys())[:100]
+for ID in progressbar(pbar):
     if ID not in id2_boxes_path:
         continue
     OBJ = id2_objects(ID)
