@@ -120,7 +120,8 @@ for ID in progressbar(id2_image_path):
         continue
     OBJ = id2_objects(ID)
     OBJ = format_OBJ(*OBJ)
-
+    OBJ['ID'] = ID
+    
     path = str(len(res_dict)) + ".pickle"
     path = os.path.join(res_path, path)
     res_dict[ID] = path
