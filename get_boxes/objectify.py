@@ -89,11 +89,8 @@ def id2_objects(ID):
 
     return images, boxes, classes, scores
 
-
 def format_OBJ(images, boxes, classes, scores):
-    raise NotImplementedError
-    return 0
-
+    return {'images':images, 'boxes':boxes, 'classes':classes, 'scores':scores}
 
 print("getting images paths")
 id2_image_path = dict()
