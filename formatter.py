@@ -45,24 +45,30 @@ def read_img(path):
         return None
 
 def sent2list(sent,size = 40):
+    global word2num
     replace = lambda c: c if c.isdigit() or c.isalpha() else ' '
     sent = ''.join(map(replace,sent))
     sent = sent.split(' ')
     sent = filter(lambda w: len(w) > 0, sent)
-    sent = list(sent)
-    sent = sent[:size]
-    for _ in range(len(sent),size): sent.append(pad_word)
+    sent = list(sent)   
+    tonum = lambda w: word2num['unk'] if w not in word2num else word2num[w]
+    sent = list(map(tonum,sent[:size]))
+    for _ in range(len(sent),size): sent.append(0)
     return list(sent)
 
 #######################
 
 orig_dir = '/Users/ofermagen/Coding/NLP_Project_Data/data/'
 res_dir = '/Users/ofermagen/Desktop/'
-img_dir = orig_dir + 'unformatted_images/dev'
-json_file = orig_dir + 'nlvr/nlvr2/data/dev.json'
-hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/dev_hashes.json'
-DDIR =  res_dir + 'semiformatted_images/dev'
-if not os.path.isdir(DDIR): os.mkdir(DDIR)
+img_dir = orig_dir + 'unformatted_images/train'
+json_file = orig_dir + 'nlvr/nlvr2/data/train.json'
+hash_file = orig_dir + 'nlvr/nlvr2/util/hashes/train_hashes.json'
+DDIR =  res_dir + 'semiformatted_images/train'
+print(DDIR,os.path.isdir(DDIR))
+if not os.path.isdir(DDIR): 
+    os.mkdir(DDIR)
+else:
+    raise Exception
 
 #######################
 
@@ -76,27 +82,10 @@ examples = [json.loads(line) for line in open(json_file).readlines()]
 hashes = json.loads(open(hash_file).read())
 
 #######################
+with open('word_embeddings/word2num.json','r') as f:
+  word2num = json.load(f)
+  word2num = {w:i for i,w in enumerate(word2num)}
 
-word2num = dict()
-pad_word = '_UNIQUE_PADDING_WORD'
-word2num[pad_word] = 0
-for sent in examples:
-  sent = sent['sentence']
-  sent = sent2list(sent)
-  for w in sent:
-    if w not in word2num:
-      tmp = len(word2num)
-      word2num[w] = tmp
-with open(os.path.join(DDIR,'word2num.json'),'w') as f:
-  json.dump(word2num,f)
-
-params = dict()
-params['vocab_size'] = len(word2num)
-
-with open(os.path.join(DDIR,"params.json"),"w") as f:
-    json.dump(params,f)
-
-exit()
 #######################
 
 shuffle(examples)
@@ -131,7 +120,7 @@ for ex in progressbar(examples):
 
     cv2.imwrite(os.path.join(res_dir,str(len(data)) + "-img0.png"),imgL)
     cv2.imwrite(os.path.join(res_dir,str(len(data)) + "-img1.png"),imgR)
-    sent = map(lambda w: word2num[w],sent2list(ex["sentence"]))
+    sent = sent2list(ex["sentence"])
     label = ex['label'][0] == 'T'
     data.append({"id": ID, "sentence" : list(sent), "label" : label})
 
