@@ -130,7 +130,7 @@ for ID in pbar:
         pickle.dump(OBJ, f, pickle.HIGHEST_PROTOCOL)
 
 
-class_dict = {str(s}:i for s,i in class_dict.items()}
+class_dict = {str(s):i for s,i in class_dict.items()}
 path = os.path.join(res_path, "params.json")
 with open(path, "w") as f:
     json.dump({"ID2path": res_dict, "class2num": class_dict}, f)
