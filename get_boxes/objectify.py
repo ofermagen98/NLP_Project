@@ -107,6 +107,7 @@ print("getting classes")
 class_dict = dict()
 special_classes = 1
 for _, path in id2_boxes_path.items():
+    print(path)
     with open(path, "rb") as f:
         OBJ = pickle.load(f)
         for c in OBJ["detection_classes"]:
