@@ -132,6 +132,8 @@ for ID in progressbar(pbar):
 #stringify because json is a jerk
 #class_dict = {str(s):i for s,i in class_dict.items()}
 print(class_dict)
+S = {type(x) for x in class_dict}
+print(S)
 path = os.path.join(res_path, "params.json")
 with open(path, "w") as f:
     json.dump({"ID2path": res_dict, "class2num": class_dict}, f)
