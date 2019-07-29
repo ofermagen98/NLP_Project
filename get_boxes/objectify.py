@@ -104,7 +104,7 @@ for _,path in id2_boxes_path.items():
             if c not in class_dict:
                 class_dict[c] = len(class_dict) + special_classes
 
-
+print('formatting')
 res_dict = dict()
 for ID in id2_image_path:
     if ID not in id2_boxes_path: continue
