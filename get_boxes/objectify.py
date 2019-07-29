@@ -73,7 +73,7 @@ def id2_objects(ID):
         images.append(cropped_image)
 
     images = np.stack(images)
-    boxes = np.concat(
+    boxes = np.concatenate(
         [np.asarray([0, 1, 0, 1], dtype=float), OBJ["detection_boxes"]], axis=0
     )
     classes = [0] + [get_class(c) for c in OBJ["detection_classes"]]
