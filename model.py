@@ -42,7 +42,7 @@ em_imgs = tf.keras.layers.Concatenate(axis=2)([em_imgL, em_imgR])
 
 # embedding sentence
 print("creating transformer encoder")
-GloVe_embeddings = np.load("word_embeddings", "embedding.npy")
+GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
 enc_mask = create_padding_mask(sent)
 encoder = Encoder(
