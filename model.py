@@ -1,6 +1,5 @@
 import json
 import os
-from progressbar import progressbar
 import sys
 import numpy as np
 
