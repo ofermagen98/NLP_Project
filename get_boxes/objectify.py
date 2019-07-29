@@ -59,7 +59,7 @@ def id2_objects(ID):
 
     assert ID in id2_image_path and ID in id2_boxes_path
     size = 128
-    orig_img = Image.open(id2_path[ID])
+    orig_img = Image.open(id2_image_path[ID])
     orig_img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
     img = resize(orig_img, 1024)
 
