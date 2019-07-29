@@ -31,7 +31,7 @@ from transformer import Encoder, create_padding_mask
 
 
 def lr_schedualer(epoch):
-    base = 2e-7
+    base = 1e-6
 
     if epoch <= 20:
         frac = 0.1
