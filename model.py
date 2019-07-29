@@ -44,10 +44,11 @@ em_imgs = tf.keras.layers.Concatenate(axis=2)([em_imgL, em_imgR])
 # embedding sentence
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings", "embedding.npy")
+print(GloVe_embeddings.shape)
 enc_mask = create_padding_mask(sent)
 encoder = Encoder(
     num_layers=4,
-    d_model=128,
+    d_model=GloVe_embeddings.shape[1],
     num_heads=8,
     dff=512,
     input_vocab_size=GloVe_embeddings.shape[0],
