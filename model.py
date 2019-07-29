@@ -12,7 +12,7 @@ if sys.argv[1] == "J":
         "/specific/netapp5/joberant/home/ofermagen/checkpoints/model.{epoch:03d}.h5"
     )
 elif sys.argv[1] == "O":
-    data_dir = "/home/ofermagen/data/training_data_formatted/train/"
+    data_dir = "/home/ofermagen/data/semiformatted_images/train/"
     model_path = "/home/ofermagen/checkpoints/model.{epoch:03d}.h5"
 else:
     raise NotImplementedError
