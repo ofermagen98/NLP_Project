@@ -130,7 +130,7 @@ for ID in progressbar(pbar):
         pickle.dump(OBJ, f, pickle.HIGHEST_PROTOCOL)
 
 #stringify because json is a jerk
-#class_dict = {str(s):i for s,i in class_dict.items()}
+class_dict = {int(k):i for k,i in class_dict.items()}
 print(class_dict)
 S = {type(x) for x in class_dict}
 print(S)
