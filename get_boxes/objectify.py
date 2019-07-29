@@ -81,11 +81,11 @@ def id2_objects(ID):
     scores = [1.0] + [s for s in OBJ["detection_scores"]]
     scores = np.asarray(scores)
 
-    desc = lambda A: "shape=" + str(A.shape) + ", dtype=" + str(A.dtype)
-    print("images", desc(images))
-    print("scores", desc(scores))
-    print("boxes", desc(boxes))
-    print("classes", desc(classes))
+    #desc = lambda A: "shape=" + str(A.shape) + ", dtype=" + str(A.dtype)
+    #print("images", desc(images))
+    #print("scores", desc(scores))
+    #print("boxes", desc(boxes))
+    #print("classes", desc(classes))
 
     return images, boxes, classes, scores
 
