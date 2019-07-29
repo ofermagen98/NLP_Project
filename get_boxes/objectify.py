@@ -45,9 +45,18 @@ def resize(im, desired_size, color=(128, 128, 128)):
     )
     return new_im
 
+def get_class(c):
+    global class_dict, special_classes
+    if c in class_dict: 
+        return class_dict[c]
+    else:
+        res = len(class_dict) + special_classes
+        class_dict[c] = res
+        return res
 
 def id2_objects(ID):
-    global id2_image_path, id2_boxes_path, class_dict
+    global id2_image_path, id2_boxes_path
+
     assert ID in id2_image_path and ID in id2_boxes_path
     size = 128
     orig_img = Image.open(id2_path[ID])
@@ -67,7 +76,7 @@ def id2_objects(ID):
     boxes = np.concat(
         [np.asarray([0, 1, 0, 1], dtype=float), OBJ["detection_boxes"]], axis=0
     )
-    classes = [0] + [class_dict[c] for c in OBJ["detection_classes"]]
+    classes = [0] + [get_class(c) for c in OBJ["detection_classes"]]
     classes = np.asarray(classes)
     scores = [1.0] + [s for s in OBJ["detection_scores"]]
     scores = np.asarray(scores)
@@ -104,16 +113,8 @@ with open(json_file, "r") as f:
         path = os.path.join(boxes_dir, path)
         id2_boxes_path[ID] = path
 
-print("getting classes")
 class_dict = dict()
 special_classes = 1
-for _, path in progressbar(id2_boxes_path.items()):
-    with open(path, "rb") as f:
-        OBJ = pickle.load(f)
-        for c in OBJ["detection_classes"]:
-            if c not in class_dict:
-                class_dict[c] = len(class_dict) + special_classes
-
 print("formatting")
 res_dict = dict()
 for ID in progressbar(id2_image_path):
