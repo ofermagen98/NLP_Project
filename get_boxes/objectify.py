@@ -7,7 +7,7 @@ import json
 
 img_dir = '/home/ofermagen/data/unformatted_images/train/'
 json_file = 'data/pretraining_data_formatted/train/ID2path.json'
-boxes_dir = '/home/ofermagen/d/data/pretraining_boxes/train/'
+boxes_dir = '/home/ofermagen/data/pretraining_boxes/train/'
 res_path = '/home/ofermagen/data/objects/train/'
 
 print(boxes_dir)
