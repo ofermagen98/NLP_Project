@@ -129,11 +129,8 @@ for ID in progressbar(pbar):
     with open(path, "wb") as f:
         pickle.dump(OBJ, f, pickle.HIGHEST_PROTOCOL)
 
-#stringify because json is a jerk
+#int because json is a jerk
 class_dict = {int(k):i for k,i in class_dict.items()}
-print(class_dict)
-S = {type(x) for x in class_dict}
-print(S)
 path = os.path.join(res_path, "params.json")
 with open(path, "w") as f:
     json.dump({"ID2path": res_dict, "class2num": class_dict}, f)
