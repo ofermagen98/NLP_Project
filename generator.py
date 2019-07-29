@@ -123,8 +123,10 @@ class DataGenerator(Sequence):
 
         imgL = map(lambda i: self.paths[i] + "-img0.png", idx)
         imgL = np.stack([np.array(Image.open(path)) for path in imgL])
+        print(imgL.shape)
         imgL = self.gen.flow(imgL, batch_size=imgL.shape[0], shuffle=False)[0]
-
+        print(imgL.shape)
+        
         imgR = map(lambda i: self.paths[i] + "-img1.png", idx)
         imgR = np.stack([np.array(Image.open(path)) for path in imgR])
         imgR = self.gen.flow(imgR, batch_size=imgR.shape[0], shuffle=False)[0]
