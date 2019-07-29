@@ -4,6 +4,7 @@ from PIL import Image
 import numpy as np
 import os
 import json
+from progressbar import progressbar
 
 img_dir = "/home/ofermagen/data/unformatted_images/train/"
 json_file = "/home/ofermagen/data/pretraining_data_formatted/train/ID2path.json"
@@ -106,7 +107,7 @@ with open(json_file, "r") as f:
 print("getting classes")
 class_dict = dict()
 special_classes = 1
-for _, path in id2_boxes_path.items():
+for _, path in progressbar(id2_boxes_path.items()):
     with open(path, "rb") as f:
         OBJ = pickle.load(f)
         for c in OBJ["detection_classes"]:
@@ -115,7 +116,7 @@ for _, path in id2_boxes_path.items():
 
 print("formatting")
 res_dict = dict()
-for ID in id2_image_path:
+for ID in progressbar(id2_image_path):
     if ID not in id2_boxes_path:
         continue
     OBJ = id2_objects(ID)
