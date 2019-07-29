@@ -20,7 +20,7 @@ assert os.path.isdir(data_dir)
 import tensorflow as tf
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import Input, Dense
-from tensorflow.keras.callbacks import ModelCheckpoint,LearningRateScheduler
+from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 
 from tensorflow.keras.initializers import Constant
 
@@ -31,27 +31,26 @@ from transformer import Encoder, create_padding_mask
 
 
 def lr_schedualer(epoch):
-	base = 1e-7
+    base = 1e-7
 
-	if epoch <= 20:
-		frac = 0.1
-	elif epoch <= 30:
-		frac = 0.2
-	elif epoch <= 40:
-		frac = 0.4
-	elif epoch <= 60:
-		frac = 0.8
-	elif epoch <= 120:
-		frac = 1.0
-	elif epoch <= 140:
-		frac = 0.75
-	elif epoch <= 180:
-		frac = 0.5
-	else:
-		frac = 0.25
-	
-	return base*frac
+    if epoch <= 20:
+        frac = 0.1
+    elif epoch <= 30:
+        frac = 0.2
+    elif epoch <= 40:
+        frac = 0.4
+    elif epoch <= 60:
+        frac = 0.8
+    elif epoch <= 120:
+        frac = 1.0
+    elif epoch <= 140:
+        frac = 0.75
+    elif epoch <= 180:
+        frac = 0.5
+    else:
+        frac = 0.25
 
+    return base * frac
 
 
 # defining model's inputs
@@ -73,7 +72,7 @@ print(GloVe_embeddings.shape)
 enc_mask = create_padding_mask(sent)
 encoder = Encoder(
     num_layers=4,
-    d_model=300,
+    d_model=300,  # also the word embedding dim
     num_heads=12,
     dff=512,
     input_vocab_size=GloVe_embeddings.shape[0],
@@ -101,7 +100,7 @@ checkpoint = ModelCheckpoint(
     filepath=model_path, monitor="acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
-callbacks = [checkpoint,lrate]
+callbacks = [checkpoint, lrate]
 
 print("creating generators")
 datagen = DataGenerator(data_dir)
