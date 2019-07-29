@@ -116,6 +116,7 @@ print("formatting")
 res_dict = dict()
 pbar = list(id2_image_path.keys())[:100]
 pbar = progressbar(pbar)
+
 for ID in pbar:
     if ID not in id2_boxes_path:
         continue
@@ -128,6 +129,8 @@ for ID in pbar:
     with open(path, "wb") as f:
         pickle.dump(OBJ, f, pickle.HIGHEST_PROTOCOL)
 
+
+print(class_dict)
 path = os.path.join(res_path, "params.json")
 with open(path, "w") as f:
     json.dump({"ID2path": res_dict, "class2num": class_dict}, f)
