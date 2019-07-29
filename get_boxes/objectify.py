@@ -10,6 +10,7 @@ json_file = 'data/pretraining_data_formatted/train/ID2path.json'
 boxes_dir = '/home/ofermagen/d/data/pretraining_boxes/train/'
 res_path = '/home/ofermagen/data/objects/train/'
 
+print(boxes_dir)
 assert os.path.isdir(img_dir)
 assert os.path.isdir(boxes_dir)
 assert os.path.isfile(json_file)
