@@ -100,7 +100,7 @@ checkpoint = ModelCheckpoint(
 lrate = LearningRateScheduler(lr_schedualer)
 callbacks = [checkpoint, lrate]
 if sys.argv[1] == 'O':
-    model.load_weights("/home/ofermagen/checkpoints/model.011.h5")
+    model.load_weights("/home/ofermagen/checkpoints/model.001.h5")
 
 
 print("creating generators")
