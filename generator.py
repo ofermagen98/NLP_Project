@@ -12,7 +12,7 @@ class DataGenerator(Sequence):
     """
     """
 
-    def __init__(self, ddir, batch_size=40, shuffle=True, augmentation=False):
+    def __init__(self, ddir, batch_size=30, shuffle=True, augmentation=False):
         assert os.path.isdir(ddir)
         super(DataGenerator, self).__init__()
         self.ddir = ddir
