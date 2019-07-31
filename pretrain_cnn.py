@@ -21,7 +21,7 @@ with open(
     classes = json.load(f)
     class_num = len(classes)
 
-import tensorflow as tf
+from utils import tensorflow as tf as tf
 from resnet import ResnetV1_FCNN
 
 # from RN import Perceptron

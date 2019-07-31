@@ -1,4 +1,4 @@
-import tensorflow as tf
+from utils import tensorflow as tf as tf
 import numpy as np
 from tensorflow.keras.layers import LayerNormalization
 
