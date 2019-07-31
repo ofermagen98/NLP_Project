@@ -92,6 +92,7 @@ pred = Dense(1, activation="sigmoid")(relation_out)
 print("compiling model")
 model = Model(inputs=[imgL, imgR, sent], outputs=pred)
 model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
+model.load_weights("")
 
 # model.load_weights(model_path)
 checkpoint = ModelCheckpoint(

@@ -1,10 +1,24 @@
-import tensorflow as tf
+import signal
+import psutil
 import json
 import os
 
 DROPOUT_BOOL = False
 DROPOUT_RATE = 0.4
 
+def import_tensorflow():
+    def kill_children(*a,**kw):
+        print("timeout")
+        current_process = psutil.Process()
+        child = current_process.children(recursive=True)[0]
+        os.kill(child.pid, signal.SIGTERM)
+
+    signal.signal(signal.SIGALRM, kill_children)
+    signal.alarm(5)
+    import tensorflow
+    return tensorflow
+
+tf = import_tensorflow()
 
 class HistorySaver(tf.keras.callbacks.Callback):
     def __init__(self, fname, save_every=32, *a, **kw):
