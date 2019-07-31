@@ -20,7 +20,7 @@ def import_tensorflow():
 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6"
-    os.environ["LD_LIBRARY_PATH"] = "/usr/local/lib/cuda-9.0.176/lib64:/usr/local/lib/cudnn-10.0-v7/lib64/:/usr/local/lib/cuda-10.0.130/lib64/"
+    os.environ["LD_LIBRARY_PATH"] = "/usr/local/lib/cuda-10.0.130/lib64"
     from tensorflow.python.client import device_lib
 
     print(device_lib.list_local_devices())
