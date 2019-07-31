@@ -14,7 +14,7 @@ def import_tensorflow():
         os.kill(child.pid, signal.SIGTERM)
 
     signal.signal(signal.SIGALRM, kill_children)
-    signal.alarm(5)
+    signal.alarm(10)
     import tensorflow
 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
