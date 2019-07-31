@@ -8,7 +8,7 @@ import numpy as np
 assert len(sys.argv) > 1
 if sys.argv[1] == "J":
     data_dir = "/specific/disk1/home/gamir/ofer/data/semiformatted_images/train"
-    model_path = "/specific/disk1/home/gamir/ofer/checkpoints/model.h5"
+    model_path = "/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5"
 elif sys.argv[1] == "O":
     data_dir = "/home/ofermagen/data/semiformatted_images/train/"
     model_path = "/home/ofermagen/checkpoints/model.{epoch:03d}.h5"
