@@ -97,7 +97,7 @@ class DataGenerator(Sequence):
         if shuffle:
             self.shuffle()
 
-        sampled_images = range(0, min(1000, self.sample_num))
+        sampled_images = range(0, min(100, self.sample_num))
         sampled_images = map(lambda i: self.paths[i] + "-img0.png", sampled_images)
         sampled_images = np.stack(
             [np.array(Image.open(path)) for path in sampled_images]
