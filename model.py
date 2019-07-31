@@ -102,7 +102,7 @@ callbacks = [checkpoint, lrate]
 if sys.argv[1] == 'O':
     model.load_weights("/home/ofermagen/checkpoints/model.001.h5")
 elif sys.argv[1] == 'J':
-    model.load_weights("/specific/disk1/home/gamir/ofer/checkpoints/model.011.h5")
+    model.load_weights("/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5")
 
 print("creating generators")
 datagen = DataGenerator(data_dir)
