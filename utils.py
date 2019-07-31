@@ -6,6 +6,7 @@ import os
 DROPOUT_BOOL = False
 DROPOUT_RATE = 0.4
 
+
 def import_tensorflow():
     def kill_children(*a, **kw):
         print("timeout")
@@ -19,9 +20,16 @@ def import_tensorflow():
 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6"
+
+    from tensorflow.python.client import device_lib
+
+    print(device_lib.list_local_devices())
+
     return tensorflow
 
+
 tensorflow = import_tensorflow()
+
 
 class HistorySaver(tensorflow.keras.callbacks.Callback):
     def __init__(self, fname, save_every=32, *a, **kw):
