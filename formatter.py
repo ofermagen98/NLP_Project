@@ -72,7 +72,7 @@ img_dir = orig_dir + "unformatted_images/train"
 json_file = orig_dir + "nlvr/nlvr2/data/train.json"
 hash_file = orig_dir + "nlvr/nlvr2/util/hashes/train_hashes.json"
 DDIR = res_dir + "semiformatted_images/train"
-print(DDIR, os.path.isdir(DDIR))
+
 if not os.path.isdir(DDIR):
     os.mkdir(DDIR)
 else:

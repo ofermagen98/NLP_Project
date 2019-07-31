@@ -7,7 +7,7 @@ import numpy as np
 # data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
 assert len(sys.argv) > 1
 if sys.argv[1] == "J":
-    data_dir = "/specific/netapp5/joberant/home/ofermagen/semiformatted_images/train"
+    data_dir = "/specific/disk1/home/gamir/ofer/data/semiformatted_images/train"
     model_path = "/specific/netapp5/joberant/home/ofermagen/checkpoints/model.{epoch:03d}.h5"
 elif sys.argv[1] == "O":
     data_dir = "/home/ofermagen/data/semiformatted_images/train/"
