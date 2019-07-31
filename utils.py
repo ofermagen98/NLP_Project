@@ -16,10 +16,10 @@ def import_tensorflow():
 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6"
-    os.environ["LD_LIBRARY_PATH"] = "/usr/local/lib/cuda-10.0.130/lib64"
-    os.environ["LIBRARY_PATH"] = "/usr/local/lib/cuda-10.0.130/lib64"
-    os.environ["CUDA_ROOT"] = "/usr/local/lib/cuda-10.0.130"
-    os.environ["CUDA_HOME"] = "/usr/local/lib/cuda-10.0.130"
+    #os.environ["LD_LIBRARY_PATH"] = "/usr/local/lib/cuda-10.0.130/lib64"
+    #os.environ["LIBRARY_PATH"] = "/usr/local/lib/cuda-10.0.130/lib64"
+    #os.environ["CUDA_ROOT"] = "/usr/local/lib/cuda-10.0.130"
+    #os.environ["CUDA_HOME"] = "/usr/local/lib/cuda-10.0.130"
 
     signal.signal(signal.SIGALRM, kill_children)
     signal.alarm(20)
