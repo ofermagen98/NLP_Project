@@ -15,7 +15,7 @@ def import_tensorflow():
 
     signal.signal(signal.SIGALRM, kill_children)
     signal.alarm(5)
-    from utils import tensorflow as tf
+    import tensorflow
 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6"
