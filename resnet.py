@@ -1,6 +1,6 @@
 from utils import DROPOUT_RATE, DROPOUT_BOOL
 
-from utils import tensorflow as tf as tf
+from utils import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense, Conv2D
 from tensorflow.keras.layers import Dropout, BatchNormalization, Flatten

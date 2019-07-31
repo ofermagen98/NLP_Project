@@ -1,7 +1,7 @@
 import numpy as np
 import os
 import sys
-from utils import tensorflow as tf as tf
+from utils import tensorflow as tf
 from PIL import Image
 
 # import cv2

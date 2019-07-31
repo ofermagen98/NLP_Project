@@ -15,7 +15,7 @@ elif sys.argv[1] == "O":
 else:
     raise NotImplementedError
 assert os.path.isdir(data_dir)
-from utils import tensorflow as tf as tf
+from utils import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
