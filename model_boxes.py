@@ -17,7 +17,7 @@ else:
 assert os.path.isdir(data_dir)
 
 
-from utils from utils import tensorflow as tf as tf
+from utils import tensorflow as tf as tf
 from tensorflow.keras.models import Model, load_model
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
