@@ -68,9 +68,9 @@ def sent2list(sent, size=40):
 
 orig_dir = "/specific/disk1/home/gamir/ofer/data/"
 res_dir = "/specific/disk1/home/gamir/ofer/data/"
-img_dir = orig_dir + "unformatted_images/dev"
+img_dir = orig_dir + "unformatted_images/dev/"
 json_file = orig_dir + "nlvr/nlvr2/data/dev.json"
-hash_file = orig_dir + "nlvr/nlvr2/util/hashes/train_hashes.json"
+hash_file = orig_dir + "nlvr/nlvr2/util/hashes/dev_hashes.json"
 DDIR = res_dir + "semiformatted_images/dev"
 
 if not os.path.isdir(DDIR):
