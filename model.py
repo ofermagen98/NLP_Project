@@ -2,7 +2,7 @@ import json
 import os
 import sys
 import numpy as np
-from random import smaple_images
+from utils import smaple_images
 from PIL import Image
 
 # data sources
