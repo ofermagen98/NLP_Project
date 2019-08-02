@@ -102,13 +102,13 @@ checkpoint = ModelCheckpoint(
 )
 lrate = LearningRateScheduler(lr_schedualer)
 callbacks = [checkpoint, lrate]
-if sys.argv[1] == 'O':
-    model.load_weights("/home/ofermagen/checkpoints/model.001.h5")
-elif sys.argv[1] == 'J':
-    model.load_weights("/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5")
+#if sys.argv[1] == 'O':
+#    model.load_weights("/home/ofermagen/checkpoints/model.001.h5")
+#elif sys.argv[1] == 'J':
+#    model.load_weights("/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5")
 
 print("creating generators")
-train_gen = DataGenerator(train_data_dir)
+train_gen = DataGenerator(train_data_dir,augmentation=True)
 val_gen = DataGenerator(dev_data_dir)
 
 print("training model")
