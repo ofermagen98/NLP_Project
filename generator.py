@@ -36,13 +36,13 @@ class DataGenerator(Sequence):
                 # randomly rotate images in the range (deg 0 to 180)
                 rotation_range=10,
                 # randomly shift images horizontally
-                width_shift_range=0.075,
+                width_shift_range=0.1,
                 # randomly shift images vertically
-                height_shift_range=0.075,
+                height_shift_range=0.1,
                 # set range for random shear
-                shear_range=0.075,
+                shear_range=0.1,
                 # set range for random zoom
-                zoom_range=0.075,
+                zoom_range=0.1,
                 # set range for random channel shifts
                 channel_shift_range=0.0,
                 # set mode for filling points outside the input boundaries
