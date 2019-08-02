@@ -12,7 +12,7 @@ class DataGenerator(Sequence):
     """
     """
 
-    def __init__(self, ddir, batch_size=30, shuffle=True, augmentation=False):
+    def __init__(self, ddir, smapled_images, batch_size=30, shuffle=True, augmentation=False):
         assert os.path.isdir(ddir)
         super(DataGenerator, self).__init__()
         self.ddir = ddir
@@ -66,6 +66,7 @@ class DataGenerator(Sequence):
             self.gen = ImageDataGenerator(
                 featurewise_center=True, featurewise_std_normalization=True
             )
+        self.gen.fit(sampled_images)
 
         self.dir_num = os.listdir(ddir)
         self.dir_num = map(lambda s: os.path.join(ddir, s), self.dir_num)
@@ -96,13 +97,6 @@ class DataGenerator(Sequence):
 
         if shuffle:
             self.shuffle()
-
-        sampled_images = range(0, min(1000, self.sample_num))
-        sampled_images = map(lambda i: self.paths[i] + "-img0.png", sampled_images)
-        sampled_images = np.stack(
-            [np.array(Image.open(path)) for path in sampled_images]
-        )
-        self.gen.fit(sampled_images)
 
     def shuffle(self):
         self.permutation = np.random.permutation(self.sample_num)

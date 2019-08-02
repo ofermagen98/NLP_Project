@@ -2,9 +2,23 @@ import psutil
 import signal
 import json
 import os
+import random
 
 DROPOUT_BOOL = False
 DROPOUT_RATE = 0.4
+
+def smaple_images(dir,num,seed=1234):
+    samples = []
+    for root, _, files in os.walk(dir):
+        for f in files:
+            if os.path.splitext(f)[1] == ".png":
+                samples.append(os.path.join(root, f))
+    #samples.sort(key = os.path.basename)
+    samples.sort()
+    random.Random(seed).shuffle(samples)
+    samples = samples[:num]
+    return samples
+
 
 
 def import_tensorflow():

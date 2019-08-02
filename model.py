@@ -2,6 +2,8 @@ import json
 import os
 import sys
 import numpy as np
+from random import smaple_images
+from PIL import Image
 
 # data sources
 # data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
@@ -108,8 +110,10 @@ callbacks = [checkpoint, lrate]
 #    model.load_weights("/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5")
 
 print("creating generators")
-train_gen = DataGenerator(train_data_dir,augmentation=True)
-val_gen = DataGenerator(dev_data_dir)
+sampled_images = smaple_images(train_data_dir,1000)
+sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
+train_gen = DataGenerator(train_data_dir,sampled_images,augmentation=True)
+val_gen = DataGenerator(dev_data_dir,sampled_images)
 
 print("training model")
 model.fit_generator(
