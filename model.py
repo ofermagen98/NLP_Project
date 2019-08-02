@@ -7,10 +7,11 @@ from PIL import Image
 
 # data sources
 # data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
+
 assert len(sys.argv) > 1
 if sys.argv[1] == "J":
     train_data_dir = "/specific/disk1/home/gamir/ofer/data/semiformatted_images/train"
-    dev_data_dir =  "/specific/disk1/home/gamir/ofer/data/semiformatted_images/dev"
+    dev_data_dir = "/specific/disk1/home/gamir/ofer/data/semiformatted_images/dev"
     model_path = "/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5"
 elif sys.argv[1] == "O":
     train_data_dir = "/home/ofermagen/data/semiformatted_images/train/"
@@ -107,13 +108,19 @@ callbacks = [checkpoint, lrate]
 model.load_weights(model_path)
 
 print("creating generators")
-sampled_images = smaple_images(train_data_dir,1000)
+sampled_images = smaple_images(train_data_dir, 1000)
 sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
-train_gen = DataGenerator(train_data_dir,sampled_images,augmentation=True)
-val_gen = DataGenerator(dev_data_dir,sampled_images)
+train_gen = DataGenerator(train_data_dir, sampled_images, augmentation=True)
+val_gen = DataGenerator(dev_data_dir, sampled_images)
 
 print("training model")
 model.fit_generator(
-    train_gen, epochs=200, verbose=1, workers=4, callbacks=callbacks, validation_data = val_gen, shuffle=False
+    train_gen,
+    epochs=200,
+    verbose=1,
+    workers=4,
+    callbacks=callbacks,
+    validation_data=val_gen,
+    shuffle=False,
 )
 
