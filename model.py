@@ -7,14 +7,17 @@ import numpy as np
 # data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
 assert len(sys.argv) > 1
 if sys.argv[1] == "J":
-    data_dir = "/specific/disk1/home/gamir/ofer/data/semiformatted_images/train"
+    train_data_dir = "/specific/disk1/home/gamir/ofer/data/semiformatted_images/train"
+    dev_data_dir =  "/specific/disk1/home/gamir/ofer/data/semiformatted_images/dev"
     model_path = "/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5"
 elif sys.argv[1] == "O":
-    data_dir = "/home/ofermagen/data/semiformatted_images/train/"
+    train_data_dir = "/home/ofermagen/data/semiformatted_images/train/"
     model_path = "/home/ofermagen/checkpoints/model.{epoch:03d}.h5"
 else:
     raise NotImplementedError
-assert os.path.isdir(data_dir)
+assert os.path.isdir(train_data_dir)
+assert os.path.isdir(dev_data_dir)
+
 from utils import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
@@ -95,7 +98,7 @@ model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
 # model.load_weights(model_path)
 checkpoint = ModelCheckpoint(
-    filepath=model_path, monitor="acc", verbose=1, save_best_only=True, mode="max"
+    filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
 callbacks = [checkpoint, lrate]
@@ -105,10 +108,11 @@ elif sys.argv[1] == 'J':
     model.load_weights("/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5")
 
 print("creating generators")
-datagen = DataGenerator(data_dir)
+train_gen = DataGenerator(train_data_dir)
+val_gen = DataGenerator(dev_data_dir)
 
 print("training model")
 model.fit_generator(
-    datagen, epochs=200, verbose=1, workers=4, callbacks=callbacks, shuffle=False
+    datagen, epochs=200, verbose=1, workers=4, callbacks=callbacks, validation_data = val_gen, shuffle=False
 )
 

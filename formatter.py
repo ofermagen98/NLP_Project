@@ -71,7 +71,7 @@ res_dir = "/specific/disk1/home/gamir/ofer/data/"
 img_dir = orig_dir + "unformatted_images/dev/"
 json_file = orig_dir + "nlvr/nlvr2/data/dev.json"
 hash_file = orig_dir + "nlvr/nlvr2/util/hashes/dev_hashes.json"
-DDIR = res_dir + "semiformatted_images/dev"
+DDIR = res_dir + "semiformatted_images/dev/"
 
 if not os.path.isdir(DDIR):
     os.mkdir(DDIR)
