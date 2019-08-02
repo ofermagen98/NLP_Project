@@ -14,7 +14,7 @@ if sys.argv[1] == "J":
     model_path = "/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5"
 elif sys.argv[1] == "O":
     train_data_dir = "/home/ofermagen/data/semiformatted_images/train/"
-    model_path = "/home/ofermagen/checkpoints/model.{epoch:03d}.h5"
+    model_path = "/home/ofermagen/checkpoint_best/model.h5"
 else:
     raise NotImplementedError
 assert os.path.isdir(train_data_dir)
@@ -104,10 +104,7 @@ checkpoint = ModelCheckpoint(
 )
 lrate = LearningRateScheduler(lr_schedualer)
 callbacks = [checkpoint, lrate]
-#if sys.argv[1] == 'O':
-#    model.load_weights("/home/ofermagen/checkpoints/model.001.h5")
-#elif sys.argv[1] == 'J':
-#    model.load_weights("/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5")
+model.load_weights(model_path)
 
 print("creating generators")
 sampled_images = smaple_images(train_data_dir,1000)
