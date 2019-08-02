@@ -37,7 +37,7 @@ class RelationalProduct(tf.keras.layers.Layer):
 
 
 class ConvolutionalPerceptron(tf.keras.layers.Layer):
-    def __init__(self, input_shape, layer_dims):
+    def __init__(self, input_shape, layer_dims, dropout=DROPOUT_BOOL):
         super(ConvolutionalPerceptron, self).__init__()
         self._input_shape = input_shape
         self.model = Sequential()
