@@ -7,7 +7,6 @@ from PIL import Image
 
 # data sources
 # data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
-
 assert len(sys.argv) > 1
 if sys.argv[1] == "J":
     train_data_dir = "/specific/disk1/home/gamir/ofer/data/semiformatted_images/train"
