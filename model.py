@@ -100,7 +100,7 @@ model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
 # model.load_weights(model_path)
 checkpoint = ModelCheckpoint(
-    filepath=model_path, monitor="val_acc", verbose=1, save_best_only=False, mode="max"
+    filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
 callbacks = [checkpoint, lrate]
