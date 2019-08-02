@@ -113,6 +113,6 @@ val_gen = DataGenerator(dev_data_dir)
 
 print("training model")
 model.fit_generator(
-    datagen, epochs=200, verbose=1, workers=4, callbacks=callbacks, validation_data = val_gen, shuffle=False
+    train_gen, epochs=200, verbose=1, workers=4, callbacks=callbacks, validation_data = val_gen, shuffle=False
 )
 
