@@ -48,6 +48,9 @@ class ConvolutionalPerceptron(tf.keras.layers.Layer):
                 )
             else:
                 self.model.add(Conv1D(filters=dim, kernel_size=1))
+            if dropout:
+                self.model.add(Dropout(rate=DROPOUT_RATE))
+
 
     def call(self, x):
         assert len(x.shape) == 3

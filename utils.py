@@ -4,8 +4,8 @@ import json
 import os
 import random
 
-DROPOUT_BOOL = False
-DROPOUT_RATE = 0.4
+DROPOUT_BOOL = True
+DROPOUT_RATE = 0.3
 
 def smaple_images(dir,num,seed=1234):
     samples = []
