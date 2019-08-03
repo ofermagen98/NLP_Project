@@ -21,6 +21,7 @@ with open(CONFIG_PATH, "r") as f:
     OBJ = CONFIG["OBJS"][INDEX]
     CONFIG.pop("OBJS", None)
 
+print(CONFIG["DDIR"])
 assert os.path.isdir(CONFIG["SDIR"])
 assert os.path.isdir(CONFIG["DDIR"])
 
