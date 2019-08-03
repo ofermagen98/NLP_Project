@@ -79,7 +79,7 @@ def id2_objects(ID):
     classes = np.asarray(classes)
     scores = [1.0] + [s for s in OBJ["detection_scores"]]
     scores = np.asarray(scores)
-    idx = [c for c in classes if c != -1]
+    idx = [i for i,c in enumerate(classes) if c != -1]
 
     print(images[idx].shape)
     exit()
