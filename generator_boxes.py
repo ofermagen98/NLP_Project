@@ -83,7 +83,6 @@ def read_OBJ(imgL, imgR, size=30):
     OBJ["mask"] = np.asarray([True] * (size - count) + [False] * count, dtype=bool)
     return OBJ
 
-
 class DataGenerator(Sequence):
     """
     """
