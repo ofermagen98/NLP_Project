@@ -7,7 +7,7 @@ from copy import deepcopy
 from PIL import Image
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
-# TODO shuffle
+
 class DataGenerator(Sequence):
     """
     """
