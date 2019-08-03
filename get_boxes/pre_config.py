@@ -4,7 +4,7 @@ DEVICE_NUM = 8
 SOURCE = "/home/ofermagen/"
 SDIR = SOURCE + "data/pretraining_data_formatted/dev/"
 DDIR = SOURCE + "data/pretraining_boxes/dev/"
-json_file = SOURCE + "NLP_Project/get_boxes/config.json"
+json_file = SOURCE + "config.json"
 
 assert os.path.isdir(SDIR)
 assert os.path.isdir(DDIR)
