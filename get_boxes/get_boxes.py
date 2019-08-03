@@ -1,7 +1,7 @@
 import numpy as np
 import os
 import sys
-from utils import tensorflow as tf
+import tensorflow as tf
 from PIL import Image
 
 # import cv2
@@ -14,7 +14,7 @@ from time import time
 INDEX = 0
 if len(sys.argv) > 1:
     INDEX = int(sys.argv[0])
-CONFIG_PATH = "/home/ofermagen/NLP_Project/get_boxes/config.json"
+CONFIG_PATH = "/home/ofermagen/config.json"
 MODELS_DIR = "/home/ofermagen/models/"
 with open(CONFIG_PATH, "r") as f:
     CONFIG = json.load(f)
