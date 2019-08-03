@@ -5,11 +5,12 @@ import numpy as np
 import os
 import json
 from progressbar import progressbar
+from objectify_utils import class2num,special_classes
 
-img_dir = "/home/ofermagen/data/unformatted_images/train/"
-json_file = "/home/ofermagen/data/pretraining_data_formatted/train/ID2path.json"
-boxes_dir = "/home/ofermagen/data/pretraining_boxes/train/"
-res_path = "/home/ofermagen/data/objects/train/"
+img_dir = "/home/ofermagen/data/unformatted_images/dev/"
+json_file = "/home/ofermagen/data/pretraining_data_formatted/dev/ID2path.json"
+boxes_dir = "/home/ofermagen/data/pretraining_boxes/dev/"
+res_path = "/home/ofermagen/data/objects/dev/"
 
 assert os.path.isdir(img_dir)
 assert os.path.isdir(boxes_dir)
@@ -50,9 +51,7 @@ def get_class(c):
     if c in class_dict: 
         return class_dict[c]
     else:
-        res = len(class_dict) + special_classes
-        class_dict[c] = res
-        return res
+        return -1
 
 def id2_objects(ID):
     global id2_image_path, id2_boxes_path
@@ -80,14 +79,11 @@ def id2_objects(ID):
     classes = np.asarray(classes)
     scores = [1.0] + [s for s in OBJ["detection_scores"]]
     scores = np.asarray(scores)
+    idx = [c for c in classes if c != -1]
 
-    #desc = lambda A: "shape=" + str(A.shape) + ", dtype=" + str(A.dtype)
-    #print("images", desc(images))
-    #print("scores", desc(scores))
-    #print("boxes", desc(boxes))
-    #print("classes", desc(classes))
-
-    return images, boxes, classes, scores
+    print(images[idx].shape)
+    exit()
+    return images[idx], boxes[idx], classes[idx], scores[idx]
 
 def format_OBJ(images, boxes, classes, scores):
     return {'images':images, 'boxes':boxes, 'classes':classes, 'scores':scores}
@@ -110,8 +106,7 @@ with open(json_file, "r") as f:
         path = os.path.join(boxes_dir, path)
         id2_boxes_path[ID] = path
 
-class_dict = dict()
-special_classes = 1
+class_dict = class2num.copy()
 print("formatting")
 res_dict = dict()
 
