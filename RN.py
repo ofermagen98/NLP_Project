@@ -6,6 +6,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D, Dense, Input, Dropout
 
 
+
+
 class ReduceMean(tf.keras.layers.Layer):
     def __init__(self, axis):
         super(ReduceMean, self).__init__()
@@ -75,3 +77,28 @@ class Perceptron(tf.keras.layers.Layer):
         assert len(x.shape) == 2
         assert x.shape[1] == self._input_dim
         return self.model(x)
+
+
+class MaskedReduceMean(tf.keras.layers.Layer):
+    def __init__(self):
+        super(MaskedReduceMean, self).__init__()
+
+    def call(self, X,m1,m2):
+        n1 = m1.shape[1]
+        n2 = m2.shape[1]
+
+        O1 = tf.expand_dims(m1, axis=1)
+        O1 = tf.tile(O1, multiples=(1, n2, 1))
+        O2 = tf.expand_dims(m2, axis=2)
+        O2 = tf.tile(O2, multiples=(1, 1, n1))
+        mask = tf.math.logical_and(O1,O2)
+        mask = tf.reshape(mask,shape=(-1,n1*n2))
+        mask = tf.cast(mask,tf.float32)
+        sums = tf.reduce_sum(mask, axis=-1)
+        sums = tf.expand_dims(sums, axis=-1)
+        mask = tf.expand_dims(mask, axis=-1)
+
+        X = X*mask
+        X = tf.reduce_sum(X, axis=1)
+        X = X / sums
+        return X

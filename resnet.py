@@ -4,7 +4,7 @@ from utils import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense, Conv2D
 from tensorflow.keras.layers import Dropout, BatchNormalization, Flatten
-from tensorflow.keras.layers import Activation, AveragePooling2D
+from tensorflow.keras.layers import Activation, AveragePooling2D,MaxPooling2D
 from tensorflow.keras.regularizers import l2
 from tensorflow import keras
 
@@ -64,6 +64,35 @@ def resnet_layer(
 
     return x
 
+class Simple_CNN(tf.keras.layers.Layer):
+    """
+    """
+    def __init__(self,input_shape,params):
+        super(Simple_CNN, self).__init__()
+        img = Input(shape=input_shape, name="img", dtype="float32")
+        X = img
+        for kernel_size,num_filters in params:
+            conv = Conv2D(
+                num_filters,
+                kernel_size=kernel_size,
+                strides=1,
+                padding="same",
+                kernel_initializer="he_normal",
+                kernel_regularizer=l2(5e-7),
+                activation='relu'
+            )
+            X = conv(X)
+            X = MaxPooling2D()(X)
+            if DROPOUT_BOOL:
+                X = Dropout(rate=DROPOUT_RATE)(X)
+            X = BatchNormalization()(X)
+            
+
+        X = Flatten()(X)
+        self.model = Model(inputs=img, outputs=X)
+            
+    def call(self, img, training=None):
+        return self.model(img, training=training)
 
 class ResnetV1_FCNN(tf.keras.layers.Layer):
     """
@@ -116,3 +145,4 @@ class ResnetV1_FCNN(tf.keras.layers.Layer):
 
     def call(self, img, training=None):
         return self.model(img, training=training)
+
