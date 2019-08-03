@@ -81,8 +81,6 @@ def id2_objects(ID):
     scores = np.asarray(scores)
     idx = [i for i,c in enumerate(classes) if c != -1]
 
-    print(images[idx].shape)
-    exit()
     return images[idx], boxes[idx], classes[idx], scores[idx]
 
 def format_OBJ(images, boxes, classes, scores):
