@@ -16,26 +16,6 @@ with open("./word_embeddings/word2num.json", "r") as f:
     word2num = json.load(f)
     word2num = {w: i for i, w in enumerate(word2num)}
 
-
-def sample_imags(ddir, num=1000):
-    paths = os.listdir(ddir)
-    paths = filter(lambda p: os.path.splitext(p)[1] == ".pickle", paths)
-    paths = list(paths)
-    _shuffle(paths)
-    paths = paths[:num]
-    images = []
-    S = 0
-    for p in paths:
-        if S > num:
-            break
-        with open(os.path.join(ddir, p), "rb") as f:
-            imgs = pickle.load(f)["images"]
-            S += len(imgs)
-            images.append(imgs)
-    images = np.concatenate(images)
-    return images
-
-
 def sent2list(sent, size=40):
     global word2num
     replace = lambda c: c if c.isdigit() or c.isalpha() else " "
@@ -87,7 +67,7 @@ class DataGenerator(Sequence):
     """
     """
 
-    def __init__(self, json_file, ddir, sampled_images, batch_size=16, shuffle=True):
+    def __init__(self, json_file, ddir, batch_size=16, shuffle=True):
         assert os.path.isdir(ddir)
         super(DataGenerator, self).__init__()
         self.ddir = ddir
@@ -160,7 +140,5 @@ if __name__ == "__main__":
         "/Users/ofermagen/Coding/NLP_Project_Data/home/ofermagen/data/objects/train/"
     )
     json_file = "/Users/ofermagen/Coding/NLP_Project_Data/nlvr/nlvr2/data/train.json"
-    sampled_imags = sample_imags(src_dir)
-    gen = DataGenerator(json_file, src_dir, sampled_imags)
-
+    gen = DataGenerator(json_file, src_dir)
     gen[0]
