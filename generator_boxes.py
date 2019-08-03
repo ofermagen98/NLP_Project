@@ -134,7 +134,6 @@ class DataGenerator(Sequence):
 
         return [images, classes, boxes, masks, sentences], labels
 
-
 if __name__ == "__main__":
     src_dir = (
         "/Users/ofermagen/Coding/NLP_Project_Data/home/ofermagen/data/objects/train/"
