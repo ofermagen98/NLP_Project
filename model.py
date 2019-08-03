@@ -33,26 +33,10 @@ from resnet import ResnetV1_FCNN
 from transformer import Encoder, create_padding_mask
 
 
-def lr_schedualer(epoch):
+def lr_schedualer(epoch,num_epoches=200):
     base = 1e-6
-
-    if epoch <= 20:
-        frac = 0.1
-    elif epoch <= 30:
-        frac = 0.2
-    elif epoch <= 40:
-        frac = 0.4
-    elif epoch <= 60:
-        frac = 0.8
-    elif epoch <= 120:
-        frac = 1.0
-    elif epoch <= 140:
-        frac = 0.75
-    elif epoch <= 180:
-        frac = 0.5
-    else:
-        frac = 0.25
-
+    x = float(epoch) / num_epoches
+    frac = pow(2,-x/50)
     return base * frac
 
 
