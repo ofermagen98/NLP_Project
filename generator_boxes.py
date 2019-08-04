@@ -123,7 +123,6 @@ class DataGenerator(Sequence):
         for i,_ in enumerate(keys):
             res[i] = np.stack(res[i])
         labels = np.asarray(labels,dtype=np.dtype('int32'))
-        
         return res, labels
 
 

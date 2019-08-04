@@ -2,8 +2,7 @@ import json
 import os
 import sys
 import numpy as np
-
-# from utils import smaple_images
+#from utils import smaple_images
 from PIL import Image
 
 # data sources
@@ -33,8 +32,7 @@ else:
     pass
 
 from utils import tensorflow as tf
-
-# from tensorflow.keras.utils import plot_model
+#from tensorflow.keras.utils import plot_model
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
@@ -69,47 +67,38 @@ sent = Input(shape=(40,), name="sent", dtype="int32")
 img_mask = tf.math.not_equal(sides, 0)
 sent_mask = tf.math.not_equal(sent, 0)
 
-
 class FeatureExtractor(tf.keras.layers.Layer):
-    def __init__(self, img_shape, num_class, size):
+    def __init__(self):
         super(FeatureExtractor, self).__init__()
-        # embed classes
-        self.img_shape = img_shape
-        self.num_class = num_class
-        self.size = size
 
-        self.class_embedding = tf.keras.layers.Embedding(
-            num_class, 64, embeddings_initializer="uniform"
-        )
-        self.cnn_params = [(3, 16), (3, 32), (3, 32), (3, 32), (3, 64), (3, 64)]
-        self.fcnn = Simple_CNN(img_shape[1:], self.cnn_params)
-
-    def call(self, X):
-        imgs, boxes, scores, classes, sides = X
+    def call(self,X):
+        imgs,boxes,scores,classes,sides = X
 
         # cast to float32
         em_sides = tf.cast(sides, dtype="float32")
         em_sides = tf.expand_dims(em_sides, axis=2)
         em_scores = tf.expand_dims(scores, axis=2)
-        em_classes = self.class_embedding(classes)
+
+        # embed classes
+        class_embedding = tf.keras.layers.Embedding(
+            num_class, 64, embeddings_initializer="uniform"
+        )
+        em_classes = class_embedding(classes)
 
         # embedd images
-        embedded_imgs = tf.reshape(imgs, shape=(-1,) + self.img_shape[1:])
-        embedded_imgs = self.fcnn(embedded_imgs)
-        self.n_shape = embedded_imgs.get_shape().as_list()
-        self.n_shape = [-1, self.size] + self.n_shape[1:]
-        embedded_imgs = tf.reshape(embedded_imgs, shape=self.n_shape)
+        embedded_imgs = tf.reshape(imgs, shape=(-1,) + img_shape[1:])
+        cnn_params = [(3, 16), (3, 32), (3, 32), (3, 32), (3, 64), (3, 64)]
+        fcnn = Simple_CNN(img_shape[1:], cnn_params)
+        embedded_imgs = fcnn(embedded_imgs)
+        n_shape = embedded_imgs.get_shape().as_list()
+        n_shape = [-1, size] + n_shape[1:]
+        embedded_imgs = tf.reshape(embedded_imgs, shape=n_shape)
 
-        # returning embedded features
-        em_features = tf.concat(
-            [embedded_imgs, boxes, em_classes, em_sides, em_scores], axis=-1
-        )
+        #returning embedded features
+        em_features = tf.concat([embedded_imgs, boxes, em_classes, em_sides,em_scores], axis=-1)
         return em_features
 
-
-em_featurs = FeatureExtractor(img_shape, num_class, size)(
-    [imgs, boxes, scores, classes, sides]
-)
+em_featurs = FeatureExtractor()([imgs,boxes,scores,classes,sides])
 
 # embedding sentence
 print("creating transformer encoder")
@@ -144,18 +133,19 @@ print("compiling model")
 model = Model(inputs=[imgs, boxes, classes, scores, sides, sent], outputs=pred)
 model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
-# plot_model(model, "model.png")
-# model.load_weights(model_path)
+#plot_model(model, "model.png")
 
+# model.load_weights(model_path)
 checkpoint = ModelCheckpoint(
     filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
 callbacks = [checkpoint, lrate]
+#model.load_weights(model_path)
 
 print("creating generators")
-# sampled_images = smaple_images(train_data_dir, 1000)
-# sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
+#sampled_images = smaple_images(train_data_dir, 1000)
+#sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
 train_gen = DataGenerator(*train_data)
 val_gen = DataGenerator(*dev_data)
 
