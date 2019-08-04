@@ -5,7 +5,7 @@ import numpy as np
 import os
 import json
 from progressbar import progressbar
-from objectify_utils import class2num,special_classes
+from objectify_utils import class2num, special_classes
 
 img_dir = "/home/ofermagen/data/unformatted_images/dev/"
 json_file = "/home/ofermagen/data/pretraining_data_formatted/dev/ID2path.json"
@@ -46,12 +46,14 @@ def resize(im, desired_size, color=(128, 128, 128)):
     )
     return new_im
 
+
 def get_class(c):
     global class_dict, special_classes
-    if c in class_dict: 
+    if c in class_dict:
         return class_dict[c]
     else:
         return -1
+
 
 def id2_objects(ID):
     global id2_image_path, id2_boxes_path
@@ -79,12 +81,14 @@ def id2_objects(ID):
     classes = np.asarray(classes)
     scores = [1.0] + [s for s in OBJ["detection_scores"]]
     scores = np.asarray(scores)
-    idx = [i for i,c in enumerate(classes) if c != -1]
+    idx = [i for i, c in enumerate(classes) if c != -1]
 
     return images[idx], boxes[idx], classes[idx], scores[idx]
 
+
 def format_OBJ(images, boxes, classes, scores):
-    return {'images':images, 'boxes':boxes, 'classes':classes, 'scores':scores}
+    return {"images": images, "boxes": boxes, "classes": classes, "scores": scores}
+
 
 print("getting images paths")
 id2_image_path = dict()
@@ -113,16 +117,16 @@ for ID in progressbar(id2_image_path):
         continue
     OBJ = id2_objects(ID)
     OBJ = format_OBJ(*OBJ)
-    OBJ['ID'] = ID
-    
+    OBJ["ID"] = ID
+
     path = str(len(res_dict)) + ".pickle"
     path = os.path.join(res_path, path)
     res_dict[ID] = path
     with open(path, "wb") as f:
         pickle.dump(OBJ, f, pickle.HIGHEST_PROTOCOL)
 
-#int because json is a jerk
-class_dict = {int(k):i for k,i in class_dict.items()}
+# int because json is a jerk
+class_dict = {int(k): i for k, i in class_dict.items()}
 path = os.path.join(res_path, "params.json")
 with open(path, "w") as f:
     json.dump({"ID2path": res_dict, "class2num": class_dict}, f)
