@@ -134,14 +134,13 @@ model = Model(inputs=[imgs, boxes, classes, scores, sides, sent], outputs=pred)
 model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
 #plot_model(model, "model.png")
+model.load_weights(model_path)
 
-# model.load_weights(model_path)
 checkpoint = ModelCheckpoint(
     filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
 callbacks = [checkpoint, lrate]
-#model.load_weights(model_path)
 
 print("creating generators")
 #sampled_images = smaple_images(train_data_dir, 1000)
