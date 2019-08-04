@@ -74,7 +74,6 @@ class FeatureExtractor(tf.keras.layers.Layer):
     def __init__(self, img_shape, num_class, size):
         super(FeatureExtractor, self).__init__()
         # embed classes
-        global num_class, img_shape
         self.img_shape = img_shape
         self.num_class = num_class
         self.size = size
