@@ -2,7 +2,7 @@ import json
 import os
 import sys
 import numpy as np
-from utils import smaple_images
+#from utils import smaple_images
 from PIL import Image
 from tensorflow.keras.utils import plot_model
 
@@ -135,8 +135,8 @@ callbacks = [checkpoint, lrate]
 #model.load_weights(model_path)
 
 print("creating generators")
-sampled_images = smaple_images(train_data_dir, 1000)
-sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
+#sampled_images = smaple_images(train_data_dir, 1000)
+#sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
 train_gen = DataGenerator(*train_data)
 val_gen = DataGenerator(*dev_data)
 
