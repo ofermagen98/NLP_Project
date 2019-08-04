@@ -71,7 +71,7 @@ class FeatureExtractor(tf.keras.layers.Layer):
     def __init__(self):
         super(FeatureExtractor, self).__init__()
 
-    def call(X)
+    def call(X):
         imgs,boxes,scores,classes,sides = X
 
         # cast to float32
