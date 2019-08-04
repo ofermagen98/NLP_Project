@@ -28,6 +28,7 @@ def import_tensorflow():
         child = current_process.children(recursive=True)[0]
         os.kill(child.pid, signal.SIGTERM)
 
+    #export LD_LIBRARY_PATH=/usr/local/lib/cuda-10.0.130/lib64/:/usr/local/lib/cudnn-10.0-v7/lib64/
     os.environ[
         "LD_LIBRARY_PATH"
     ] = "/usr/local/lib/cuda-10.0.130/lib64/:/usr/local/lib/cudnn-10.0-v7/lib64/"
