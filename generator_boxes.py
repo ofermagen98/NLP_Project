@@ -16,6 +16,7 @@ with open("./word_embeddings/word2num.json", "r") as f:
     word2num = json.load(f)
     word2num = {w: i for i, w in enumerate(word2num)}
 
+
 def sent2list(sent, size=40):
     global word2num
     replace = lambda c: c if c.isdigit() or c.isalpha() else " "
@@ -60,8 +61,8 @@ def read_OBJ(imgL, imgR, size=30):
             A = np.stack([A] * count)
             OBJ[key] = np.concatenate([OBJ[key], A])
 
-    OBJ["mask"] = np.asarray([True] * (size - count) + [False] * count, dtype=bool)
     return OBJ
+
 
 class DataGenerator(Sequence):
     """
@@ -108,31 +109,23 @@ class DataGenerator(Sequence):
         idx = min((index + 1) * self.batch_size, len(self.examples))
         idx = range(index * self.batch_size, idx)
         idx = list(idx)
-
-        images = []
-        classes = []
-        sentences = []
-        masks = []
+        
+        keys = ["images", "boxes", "classes", "scores", "img_side", "sent"] 
         labels = []
-        boxes = []
+        res = [[] for _ in keys]
 
         for i in idx:
             OBJ = self.read_example(i)
-            images.append(OBJ["images"])
-            classes.append(OBJ["classes"])
-            sentences.append(OBJ["sent"])
-            masks.append(OBJ["mask"])
+            for i,key in enumerate(keys):
+                res[i].append(OBJ[key])
             labels.append(OBJ["label"])
-            boxes.append(OBJ["boxes"])
 
-        images = np.stack(images)
-        classes = np.stack(classes)
-        sentences = np.stack(images)
-        masks = np.stack(masks)
-        boxes = np.stack(boxes)
+        for i,_ in enumerate(keys):
+            res[i] = np.stack(res[i])
         labels = np.stack(labels)
 
-        return [images, classes, boxes, masks, sentences], labels
+        return res, labels
+
 
 if __name__ == "__main__":
     src_dir = (
@@ -140,4 +133,4 @@ if __name__ == "__main__":
     )
     json_file = "/Users/ofermagen/Coding/NLP_Project_Data/nlvr/nlvr2/data/train.json"
     gen = DataGenerator(json_file, src_dir)
-    gen[0]
+    print(gen[0][0][4])

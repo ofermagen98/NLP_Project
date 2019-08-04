@@ -83,14 +83,15 @@ class MaskedReduceMean(tf.keras.layers.Layer):
     def __init__(self):
         super(MaskedReduceMean, self).__init__()
 
-    def call(self, X,m1,m2):
-        n1 = m1.shape[1]
-        n2 = m2.shape[1]
+    def call(self, X,O1_mask, O2_mask):
+        n1 = O1_mask.shape[1]
+        n2 = O2_mask.shape[1]
 
-        O1 = tf.expand_dims(m1, axis=1)
+        O1 = tf.expand_dims(O1_mask, axis=1)
         O1 = tf.tile(O1, multiples=(1, n2, 1))
-        O2 = tf.expand_dims(m2, axis=2)
+        O2 = tf.expand_dims(O2_mask, axis=2)
         O2 = tf.tile(O2, multiples=(1, 1, n1))
+
         mask = tf.math.logical_and(O1,O2)
         mask = tf.reshape(mask,shape=(-1,n1*n2))
         mask = tf.cast(mask,tf.float32)

@@ -10,7 +10,6 @@ from tensorflow import keras
 
 # https://keras.io/examples/cifar10_resnet/
 
-
 def resnet_layer(
     inputs,
     num_filters=16,
@@ -70,7 +69,8 @@ class Simple_CNN(tf.keras.layers.Layer):
     def __init__(self,input_shape,params):
         super(Simple_CNN, self).__init__()
         img = Input(shape=input_shape, name="img", dtype="float32")
-        X = img
+        X = BatchNormalization()(img)
+
         for kernel_size,num_filters in params:
             conv = Conv2D(
                 num_filters,
@@ -87,7 +87,6 @@ class Simple_CNN(tf.keras.layers.Layer):
                 X = Dropout(rate=DROPOUT_RATE)(X)
             X = BatchNormalization()(X)
             
-
         X = Flatten()(X)
         self.model = Model(inputs=img, outputs=X)
             
