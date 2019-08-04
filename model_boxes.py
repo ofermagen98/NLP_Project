@@ -64,32 +64,41 @@ classes = Input(shape=(size,), name="classes", dtype="int32")
 sides = Input(shape=(size,), name="img_sides", dtype="int32")
 sent = Input(shape=(40,), name="sent", dtype="int32")
 
-
 img_mask = tf.math.not_equal(sides, 0)
 sent_mask = tf.math.not_equal(sent, 0)
 
-# cast to float32
-em_sides = tf.cast(sides, dtype="float32")
-em_sides = tf.expand_dims(em_sides, axis=2)
-em_scores = tf.expand_dims(scores, axis=2)
+class FeatureExtractor(tf.keras.layers.Layer):
+    def __init__(self):
+        super(FeatureExtractor, self).__init__()
 
-# embed classes
-class_embedding = tf.keras.layers.Embedding(
-    num_class, 64, embeddings_initializer="uniform"
-)
-em_classes = class_embedding(classes)
+    def call(X)
+        imgs,boxes,scores,classes,sides = X
 
-# embedd images
-embedded_imgs = tf.reshape(imgs, shape=(-1,) + img_shape[1:])
-cnn_params = [(3, 16), (3, 32), (3, 32), (3, 32), (3, 64), (3, 64)]
-fcnn = Simple_CNN(img_shape[1:], cnn_params)
-embedded_imgs = fcnn(embedded_imgs)
-n_shape = embedded_imgs.get_shape().as_list()
-n_shape = [-1, size] + n_shape[1:]
-embedded_imgs = tf.reshape(embedded_imgs, shape=n_shape)
+        # cast to float32
+        em_sides = tf.cast(sides, dtype="float32")
+        em_sides = tf.expand_dims(em_sides, axis=2)
+        em_scores = tf.expand_dims(scores, axis=2)
 
-#
-em_featurs = tf.concat([embedded_imgs, boxes, em_classes, em_sides,em_scores], axis=-1)
+        # embed classes
+        class_embedding = tf.keras.layers.Embedding(
+            num_class, 64, embeddings_initializer="uniform"
+        )
+        em_classes = class_embedding(classes)
+
+        # embedd images
+        embedded_imgs = tf.reshape(imgs, shape=(-1,) + img_shape[1:])
+        cnn_params = [(3, 16), (3, 32), (3, 32), (3, 32), (3, 64), (3, 64)]
+        fcnn = Simple_CNN(img_shape[1:], cnn_params)
+        embedded_imgs = fcnn(embedded_imgs)
+        n_shape = embedded_imgs.get_shape().as_list()
+        n_shape = [-1, size] + n_shape[1:]
+        embedded_imgs = tf.reshape(embedded_imgs, shape=n_shape)
+
+        #returning embedded features
+        em_features = tf.concat([embedded_imgs, boxes, em_classes, em_sides,em_scores], axis=-1)
+        return em_features
+
+em_featurs = FeatureExtractor()([imgs,boxes,scores,classes,sides])
 
 # embedding sentence
 print("creating transformer encoder")
