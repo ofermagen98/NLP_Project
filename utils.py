@@ -6,7 +6,7 @@ import random
 import sys
 
 DROPOUT_BOOL = True
-DROPOUT_RATE = 0.3
+DROPOUT_RATE = 0.1
 
 def smaple_images(dir,num,seed=1234):
     samples = []
