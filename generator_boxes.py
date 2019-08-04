@@ -84,6 +84,7 @@ class DataGenerator(Sequence):
 
     def __len__(self):
         "Denotes the number of batches per epoch"
+        return 10
         return self.batch_num
 
     def read_example(self, idx):
