@@ -7,6 +7,7 @@ from PIL import Image
 
 # data sources
 # data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
+assert len(sys.argv) > 2
 
 if len(sys.argv) > 1:
     if sys.argv[1] == "J":
@@ -72,14 +73,13 @@ class FeatureExtractor(tf.keras.layers.Layer):
         super(FeatureExtractor, self).__init__()
 
     def call(self,X):
+        global num_class,size,img_shape
         imgs,boxes,scores,classes,sides = X
 
-        # cast to float32
+        # embedd features
         em_sides = tf.cast(sides, dtype="float32")
         em_sides = tf.expand_dims(em_sides, axis=2)
         em_scores = tf.expand_dims(scores, axis=2)
-
-        # embed classes
         class_embedding = tf.keras.layers.Embedding(
             num_class, 64, embeddings_initializer="uniform"
         )

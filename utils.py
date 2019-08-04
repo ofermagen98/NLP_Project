@@ -3,6 +3,7 @@ import signal
 import json
 import os
 import random
+import sys
 
 DROPOUT_BOOL = True
 DROPOUT_RATE = 0.3
@@ -33,7 +34,7 @@ def import_tensorflow():
         "LD_LIBRARY_PATH"
     ] = "/usr/local/lib/cuda-10.0.130/lib64/:/usr/local/lib/cudnn-10.0-v7/lib64/"
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-    os.environ["CUDA_VISIBLE_DEVICES"] = "4,5,6"
+    os.environ["CUDA_VISIBLE_DEVICES"] = sys.argv[2]
 
     signal.signal(signal.SIGALRM, kill_children)
     signal.alarm(20)
