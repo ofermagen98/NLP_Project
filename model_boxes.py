@@ -4,7 +4,6 @@ import sys
 import numpy as np
 #from utils import smaple_images
 from PIL import Image
-from tensorflow.keras.utils import plot_model
 
 # data sources
 # data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
@@ -33,6 +32,7 @@ else:
     pass
 
 from utils import tensorflow as tf
+#from tensorflow.keras.utils import plot_model
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
