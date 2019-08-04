@@ -14,9 +14,9 @@ if len(sys.argv) > 1:
         orig_dir = "/specific/netapp5/joberant/home/ofermagen/"
         train_data = (
             orig_dir + "nlvr/nlvr2/data/train.json",
-            orig_dir + "objects/train",
+            orig_dir + "objects/train/",
         )
-        dev_data = (orig_dir + "nlvr/nlvr2/data/dev.json", orig_dir + "objects/dev")
+        dev_data = (orig_dir + "nlvr/nlvr2/data/dev.json", orig_dir + "objects/dev/")
         model_path = "/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5"
     elif sys.argv[1] == "O":
         train_data_dir = "/home/ofermagen/data/semiformatted_images/train/"
