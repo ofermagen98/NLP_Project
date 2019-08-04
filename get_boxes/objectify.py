@@ -52,7 +52,7 @@ def get_class(c):
     if c in class_dict:
         return class_dict[c]
     else:
-        return -1
+        return 1
 
 
 def id2_objects(ID):
@@ -81,9 +81,9 @@ def id2_objects(ID):
     classes = np.asarray(classes)
     scores = [1.0] + [s for s in OBJ["detection_scores"]]
     scores = np.asarray(scores)
-    idx = [i for i, c in enumerate(classes) if c != -1]
+    #idx = [i for i, c in enumerate(classes) if c != -1]
 
-    return images[idx], boxes[idx], classes[idx], scores[idx]
+    return images, boxes, classes, scores
 
 
 def format_OBJ(images, boxes, classes, scores):
