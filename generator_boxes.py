@@ -118,12 +118,12 @@ class DataGenerator(Sequence):
             OBJ = self.read_example(i)
             for i,key in enumerate(keys):
                 res[i].append(OBJ[key])
-            labels.append(OBJ["label"])
-
+            labels.append(OBJ["label"][0] == 'T')
+        
         for i,_ in enumerate(keys):
             res[i] = np.stack(res[i])
-        labels = np.stack(labels)
-
+        labels = np.asarray(labels,dtype=np.dtype('int32'))
+        
         return res, labels
 
 
