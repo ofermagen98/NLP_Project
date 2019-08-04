@@ -99,6 +99,15 @@ class DataGenerator(Sequence):
         imgR = self.ddir + os.path.basename(imgR)
 
         OBJ = read_OBJ(imgL, imgR)
+ 
+        #print(ex['sentence'])
+        #print(ex['label'])
+        #for img in OBJ['images']:
+        #    cv2.imshow("img",img)
+        #    key = cv2.waitKey() & 0xFF
+        #    if int(key) == 27: exit()
+        #exit()
+
         OBJ["sent"] = np.asarray(sent)
         OBJ["label"] = ex["label"]
         OBJ["synset"] = ex["synset"]

@@ -41,14 +41,17 @@ from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from tensorflow.keras.initializers import Constant
 
 from generator_boxes import DataGenerator
-from RN import MaskedReduceMean, RelationalProduct, ConvolutionalPerceptron, Perceptron
+from RN import ReduceMean,MaskedReduceMean, RelationalProduct, ConvolutionalPerceptron, Perceptron
 from resnet import Simple_CNN
 from transformer import Encoder, create_padding_mask
 
 
-def lr_schedualer(epoch, num_epoches=200):
+NUM_EPOCHS = 200
+
+def lr_schedualer(epoch, *a, **kw):
+    global NUM_EPOCHS
     base = 1e-6
-    x = float(epoch) / num_epoches
+    x = float(epoch) / NUM_EPOCHS
     frac = pow(2, -4 * x)
     return base * frac
 
@@ -66,7 +69,7 @@ sides = Input(shape=(size,), name="img_sides", dtype="int32")
 sent = Input(shape=(40,), name="sent", dtype="int32")
 
 img_mask = tf.math.not_equal(sides, 0)
-sent_mask = tf.math.not_equal(sent, 0)
+sent_mask = tf.math.not_equal(sent, -1)
 
 class FeatureExtractor(tf.keras.layers.Layer):
     def __init__(self):
@@ -132,8 +135,6 @@ pred = Dense(1, activation="sigmoid")(relation_out)
 print("compiling model")
 model = Model(inputs=[imgs, boxes, classes, scores, sides, sent], outputs=pred)
 model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
-
-#plot_model(model, "model.png")
 
 # model.load_weights(model_path)
 checkpoint = ModelCheckpoint(
