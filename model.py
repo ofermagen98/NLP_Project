@@ -88,7 +88,6 @@ checkpoint = ModelCheckpoint(
 )
 lrate = LearningRateScheduler(lr_schedualer)
 callbacks = [checkpoint, lrate]
-model.load_weights(model_path)
 
 print("creating generators")
 sampled_images = smaple_images(train_data_dir, 1000)
