@@ -131,6 +131,7 @@ class ResnetV1_FCNN(tf.keras.layers.Layer):
                     )
                 x = keras.layers.add([x, y])
                 x = Activation("relu")(x)
+                print(x.shape)
             num_filters *= 2
 
         # Add classifier on top.
