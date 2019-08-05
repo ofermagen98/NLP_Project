@@ -84,6 +84,7 @@ class Simple_CNN(tf.keras.layers.Layer):
                 activation='relu'
             )
             X = conv(X)
+            print(X.shape)
             if DROPOUT_BOOL:
                 X = Dropout(rate=DROPOUT_RATE)(X)
             X = BatchNormalization()(X)
