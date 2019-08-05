@@ -42,7 +42,7 @@ from tensorflow.keras.initializers import Constant
 
 from generator_boxes import DataGenerator
 from RN import ReduceMean,MaskedReduceMean, RelationalProduct, ConvolutionalPerceptron, Perceptron
-from resnet import Simple_CNN
+from resnet import Simple_CNN,ResnetV1_FCNN
 from transformer import Encoder, create_padding_mask
 
 
@@ -91,7 +91,7 @@ class FeatureExtractor(tf.keras.layers.Layer):
         # embedd images
         embedded_imgs = tf.reshape(imgs, shape=(-1,) + img_shape[1:])
         cnn_params = [(4, 16), (3, 32), (3, 32), (3, 32), (3, 64), (3, 64)]
-        fcnn = Simple_CNN(img_shape[1:], cnn_params)
+        fcnn = ResnetV1_FCNN(img_shape[1:], 8)
         embedded_imgs = fcnn(embedded_imgs)
         n_shape = embedded_imgs.get_shape().as_list()
         print(n_shape)
