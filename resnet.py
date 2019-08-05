@@ -77,7 +77,7 @@ class Simple_CNN(tf.keras.layers.Layer):
             conv = Conv2D(
                 num_filters,
                 kernel_size=kernel_size,
-                strides=3,
+                strides=2,
                 padding="same",
                 kernel_initializer="he_normal",
                 kernel_regularizer=l2(L2_REG),
