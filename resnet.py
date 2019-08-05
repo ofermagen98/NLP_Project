@@ -114,7 +114,7 @@ class ResnetV1_FCNN(tf.keras.layers.Layer):
         for stack in range(3):
             for res_block in range(num_res_blocks):
                 strides = 1
-                if stack > 0 and res_block == 0:  # first layer but not first stack
+                if res_block == 0:  # first layer but not first stack
                     strides = 2  # downsample
                 y = resnet_layer(inputs=x, num_filters=num_filters, strides=strides)
                 y = resnet_layer(inputs=y, num_filters=num_filters, activation=None)
