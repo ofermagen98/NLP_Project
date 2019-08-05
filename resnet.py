@@ -109,7 +109,8 @@ class ResnetV1_FCNN(tf.keras.layers.Layer):
         num_res_blocks = int((depth - 2) / 6)
 
         inputs = Input(shape=input_shape)
-        x = AveragePooling2D(pool_size=2)(inputs)
+        x = BatchNormalization()(inputs)
+        x = AveragePooling2D(pool_size=2)(x)
         x = resnet_layer(inputs=x)
         # Instantiate the stack of residual units
         for stack in range(3):
