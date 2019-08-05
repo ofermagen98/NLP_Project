@@ -73,17 +73,18 @@ class Simple_CNN(tf.keras.layers.Layer):
         img = Input(shape=input_shape, name="img", dtype="float32")
         X = BatchNormalization()(img)
 
-        for kernel_size,num_filters,strides in params:
+        for kernel_size,num_filters in params:
             conv = Conv2D(
                 num_filters,
                 kernel_size=kernel_size,
-                strides=strides,
+                strides=1,
                 padding="same",
                 kernel_initializer="he_normal",
                 kernel_regularizer=l2(L2_REG),
                 activation='relu'
             )
             X = conv(X)
+            X = MaxPooling2D()(X)
             if DROPOUT_BOOL:
                 X = Dropout(rate=DROPOUT_RATE)(X)
             X = BatchNormalization()(X)
