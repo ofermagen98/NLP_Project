@@ -7,7 +7,7 @@ import sys
 
 DROPOUT_BOOL = True
 DROPOUT_RATE = 0.1
-LAYER_NORM_EPSION = 3e-6
+LAYER_NORM_EPSION = 1e-6
 L2_REG = 1e-8
 
 def smaple_images(dir,num,seed=1234):
