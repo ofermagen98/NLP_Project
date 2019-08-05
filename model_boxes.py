@@ -58,7 +58,7 @@ def lr_schedualer(epoch, *a, **kw):
 
 # defining model's inputs
 size = 30
-num_class = 540
+num_class = 480
 img_shape = (size, 128, 128, 3)
 
 imgs = Input(shape=img_shape, name="img", dtype="float32")
@@ -69,7 +69,7 @@ sides = Input(shape=(size,), name="img_sides", dtype="int32")
 sent = Input(shape=(40,), name="sent", dtype="int32")
 
 img_mask = tf.math.not_equal(sides, 0)
-sent_mask = tf.math.not_equal(sent, -1)
+sent_mask = tf.math.not_equal(sent, 0)
 
 class FeatureExtractor(tf.keras.layers.Layer):
     def __init__(self):
