@@ -1,7 +1,7 @@
 from utils import tensorflow as tf
 import numpy as np
 from tensorflow.keras.layers import LayerNormalization
-
+from utils import LAYER_NORM_EPSION
 
 def get_angles(pos, i, d_model):
     angle_rates = 1 / np.power(10000, (2 * (i // 2)) / np.float32(d_model))
@@ -142,8 +142,8 @@ class EncoderLayer(tf.keras.layers.Layer):
         self.mha = MultiHeadAttention(d_model, num_heads)
         self.ffn = point_wise_feed_forward_network(d_model, dff)
 
-        self.layernorm1 = LayerNormalization(epsilon=1e-6)
-        self.layernorm2 = LayerNormalization(epsilon=1e-6)
+        self.layernorm1 = LayerNormalization(epsilon=LAYER_NORM_EPSION)
+        self.layernorm2 = LayerNormalization(epsilon=LAYER_NORM_EPSION)
 
         self.dropout1 = tf.keras.layers.Dropout(rate)
         self.dropout2 = tf.keras.layers.Dropout(rate)
@@ -172,9 +172,9 @@ class DecoderLayer(tf.keras.layers.Layer):
 
         self.ffn = point_wise_feed_forward_network(d_model, dff)
 
-        self.layernorm1 = LayerNormalization(epsilon=1e-6)
-        self.layernorm2 = LayerNormalization(epsilon=1e-6)
-        self.layernorm3 = LayerNormalization(epsilon=1e-6)
+        self.layernorm1 = LayerNormalization(epsilon=LAYER_NORM_EPSION)
+        self.layernorm2 = LayerNormalization(epsilon=LAYER_NORM_EPSION)
+        self.layernorm3 = LayerNormalization(epsilon=LAYER_NORM_EPSION)
 
         self.dropout1 = tf.keras.layers.Dropout(rate)
         self.dropout2 = tf.keras.layers.Dropout(rate)

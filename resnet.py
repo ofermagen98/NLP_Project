@@ -8,6 +8,8 @@ from tensorflow.keras.layers import Activation, AveragePooling2D,MaxPooling2D
 from tensorflow.keras.regularizers import l2
 from tensorflow import keras
 
+from utils import L2_REG
+
 # https://keras.io/examples/cifar10_resnet/
 
 def resnet_layer(
@@ -78,7 +80,7 @@ class Simple_CNN(tf.keras.layers.Layer):
                 strides=1,
                 padding="same",
                 kernel_initializer="he_normal",
-                kernel_regularizer=l2(5e-7),
+                kernel_regularizer=l2(L2_REG),
                 activation='relu'
             )
             X = conv(X)
