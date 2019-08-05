@@ -84,7 +84,6 @@ class Simple_CNN(tf.keras.layers.Layer):
                 activation='relu'
             )
             X = conv(X)
-            X = MaxPooling2D()(X)
             if DROPOUT_BOOL:
                 X = Dropout(rate=DROPOUT_RATE)(X)
             X = BatchNormalization()(X)
