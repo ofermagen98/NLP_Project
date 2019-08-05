@@ -136,9 +136,9 @@ class ResnetV1_FCNN(tf.keras.layers.Layer):
         # Add classifier on top.
         # v1 does not use BN after last shortcut connection-ReLU
         fcnn_out = AveragePooling2D(pool_size=8)(x)
-        shape = fcnn_out.shape.as_list()
+        #shape = fcnn_out.shape.as_list()
 
-        fcnn_out = tf.reshape(fcnn_out, (-1, shape[1] * shape[2], shape[3]))
+        fcnn_out = Flatten()(fcnn_out)
         self.model = Model(inputs=inputs, outputs=fcnn_out)
 
     def load_weights(self, file):
