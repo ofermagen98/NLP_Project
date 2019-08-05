@@ -109,12 +109,13 @@ class ResnetV1_FCNN(tf.keras.layers.Layer):
         num_res_blocks = int((depth - 2) / 6)
 
         inputs = Input(shape=input_shape)
-        x = resnet_layer(inputs=inputs)
+        x = AveragePooling2D(pool_size=2)(inputs)
+        x = resnet_layer(inputs=x)
         # Instantiate the stack of residual units
         for stack in range(3):
             for res_block in range(num_res_blocks):
                 strides = 1
-                if res_block == 0:  # first layer but not first stack
+                if stack > 0 and res_block == 0:  # first layer but not first stack
                     strides = 2  # downsample
                 y = resnet_layer(inputs=x, num_filters=num_filters, strides=strides)
                 y = resnet_layer(inputs=y, num_filters=num_filters, activation=None)
@@ -131,7 +132,6 @@ class ResnetV1_FCNN(tf.keras.layers.Layer):
                     )
                 x = keras.layers.add([x, y])
                 x = Activation("relu")(x)
-                print(x.shape)
             num_filters *= 2
 
         # Add classifier on top.
