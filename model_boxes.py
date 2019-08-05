@@ -2,7 +2,6 @@ import json
 import os
 import sys
 import numpy as np
-#from utils import smaple_images
 from PIL import Image
 
 # data sources
@@ -33,10 +32,11 @@ else:
     pass
 
 from utils import tensorflow as tf
-#from tensorflow.keras.utils import plot_model
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
+
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from utils import HistorySaver
 
 from tensorflow.keras.initializers import Constant
 
@@ -141,7 +141,8 @@ checkpoint = ModelCheckpoint(
     filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
-callbacks = [checkpoint, lrate]
+saver = HistorySaver('/specific/netapp5/joberant/home/ofermagen/train_loss.json')
+callbacks = [checkpoint, lrate, saver]
 #model.load_weights(model_path)
 
 print("creating generators")
