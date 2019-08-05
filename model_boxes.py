@@ -90,7 +90,7 @@ class FeatureExtractor(tf.keras.layers.Layer):
 
         # embedd images
         embedded_imgs = tf.reshape(imgs, shape=(-1,) + img_shape[1:])
-        cnn_params = [(3, 16, 3), (3, 32, 3), (3, 32, 2), (3, 64, 2), (3, 64, 2)]
+        cnn_params = [(4, 16, 3), (4, 32, 3), (3, 32, 2), (3, 64, 2), (3, 64, 2)]
         fcnn = Simple_CNN(img_shape[1:], cnn_params)
         embedded_imgs = fcnn(embedded_imgs)
         n_shape = embedded_imgs.get_shape().as_list()
