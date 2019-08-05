@@ -43,7 +43,7 @@ def resnet_layer(
         strides=strides,
         padding="same",
         kernel_initializer="he_normal",
-        kernel_regularizer=l2(5e-7),
+        kernel_regularizer=l2(L2_REG),
     )
 
     x = inputs
