@@ -73,8 +73,7 @@ class Simple_CNN(tf.keras.layers.Layer):
         img = Input(shape=input_shape, name="img", dtype="float32")
         X = BatchNormalization()(img)
 
-        for i,(kernel_size,num_filters) in enumerate(params):
-            strides = 2 if i < 2 else 1
+        for kernel_size,num_filters,strides in enumerate(params):
             conv = Conv2D(
                 num_filters,
                 kernel_size=kernel_size,
