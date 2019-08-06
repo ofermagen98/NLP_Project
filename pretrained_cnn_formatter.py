@@ -1,3 +1,4 @@
+print("h1")
 import ssl
 import os
 import shutil
@@ -25,6 +26,8 @@ from tqdm import tqdm as progressbar
 import numpy as np
 from PIL import Image
 import imagehash
+
+print("h2")
 
 from utils import tensorflow as tf
 from tensorflow.keras.layers import AveragePooling2D
