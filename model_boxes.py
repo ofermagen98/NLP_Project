@@ -43,7 +43,7 @@ from tensorflow.keras.initializers import Constant
 from generator_boxes import DataGenerator
 from RN import ReduceMean,MaskedReduceMean, RelationalProduct, ConvolutionalPerceptron, Perceptron
 from resnet import Simple_CNN,ResnetV1_FCNN
-from transformer import Encoder, create_padding_mask
+from LSTM import Encoder
 
 
 NUM_EPOCHS = 200
@@ -108,16 +108,13 @@ em_featurs = FeatureExtractor()([imgs,boxes,scores,classes,sides])
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
-enc_mask = create_padding_mask(sent)
 encoder = Encoder(
-    num_layers=4,
-    d_model=300,  # also the word embedding dim
-    num_heads=12,
-    dff=512,
+    4096,
     input_vocab_size=GloVe_embeddings.shape[0],
+    word_dim=300,  # also the word embedding dim
     embeddings_initializer=Constant(GloVe_embeddings),
 )
-em_sent = encoder(sent, training=True, mask=enc_mask)
+em_sent = encoder(sent)
 
 # getting prediction from the Relational Neural Network
 print("creating relational network")
