@@ -33,7 +33,7 @@ else:
 
 from utils import tensorflow as tf
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, Dense
+from tensorflow.keras.layers import Input, Dense,Concatenate
 
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from utils import HistorySaver
@@ -73,30 +73,17 @@ sent = Input(shape=(40,), name="sent", dtype="int32")
 feature_mask = tf.math.not_equal(sides, 0)
 sent_mask = tf.math.not_equal(sent, 0)
 
+# generate features
+em_sides = tf.keras.backend.cast(sides, "float32")
+em_features = Concatenate(axis=-1)([features, em_sides])
+em_features = tf.keras.backend.reshape(em_features, (-1, features_dim + 1))
 
-class FeatureExtractor(tf.keras.layers.Layer):
-    def __init__(self):
-        super(FeatureExtractor, self).__init__()
-
-    def call(self, X):
-        global size, features_dim
-        features, sides = X
-
-        # embedd features
-        em_features = tf.concat([features, tf.cast(sides, dtype="float32")], axis=-1)
-        n_dim = features_dim + 1
-        em_features = tf.reshape(em_features, shape=(-1, n_dim))
-        prec_params = [(1024, "sigmoid"), (1024, "sigmoid"), (1024, "sigmoid")]
-        prec = Perceptron(n_dim, prec_params)
-        em_features = prec(em_features)
-        n_dim = prec_params[-1][0]
-        em_features = tf.reshape(em_features, shape=(-1, size, n_dim))
-
-        # returning embedded features
-        return em_features
-
-
-em_featurs = FeatureExtractor()([features, sides])
+# embedd features
+prec_params = [(1024, "sigmoid"), (1024, "sigmoid"), (1024, "sigmoid")]
+prec = Perceptron(features_dim + 1, prec_params)
+em_features = prec(em_features)
+n_dim = prec_params[-1][0]
+em_features = tf.keras.backend.reshape(em_features, (-1, size, n_dim))
 
 # embedding sentence
 print("creating transformer encoder")
@@ -111,15 +98,15 @@ encoder = Encoder(
 )
 em_sent = encoder(sent)
 
-# getting prediction from the Relational Neural Network
+# creating the Relational Neural Network
 print("creating relational network")
-relation_matrix = RelationalProduct()([em_sent, em_featurs])
+relation_matrix = RelationalProduct()([em_sent, em_features])
 print(relation_matrix.shape)
-
 g = ConvolutionalPerceptron(relation_matrix.shape[1:], [1024, 1024, 1024, 1024])
 em_relations = g(relation_matrix)
-relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=img_mask)
+relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=feature_mask)
 
+#getting prediction from averaged relation
 prec_params = [
     (1024, "relu"),
     (512, "relu"),
@@ -138,21 +125,21 @@ print("compiling model")
 model = Model(inputs=[features, sides, sent], outputs=pred)
 model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
-# model.load_weights(model_path)
+#callbacks
 checkpoint = ModelCheckpoint(
     filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
 saver = HistorySaver("/specific/netapp5/joberant/home/ofermagen/train_loss.json")
 callbacks = [checkpoint, lrate, saver]
-# model.load_weights(model_path)
 
+#generators
 print("creating generators")
-# sampled_images = smaple_images(train_data_dir, 1000)
-# sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
 train_gen = DataGenerator(*train_data, batch_size=16)
 val_gen = DataGenerator(*dev_data, batch_size=16)
 
+#loading weights
+#training
 print("training model")
 model.fit_generator(
     train_gen,
