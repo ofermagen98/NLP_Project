@@ -90,8 +90,8 @@ class FeatureEmbeddor(tf.keras.layers.Layer):
 
         return em_features
 
-
 em_features = FeatureEmbeddor()([features,sides])
+
 # embedding sentence
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
