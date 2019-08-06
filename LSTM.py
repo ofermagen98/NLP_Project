@@ -4,7 +4,8 @@ from tensorflow.keras.models import Sequential
 from utils import DROPOUT_RATE
 
 class Encoder(tf.keras.layers.Layer):
-    def __init__(self, units, output_dim = 256, input_vocab_size, word_dim=300, embeddings_initializer='uniform', **kwargs):
+    def __init__(self, units,  input_vocab_size, output_dim = 256, word_dim=300, embeddings_initializer='uniform', **kwargs):
+        super(Encoder,self).__init__()
         embedding = tf.keras.layers.Embedding(
             input_vocab_size, word_dim, embeddings_initializer=embeddings_initializer
         )
