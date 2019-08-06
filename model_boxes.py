@@ -33,7 +33,7 @@ else:
 
 from utils import tensorflow as tf
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, Dense,Concatenate
+from tensorflow.keras.layers import Input, Dense, Concatenate
 
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from utils import HistorySaver
@@ -48,11 +48,11 @@ from RN import (
     ConvolutionalPerceptron,
     Perceptron,
 )
-from resnet import Simple_CNN, ResnetV1_FCNN
 from LSTM import Encoder
 
 
 NUM_EPOCHS = 200
+
 
 def lr_schedualer(epoch, *a, **kw):
     global NUM_EPOCHS
@@ -64,7 +64,7 @@ def lr_schedualer(epoch, *a, **kw):
 
 # defining model's inputs
 size = 30
-features_dim = 2048 + 4 + 1 #image embedding + box + score
+features_dim = 2048 + 4 + 1  # image embedding + box + score
 
 features = Input(shape=(size, features_dim), name="img", dtype="float32")
 sides = Input(shape=(size,), name="img_sides", dtype="int32")
@@ -106,7 +106,7 @@ g = ConvolutionalPerceptron(relation_matrix.shape[1:], [1024, 1024, 1024, 1024])
 em_relations = g(relation_matrix)
 relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=feature_mask)
 
-#getting prediction from averaged relation
+# getting prediction from averaged relation
 prec_params = [
     (1024, "relu"),
     (512, "relu"),
@@ -115,7 +115,7 @@ prec_params = [
     (64, "relu"),
     (32, "relu"),
     (16, "relu"),
-    (1, "sigmoid")
+    (1, "sigmoid"),
 ]
 f = Perceptron(relation_out.shape[1], prec_params)
 pred = f(relation_out)
@@ -125,7 +125,7 @@ print("compiling model")
 model = Model(inputs=[features, sides, sent], outputs=pred)
 model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
-#callbacks
+# callbacks
 checkpoint = ModelCheckpoint(
     filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
@@ -133,13 +133,13 @@ lrate = LearningRateScheduler(lr_schedualer)
 saver = HistorySaver("/specific/netapp5/joberant/home/ofermagen/train_loss.json")
 callbacks = [checkpoint, lrate, saver]
 
-#generators
+# generators
 print("creating generators")
 train_gen = DataGenerator(*train_data, batch_size=16)
 val_gen = DataGenerator(*dev_data, batch_size=16)
 
-#loading weights
-#training
+# loading weights
+# training
 print("training model")
 model.fit_generator(
     train_gen,
