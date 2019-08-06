@@ -21,7 +21,7 @@ class Encoder(tf.keras.layers.Layer):
         X = self.embedding(sent)
         X = self.lstm(X)
         X = tf.keras.backend.reshape(X,(-1,2*self._my_units))
-        X = self.prec(X,(-1,2*self._my_units))
+        X = self.prec(X)
         X = tf.keras.backend.reshape(X,(-1,self._my_size,self._my_output_shape))
         return X
 
