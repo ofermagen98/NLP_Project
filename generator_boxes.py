@@ -73,8 +73,8 @@ class DataGenerator(Sequence):
         self.examples = [json.loads(s) for s in open(json_file).readlines()]
         self.batch_num = (len(self.examples) + batch_size - 1) // batch_size
 
-        with open(os.path.join(ddir, "params.json"), "r") as f:
-            self.ID2path = json.load(f)["ID2path"]
+        with open(os.path.join(ddir, "ID2Path.json"), "r") as f:
+            self.ID2path = json.load(f)
 
         if shuffle:
             _shuffle(self.examples)
