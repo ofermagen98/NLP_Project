@@ -109,7 +109,7 @@ print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
 encoder = Encoder(
-    4096,
+    2048,
     input_vocab_size=GloVe_embeddings.shape[0],
     word_dim=300,  # also the word embedding dim
     embeddings_initializer=Constant(GloVe_embeddings),
@@ -146,8 +146,8 @@ callbacks = [checkpoint, lrate, saver]
 print("creating generators")
 #sampled_images = smaple_images(train_data_dir, 1000)
 #sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
-train_gen = DataGenerator(*train_data)
-val_gen = DataGenerator(*dev_data)
+train_gen = DataGenerator(*train_data,batch_size=8)
+val_gen = DataGenerator(*dev_data,batch_size=8)
 
 print("training model")
 model.fit_generator(
