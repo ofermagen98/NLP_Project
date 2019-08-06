@@ -71,6 +71,7 @@ sent_mask = tf.math.not_equal(sent, 0)
 
 # generate features
 em_sides = tf.keras.backend.cast(sides, "float32")
+em_sides = tf.keras.backend.expand_dims(em_sides,-1)
 em_features = Concatenate(axis=-1)([features, em_sides])
 em_features = tf.keras.backend.reshape(em_features, (-1, features_dim + 1))
 
