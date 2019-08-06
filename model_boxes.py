@@ -41,8 +41,14 @@ from utils import HistorySaver
 from tensorflow.keras.initializers import Constant
 
 from generator_boxes import DataGenerator
-from RN import ReduceMean,MaskedReduceMean, RelationalProduct, ConvolutionalPerceptron, Perceptron
-from resnet import Simple_CNN,ResnetV1_FCNN
+from RN import (
+    ReduceMean,
+    MaskedReduceMean,
+    RelationalProduct,
+    ConvolutionalPerceptron,
+    Perceptron,
+)
+from resnet import Simple_CNN, ResnetV1_FCNN
 from LSTM import Encoder
 
 
@@ -58,58 +64,54 @@ def lr_schedualer(epoch, *a, **kw):
 
 # defining model's inputs
 size = 30
-num_class = 480
-img_shape = (size, 128, 128, 3)
+img_shape = 2048
 
-imgs = Input(shape=img_shape, name="img", dtype="float32")
+imgs = Input(shape=(size, img_shape), name="img", dtype="float32")
 boxes = Input(shape=(size, 4), name="boxes", dtype="float32")
 scores = Input(shape=(size,), name="scores", dtype="float32")
-classes = Input(shape=(size,), name="classes", dtype="int32")
 sides = Input(shape=(size,), name="img_sides", dtype="int32")
 sent = Input(shape=(40,), name="sent", dtype="int32")
 
 img_mask = tf.math.not_equal(sides, 0)
 sent_mask = tf.math.not_equal(sent, 0)
 
+
 class FeatureExtractor(tf.keras.layers.Layer):
     def __init__(self):
         super(FeatureExtractor, self).__init__()
 
-    def call(self,X):
-        global num_class,size,img_shape
-        imgs,boxes,scores,classes,sides = X
+    def call(self, X):
+        global size, img_shape
+        imgs, boxes, scores, sides = X
 
         # embedd features
         em_sides = tf.cast(sides, dtype="float32")
         em_sides = tf.expand_dims(em_sides, axis=2)
         em_scores = tf.expand_dims(scores, axis=2)
-        class_embedding = tf.keras.layers.Embedding(
-            num_class, 64, embeddings_initializer="uniform"
-        )
-        em_classes = class_embedding(classes)
 
-        # embedd images
-        embedded_imgs = tf.reshape(imgs, shape=(-1,) + img_shape[1:])
-        cnn_params = [(4, 16), (3, 32), (3, 32), (3, 32), (3, 64), (3, 64)]
-        fcnn = Simple_CNN(img_shape[1:], cnn_params)
-        embedded_imgs = fcnn(embedded_imgs)
-        n_shape = embedded_imgs.get_shape().as_list()
-        print(n_shape)
-        n_shape = [-1, size] + n_shape[1:]
-        embedded_imgs = tf.reshape(embedded_imgs, shape=n_shape)
+        # embedd features
+        em_features = tf.concat([imgs, boxes, em_sides, em_scores], axis=-1)
+        n_dim = img_shape + 4 + 1 + 1
+        em_features = tf.reshape(imgs, shape=(-1, n_dim))
+        prec_params = [(1024, "sigmoid"), (1024, "sigmoid"), (1024, "sigmoid")]
+        prec = Perceptron(img_shape, em_features)
+        em_features = prec(em_features)
+        n_dim = prec_params[-1][0]
+        em_features = tf.reshape(em_features, shape=(-1, size, n_dim))
 
-        #returning embedded features
-        em_features = tf.concat([embedded_imgs, boxes, em_classes, em_sides,em_scores], axis=-1)
+        # returning embedded features
         return em_features
 
-em_featurs = FeatureExtractor()([imgs,boxes,scores,classes,sides])
+
+em_featurs = FeatureExtractor()([imgs, boxes, scores, sides])
 
 # embedding sentence
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
 encoder = Encoder(
-    2048,
+    units=2048,
+    out_dim=1024,
     input_vocab_size=GloVe_embeddings.shape[0],
     word_dim=300,  # also the word embedding dim
     embeddings_initializer=Constant(GloVe_embeddings),
@@ -121,17 +123,26 @@ print("creating relational network")
 relation_matrix = RelationalProduct()([em_sent, em_featurs])
 print(relation_matrix.shape)
 
-g = ConvolutionalPerceptron(relation_matrix.shape[1:], [512, 256, 256])
+g = ConvolutionalPerceptron(relation_matrix.shape[1:], [1024, 1024, 1024, 1024])
 em_relations = g(relation_matrix)
 relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=img_mask)
 
-f = Perceptron(relation_out.shape[1], [256, 256, 256])
-relation_out = f(relation_out)
-pred = Dense(1, activation="sigmoid")(relation_out)
+prec_params = [
+    (1024, "relu"),
+    (512, "relu"),
+    (256, "relu"),
+    (128, "relu"),
+    (64, "relu"),
+    (32, "relu"),
+    (16, "relu"),
+    (1, "sigmoid")
+]
+f = Perceptron(relation_out.shape[1], prec_params)
+pred = f(relation_out)
 
 # compile model
 print("compiling model")
-model = Model(inputs=[imgs, boxes, classes, scores, sides, sent], outputs=pred)
+model = Model(inputs=[imgs, boxes, scores, sides, sent], outputs=pred)
 model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
 # model.load_weights(model_path)
@@ -139,15 +150,15 @@ checkpoint = ModelCheckpoint(
     filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
-saver = HistorySaver('/specific/netapp5/joberant/home/ofermagen/train_loss.json')
+saver = HistorySaver("/specific/netapp5/joberant/home/ofermagen/train_loss.json")
 callbacks = [checkpoint, lrate, saver]
-#model.load_weights(model_path)
+# model.load_weights(model_path)
 
 print("creating generators")
-#sampled_images = smaple_images(train_data_dir, 1000)
-#sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
-train_gen = DataGenerator(*train_data,batch_size=16)
-val_gen = DataGenerator(*dev_data,batch_size=16)
+# sampled_images = smaple_images(train_data_dir, 1000)
+# sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
+train_gen = DataGenerator(*train_data, batch_size=16)
+val_gen = DataGenerator(*dev_data, batch_size=16)
 
 print("training model")
 model.fit_generator(

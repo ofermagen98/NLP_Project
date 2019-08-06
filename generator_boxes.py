@@ -119,7 +119,7 @@ class DataGenerator(Sequence):
         idx = range(index * self.batch_size, idx)
         idx = list(idx)
         
-        keys = ["images", "boxes", "classes", "scores", "img_side", "sent"] 
+        keys = ["images", "boxes", "scores", "img_side", "sent"] 
         labels = []
         res = [[] for _ in keys]
 

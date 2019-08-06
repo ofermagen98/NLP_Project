@@ -5,9 +5,6 @@ from utils import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D, Dense, Input, Dropout
 
-
-
-
 class ReduceMean(tf.keras.layers.Layer):
     def __init__(self, axis):
         super(ReduceMean, self).__init__()
@@ -65,11 +62,11 @@ class Perceptron(tf.keras.layers.Layer):
         super(Perceptron, self).__init__()
         self._input_dim = input_dim
         self.model = Sequential()
-        for i, dim in enumerate(layer_dims):
+        for i, (dim,activation) in enumerate(layer_dims):
             if i == 0:
-                self.model.add(Dense(units=dim, input_shape=(input_dim,)))
+                self.model.add(Dense(units=dim, input_shape=(input_dim,), activation=activation))
             else:
-                self.model.add(Dense(units=dim))
+                self.model.add(Dense(units=dim, activation=activation))
             if dropout:
                 self.model.add(Dropout(rate=DROPOUT_RATE))
 
