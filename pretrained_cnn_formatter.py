@@ -1,4 +1,3 @@
-print("h1")
 import ssl
 import os
 import shutil
@@ -26,8 +25,6 @@ from tqdm import tqdm as progressbar
 import numpy as np
 from PIL import Image
 import imagehash
-
-print("h2")
 
 from utils import tensorflow as tf
 from tensorflow.keras.layers import AveragePooling2D
@@ -129,7 +126,7 @@ for path in objs:
     features = base_model.predict(np.stack(sub_images))
     features = np.mean(features,axis=1)
     features = np.mean(features,axis=1)
-    features = np.concatenate([features,np.stack(boxes),np.stack(scores)])
+    features = np.concatenate([features,np.stack(boxes),np.stack(scores)],axis=-1)
 
     new_OBJ = dict()
     new_OBJ['ID'] = OBJ['ID']
