@@ -41,16 +41,18 @@ class ConvolutionalPerceptron(tf.keras.layers.Layer):
         self._input_shape = input_shape
         self.model = Sequential()
         for i, dim in enumerate(layer_dims):
+            self.model.add(BatchNormalization())
+            
             if dropout:
                 self.model.add(Dropout(rate=DROPOUT_RATE))
-                
+
             if i == 0:
                 self.model.add(
                     Conv1D(filters=dim, kernel_size=1, input_shape=input_shape)
                 )
+
             else:
                 self.model.add(Conv1D(filters=dim, kernel_size=1))
-            self.model.add(BatchNormalization())
             
             
 
@@ -67,6 +69,8 @@ class Perceptron(tf.keras.layers.Layer):
         self._input_dim = input_dim
         self.model = Sequential()
         for i, (dim,activation) in enumerate(layer_dims):
+            self.model.add(BatchNormalization())
+
             if dim >= 128 and dropout:
                 self.model.add(Dropout(rate=DROPOUT_RATE))
             if i == 0:
@@ -75,7 +79,6 @@ class Perceptron(tf.keras.layers.Layer):
             else:
                 self.model.add(Dense(units=dim, activation=activation))
             
-            self.model.add(BatchNormalization())
             
 
     def call(self, x):
