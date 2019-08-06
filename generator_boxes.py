@@ -127,7 +127,8 @@ class DataGenerator(Sequence):
         sides = np.asanyarray(sides,dtype=np.dtype('float32'))
         labels = np.asarray(labels,dtype=np.dtype('float32'))
         sents = np.asarray(sents,dtype=np.dtype('int32'))
-
+        print(labels)
+        exit()
         return [features , sides, sents], labels
 
 
