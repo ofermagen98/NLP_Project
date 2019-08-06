@@ -74,7 +74,8 @@ class DataGenerator(Sequence):
         self.examples = [json.loads(s) for s in open(json_file).readlines()]
         
         if sys.argv[1] == "checkpoints_single":
-            top10 = lambda ex: ex['synset'] in {'timber wolf', 'washbasin', 'laptop', 'sax', 'bookcase', 'gorilla', 'hyena', 'pug', 'dogsled', 'Doberman', 'water buffalo', 'cheetah', 'French bulldog', 'bookshop', 'pillow'}
+            S = {'cocker spaniel', 'malamute', 'television', 'wild boar', 'pillow', 'dogsled', 'bookshop', 'Labrador retriever', 'vase', 'washbasin', 'black-footed ferret', 'French bulldog', 'sax', 'Doberman', 'Pembroke', 'pug', 'vizsla', 'sea lion', 'borzoi', 'miniature schnauzer', 'bookcase', 'laptop', 'pencil box', 'sea anemone', 'timber wolf', 'gorilla', 'hyena', 'pizza', 'water buffalo', 'cheetah', 'academic gown', 'giant panda'}
+            top10 = lambda ex: ex['synset'] in S
             self.examples = list(filter(top10,self.examples))
         self.batch_num = (len(self.examples) + batch_size - 1) // batch_size
 
