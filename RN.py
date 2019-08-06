@@ -3,7 +3,7 @@ from utils import DROPOUT_RATE, DROPOUT_BOOL
 
 from utils import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv1D, Dense, Input, Dropout,Multiply
+from tensorflow.keras.layers import Conv1D, Dense, Input, Dropout,Multiply, Concatenate
 
 class ReduceMean(tf.keras.layers.Layer):
     def __init__(self, axis):
@@ -27,7 +27,7 @@ class RelationalProduct(tf.keras.layers.Layer):
         O1 = tf.tile(O1, multiples=(1, n2, 1, 1))
         O2 = tf.expand_dims(x2, axis=2)
         O2 = tf.tile(O2, multiples=(1, 1, n1, 1))
-        relation_matrix = Multiply()([O1, O2])
+        relation_matrix = Concatenate(axis=-1)([O1, O2])
         d = int(relation_matrix.shape[3])
         relation_matrix = tf.reshape(
             relation_matrix, shape=(-1, n1 * n2, d), name="relation_matrix"

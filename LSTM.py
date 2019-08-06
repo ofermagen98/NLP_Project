@@ -1,21 +1,21 @@
 from utils import tensorflow as tf
 from tensorflow.keras.layers import LSTM,Bidirectional,TimeDistributed,Dense,Reshape
 from tensorflow.keras.models import Sequential
+from RN import Perceptron
 from utils import DROPOUT_RATE
 
 class Encoder(tf.keras.layers.Layer):
-    def __init__(self, units, out_dim,  input_vocab_size, size=40, output_dim = 256, word_dim=300, embeddings_initializer='uniform', **kwargs):
+    def __init__(self, units, prec_params, input_vocab_size, size=40, output_dim = 256, word_dim=300, embeddings_initializer='uniform', **kwargs):
         super(Encoder,self).__init__()
         embedding = tf.keras.layers.Embedding(
             input_vocab_size, word_dim, embeddings_initializer=embeddings_initializer
         )
-
+        prec = Perceptron(units,prec_params)
         self.model = Sequential()
         self.model.add(embedding)
         self.model.add(Bidirectional(LSTM(units, return_sequences=True), input_shape=(size,word_dim)))
-        self.model.add(TimeDistributed(Dense(out_dim, activation='sigmoid')))
-        self.model.add(TimeDistributed(Dense(out_dim, activation='sigmoid')))
-    
+        self.model.add(prec)
+
     def call(self,sent):
         return self.model(sent)
 
