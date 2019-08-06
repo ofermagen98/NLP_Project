@@ -114,7 +114,7 @@ encoder = Encoder(
     word_dim=300,  # also the word embedding dim
     embeddings_initializer=Constant(GloVe_embeddings),
 )
-em_sent = encoder(sent)
+em_sent = encoder(tf.expand_dims(sent,axis=-1))
 
 # getting prediction from the Relational Neural Network
 print("creating relational network")
