@@ -125,9 +125,10 @@ for path in objs:
     
     features = base_model.predict(np.stack(sub_images))
     features = np.mean(features,axis=1)
-    features = np.mean(features,axis=1
-    print(features.shape)
-    features = np.concatenate([features,np.stack(boxes),np.stack(scores)],axis=-1)
+    features = np.mean(features,axis=1)
+    scores = np.expand_dims(np.stack(scores),axis=-1)
+
+    features = np.concatenate([features,np.stack(boxes),scores],axis=-1)
 
     new_OBJ = dict()
     new_OBJ['ID'] = OBJ['ID']
