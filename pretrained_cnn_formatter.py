@@ -9,6 +9,7 @@ IMG_DIR = '/home/joberant/home/ofermagen/unformatted_images/train'
 HASH_FILE = "/home/joberant/home/ofermagen/nlvr/nlvr2/util/hashes/train_hashes.json"
 RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/train'
 SIZE = 299
+weight_path = "/home/joberant/home/ofermagen/models/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5"
 
 assert os.path.isdir(SDIR)
 assert os.path.isdir(IMG_DIR)
@@ -72,8 +73,9 @@ def read_img(path):
 
 base_model = tf.keras.applications.InceptionV3(input_shape=(SIZE,SIZE,3),
                                                include_top=False,
-                                               weights='imagenet')
+                                               weights=weight_path)
 
+exit()
 id2path = dict()
 for root, _, files in os.walk(IMG_DIR):
     for f in files:
