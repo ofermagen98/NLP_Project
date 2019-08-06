@@ -14,6 +14,7 @@ class Encoder(tf.keras.layers.Layer):
         self.model = Sequential()
         self.model.add(embedding)
         self.model.add(Bidirectional(LSTM(units, return_sequences=True), input_shape=(size,word_dim)))
+        print(self.model.layers[-1].output_shape)
         self.model.add(prec)
 
     def call(self,sent):
