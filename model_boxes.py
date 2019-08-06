@@ -1,11 +1,7 @@
-import json
 import os
 import sys
 import numpy as np
-from PIL import Image
 
-# data sources
-# data_dir = '/Users/ofermagen/Coding/NLP_Project_Data/formatted_images'
 assert len(sys.argv) > 2
 
 if len(sys.argv) > 1:
@@ -33,14 +29,8 @@ else:
 
 from utils import tensorflow as tf
 from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Input, Dense, Concatenate
-
-from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
-from utils import HistorySaver
-
+from tensorflow.keras.layers import Input, Concatenate
 from tensorflow.keras.initializers import Constant
-
-from generator_boxes import DataGenerator
 from RN import (
     ReduceMean,
     MaskedReduceMean,
@@ -50,9 +40,11 @@ from RN import (
 )
 from LSTM import Encoder
 
+from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from utils import HistorySaver
+from generator_boxes import DataGenerator
 
 NUM_EPOCHS = 200
-
 
 def lr_schedualer(epoch, *a, **kw):
     global NUM_EPOCHS
@@ -60,7 +52,6 @@ def lr_schedualer(epoch, *a, **kw):
     x = float(epoch) / NUM_EPOCHS
     frac = pow(2, -4 * x)
     return base * frac
-
 
 # defining model's inputs
 size = 30
@@ -150,4 +141,3 @@ model.fit_generator(
     validation_data=val_gen,
     shuffle=False,
 )
-
