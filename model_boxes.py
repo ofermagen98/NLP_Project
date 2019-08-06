@@ -9,9 +9,12 @@ if len(sys.argv) > 1:
         orig_dir = "/specific/netapp5/joberant/home/ofermagen/"
         train_data = (
             orig_dir + "nlvr/nlvr2/data/train.json",
-            orig_dir + "objects/train/",
+            orig_dir + "pretrained_cnn_objects/train/",
         )
-        dev_data = (orig_dir + "nlvr/nlvr2/data/dev.json", orig_dir + "objects/dev/")
+        dev_data = (
+            orig_dir + "nlvr/nlvr2/data/dev.json",
+            orig_dir + "pretrained_cnn_objects/dev/",
+        )
         model_path = "/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5"
     elif sys.argv[1] == "O":
         train_data_dir = "/home/ofermagen/data/semiformatted_images/train/"
@@ -46,12 +49,14 @@ from generator_boxes import DataGenerator
 
 NUM_EPOCHS = 200
 
+
 def lr_schedualer(epoch, *a, **kw):
     global NUM_EPOCHS
     base = 1e-6
     x = float(epoch) / NUM_EPOCHS
     frac = pow(2, -4 * x)
     return base * frac
+
 
 # defining model's inputs
 size = 30
