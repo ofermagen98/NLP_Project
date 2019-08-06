@@ -12,7 +12,7 @@ class Encoder(tf.keras.layers.Layer):
 
         self.model = Sequential()
         self.model.add(embedding)
-        self.model.add(Reshape((size,word_dim,1),input_shape=(size,word_dim)))
+        
         self.model.add(Bidirectional(LSTM(units, return_sequences=True), input_shape=(word_dim,1)))
         self.model.add(TimeDistributed(Dense(256, activation='sigmoid')))
     
