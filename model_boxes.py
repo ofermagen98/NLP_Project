@@ -64,15 +64,13 @@ def lr_schedualer(epoch, *a, **kw):
 
 # defining model's inputs
 size = 30
-img_shape = 2048
+features_dim = 2048 + 4 + 1 #image embedding + box + score
 
-imgs = Input(shape=(size, img_shape), name="img", dtype="float32")
-boxes = Input(shape=(size, 4), name="boxes", dtype="float32")
-scores = Input(shape=(size,), name="scores", dtype="float32")
+features = Input(shape=(size, features_dim), name="img", dtype="float32")
 sides = Input(shape=(size,), name="img_sides", dtype="int32")
 sent = Input(shape=(40,), name="sent", dtype="int32")
 
-img_mask = tf.math.not_equal(sides, 0)
+feature_mask = tf.math.not_equal(sides, 0)
 sent_mask = tf.math.not_equal(sent, 0)
 
 
@@ -81,20 +79,15 @@ class FeatureExtractor(tf.keras.layers.Layer):
         super(FeatureExtractor, self).__init__()
 
     def call(self, X):
-        global size, img_shape
-        imgs, boxes, scores, sides = X
+        global size, features_dim
+        features, sides = X
 
         # embedd features
-        em_sides = tf.cast(sides, dtype="float32")
-        em_sides = tf.expand_dims(em_sides, axis=2)
-        em_scores = tf.expand_dims(scores, axis=2)
-
-        # embedd features
-        em_features = tf.concat([imgs, boxes, em_sides, em_scores], axis=-1)
-        n_dim = img_shape + 4 + 1 + 1
-        em_features = tf.reshape(imgs, shape=(-1, n_dim))
+        em_features = tf.concat([features, tf.cast(sides, dtype="float32")], axis=-1)
+        n_dim = features_dim + 1
+        em_features = tf.reshape(em_features, shape=(-1, n_dim))
         prec_params = [(1024, "sigmoid"), (1024, "sigmoid"), (1024, "sigmoid")]
-        prec = Perceptron(img_shape, em_features)
+        prec = Perceptron(n_dim, prec_params)
         em_features = prec(em_features)
         n_dim = prec_params[-1][0]
         em_features = tf.reshape(em_features, shape=(-1, size, n_dim))
@@ -103,7 +96,7 @@ class FeatureExtractor(tf.keras.layers.Layer):
         return em_features
 
 
-em_featurs = FeatureExtractor()([imgs, boxes, scores, sides])
+em_featurs = FeatureExtractor()([features, sides])
 
 # embedding sentence
 print("creating transformer encoder")
@@ -142,7 +135,7 @@ pred = f(relation_out)
 
 # compile model
 print("compiling model")
-model = Model(inputs=[imgs, boxes, scores, sides, sent], outputs=pred)
+model = Model(inputs=[features, sides, sent], outputs=pred)
 model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
 # model.load_weights(model_path)
