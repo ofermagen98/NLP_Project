@@ -75,6 +75,7 @@ base_model = tf.keras.applications.InceptionV3(input_shape=(SIZE,SIZE,3),
                                                include_top=False,
                                                weights=None)
 base_model.load_weights(weight_path)
+print("loaded weights")
 
 id2path = dict()
 for root, _, files in os.walk(IMG_DIR):
@@ -86,8 +87,9 @@ hashes = json.loads(open(HASH_FILE).read())
 objs = os.listdir(SDIR)
 objs = filter(lambda p: os.path.splitext(p)[1] == '.pickle', objs)
 objs = map(lambda p: os.path.join(SDIR,p), objs)
-objs = list(objs)[:10]
+objs = progressbar(list(objs))
 
+print("formatting")
 for path in objs:
     with open(path,'rb') as f:
         OBJ = pickle.load(f)
