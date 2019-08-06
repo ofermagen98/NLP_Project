@@ -13,6 +13,7 @@ SIZE = 299
 assert os.path.isdir(SDIR)
 assert os.path.isdir(IMG_DIR)
 assert os.path.isfile(HASH_FILE)
+print(os.path.dirname(RDIR))
 assert os.path.isdir(os.path.dirname(RDIR))
 if os.path.isdir(RDIR): shutil.rmtree(RDIR)
 os.mkdir(RDIR)
