@@ -7,7 +7,7 @@ ssl._create_default_https_context = ssl._create_unverified_context
 SDIR = '/home/joberant/home/ofermagen/objects/train/'
 IMG_DIR = '/home/joberant/home/ofermagen/unformatted_images/train/'
 HASH_FILE = "/home/joberant/home/ofermagen/nlvr/nlvr2/util/hashes/train_hashes.json"
-RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/train/'
+RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/train'
 SIZE = 299
 
 assert os.path.isdir(SDIR)
