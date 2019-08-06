@@ -31,28 +31,25 @@ def sent2list(sent, size=40):
     return list(sent)
 
 
-def read_OBJ(imgL, imgR, size=30):
+def read_features(imgL, imgR, size=30):
     with open(imgL, "rb") as f:
         imgL = pickle.load(f)
     with open(imgR, "rb") as f:
         imgR = pickle.load(f)
 
     OBJ = dict()
-    for key in imgL.keys():
-        if key != "ID":
-            OBJ[key] = np.concatenate([imgL[key], imgR[key]])
-
-    OBJ["img_side"] = [1] * len(imgL["images"]) + [-1] * len(imgR["images"])
+    OBJ['features'] = np.concatenate([imgL['features'], imgR['features']])
+    OBJ["img_side"] = [1] * len(imgL["features"]) + [-1] * len(imgR["features"])
     OBJ["img_side"] = np.asarray(OBJ["img_side"], dtype=np.dtype("float32"))
 
-    if len(OBJ["images"]) > size:
-        perm = list(range(len(OBJ["images"])))
+    if len(OBJ["features"]) > size:
+        perm = list(range(len(OBJ["features"])))
         perm.sort(key=lambda i: OBJ["scores"][i], reverse=True)
         perm = perm[:size]
         for key in OBJ.keys():
             OBJ[key] = OBJ[key][perm]
 
-    count = len(OBJ["images"])
+    count = len(OBJ["features"])
     count = size - count
 
     if count > 0:
@@ -98,18 +95,10 @@ class DataGenerator(Sequence):
         imgR = self.ID2path[ID + "-img1.png"]
         imgR = self.ddir + os.path.basename(imgR)
 
-        OBJ = read_OBJ(imgL, imgR)
- 
-        #print(ex['sentence'])
-        #print(ex['label'])
-        #for img in OBJ['images']:
-        #    cv2.imshow("img",img)
-        #    key = cv2.waitKey() & 0xFF
-        #    if int(key) == 27: exit()
-        #exit()
+        OBJ = read_features(imgL, imgR)
 
         OBJ["sent"] = np.asarray(sent)
-        OBJ["label"] = ex["label"]
+        OBJ["label"] = (ex["label"][0] == 'T')
         OBJ["synset"] = ex["synset"]
         return OBJ
 
@@ -119,20 +108,22 @@ class DataGenerator(Sequence):
         idx = range(index * self.batch_size, idx)
         idx = list(idx)
         
-        keys = ["features", "img_side", "sent"] 
+        #keys = ["features", "img_side", "sent"] 
         labels = []
-        res = [[] for _ in keys]
+        features = []
+        sides = []
 
         for i in idx:
             OBJ = self.read_example(i)
-            for i,key in enumerate(keys):
-                res[i].append(OBJ[key])
+            features.append(OBJ["features"])
+            sides.append(OBJ["img_sides"])
             labels.append(OBJ["label"][0] == 'T')
         
-        for i,_ in enumerate(keys):
-            res[i] = np.stack(res[i])
+        features = np.asarray(features)
+        sides = np.asanyarray(sides)
         labels = np.asarray(labels,dtype=np.dtype('int32'))
-        return res, labels
+        
+        return [features , sides], labels
 
 
 if __name__ == "__main__":
