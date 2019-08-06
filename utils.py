@@ -26,8 +26,9 @@ def import_tensorflow():
     def kill_children(*a, **kw):
         print("timeout")
         current_process = psutil.Process()
-        child = current_process.children(recursive=True)[0]
-        os.kill(child.pid, signal.SIGTERM)
+        children = current_process.children(recursive=True)
+        if len(children) > 0: 
+            os.kill(children[0].pid, signal.SIGTERM)
 
     #export LD_LIBRARY_PATH=/usr/local/lib/cuda-10.0.130/lib64/:/usr/local/lib/cudnn-10.0-v7/lib64/
     os.environ[

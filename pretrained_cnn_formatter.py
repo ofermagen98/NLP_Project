@@ -28,6 +28,7 @@ import imagehash
 
 from utils import tensorflow as tf
 from tensorflow.keras.layers import AveragePooling2D
+from tensorflow.keras.applications.inception_v3 import preprocess_input
 
 def resize(im, desired_size=SIZE):
     old_size = im.shape[:2]  # old_size is in (height, width) format
@@ -118,7 +119,7 @@ for path in objs:
         sub_img = resize(sub_img)
         sub_img = cv2.cvtColor(sub_img, cv2.COLOR_BGR2RGB)
 
-        sub_images.append(sub_img)
+        sub_images.append(preprocess_input(sub_img))
         boxes.append(np.asarray([xm/SIZE,ym/SIZE,xM/SIZE,yM/SIZE]))
         scores.append(OBJ['scores'][i] )
     
