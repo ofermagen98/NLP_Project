@@ -96,9 +96,10 @@ class DataGenerator(Sequence):
         imgR = self.ddir + os.path.basename(imgR)
 
         OBJ = read_features(imgL, imgR)
-
         OBJ["sent"] = np.asarray(sent)
         OBJ["label"] = (ex["label"][0] == 'T')
+
+        OBJ["ID"] = ID
         OBJ["synset"] = ex["synset"]
         return OBJ
 
@@ -112,18 +113,21 @@ class DataGenerator(Sequence):
         labels = []
         features = []
         sides = []
+        sents = []
 
         for i in idx:
             OBJ = self.read_example(i)
             features.append(OBJ["features"])
             sides.append(OBJ["img_sides"])
-            labels.append(OBJ["label"][0] == 'T')
+            labels.append(OBJ["label"])
+            sents.append(OBJ["sent"]) 
         
         features = np.asarray(features)
         sides = np.asanyarray(sides)
         labels = np.asarray(labels,dtype=np.dtype('int32'))
-        
-        return [features , sides], labels
+        sents = np.asarray(sents,dtype=np.dtype('int32'))
+
+        return [features , sides, sents], labels
 
 
 if __name__ == "__main__":
