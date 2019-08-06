@@ -118,7 +118,7 @@ class DataGenerator(Sequence):
         for i in idx:
             OBJ = self.read_example(i)
             features.append(OBJ["features"])
-            sides.append(OBJ["img_sides"])
+            sides.append(OBJ["img_side"])
             labels.append(OBJ["label"])
             sents.append(OBJ["sent"]) 
         
