@@ -4,10 +4,10 @@ import shutil
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-SDIR = '/home/joberant/home/ofermagen/objects/train'
-IMG_DIR = '/home/joberant/home/ofermagen/unformatted_images/train'
-HASH_FILE = "/home/joberant/home/ofermagen/nlvr/nlvr2/util/hashes/train_hashes.json"
-RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/train'
+SDIR = '/home/joberant/home/ofermagen/objects/dev'
+IMG_DIR = '/home/joberant/home/ofermagen/unformatted_images/dev'
+HASH_FILE = "/home/joberant/home/ofermagen/nlvr/nlvr2/util/hashes/dev_hashes.json"
+RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/dev'
 SIZE = 299
 weight_path = "/home/joberant/home/ofermagen/models/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5"
 
