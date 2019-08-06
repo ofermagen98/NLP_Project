@@ -69,9 +69,11 @@ class Perceptron(tf.keras.layers.Layer):
                 self.model.add(Dropout(rate=DROPOUT_RATE))
             if i == 0:
                 self.model.add(Dense(units=dim, input_shape=(input_dim,), activation=activation))
-            self.model.add(BatchNormalization())
+            
             else:
                 self.model.add(Dense(units=dim, activation=activation))
+            
+            self.model.add(BatchNormalization())
             
 
     def call(self, x):
