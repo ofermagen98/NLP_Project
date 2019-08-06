@@ -1,5 +1,5 @@
 from utils import tensorflow as tf
-from tensorflow.keras.layers import LSTM,Bidirectional,TimeDistributed
+from tensorflow.keras.layers import LSTM,Bidirectional,TimeDistributed,Dense
 from tensorflow.keras.models import Sequential
 from utils import DROPOUT_RATE
 
@@ -15,7 +15,7 @@ class Encoder(tf.keras.layers.Layer):
         self.model.add(Bidirectional(LSTM(units, return_sequences=True), input_shape=(word_dim,)))
         self.model.add(TimeDistributed(Dense(256, activation='sigmoid')))
     
-    def call(sent):
+    def call(self,sent):
         return self.model(sent)
 
         
