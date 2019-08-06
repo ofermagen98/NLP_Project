@@ -129,7 +129,7 @@ pred = f(relation_out)
 # compile model
 print("compiling model")
 model = Model(inputs=[features, sides, sent], outputs=pred)
-model.compile("adam", loss="categorical_crossentropy", metrics=["accuracy"])
+model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
 # callbacks
 checkpoint = ModelCheckpoint(
