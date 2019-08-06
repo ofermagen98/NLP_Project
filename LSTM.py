@@ -13,7 +13,7 @@ class Encoder(tf.keras.layers.Layer):
         self._my_size = size
         self._my_units = units
         self._my_output_shape = prec_params[-1][0]
-        self.prec = Perceptron(units,prec_params)
+        self.prec = Perceptron(2*units,prec_params)
         self.lstm = Bidirectional(LSTM(units, return_sequences=True), input_shape=(size,word_dim))
         
 
