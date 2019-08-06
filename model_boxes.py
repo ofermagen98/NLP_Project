@@ -69,24 +69,34 @@ sent = Input(shape=(40,), name="sent", dtype="int32")
 feature_mask = tf.math.not_equal(sides, 0)
 sent_mask = tf.math.not_equal(sent, 0)
 
-# generate features
-em_sides = tf.keras.backend.cast(sides, "float32")
-em_sides = tf.keras.backend.expand_dims(em_sides,-1)
-em_features = Concatenate(axis=-1)([features, em_sides])
-em_features = tf.keras.backend.reshape(em_features, (-1, features_dim + 1))
+class FeatureEmbeddor(tf.keras.layers.Layer):
+    def __init__(self):
+        super(FeatureEmbeddor,self).__init__()
 
-# embedd features
-prec_params = [(1024, "relu"), (1024, "relu"), (1024, "relu")]
-prec = Perceptron(features_dim + 1, prec_params)
-em_features = prec(em_features)
-n_dim = prec_params[-1][0]
-em_features = tf.keras.backend.reshape(em_features, (-1, size, n_dim))
+    def call(self,X):
+        features,sides = X
+        # generate features
+        em_sides = tf.keras.backend.cast(sides, "float32")
+        em_sides = tf.keras.backend.expand_dims(em_sides,-1)
+        em_features = Concatenate(axis=-1)([features, em_sides])
+        em_features = tf.keras.backend.reshape(em_features, (-1, features_dim + 1))
 
+        # embedd features
+        prec_params = [(1024, "relu")]
+        prec = Perceptron(features_dim + 1, prec_params)
+        em_features = prec(em_features)
+        n_dim = prec_params[-1][0]
+        em_features = tf.keras.backend.reshape(em_features, (-1, size, n_dim))
+
+        return em_features
+
+
+em_features = FeatureEmbeddor()([features,sides])
 # embedding sentence
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
-prec_params = [(1024, "relu"), (1024, "relu"), (1024, "relu")]
+prec_params = [(1024, "relu")]
 encoder = Encoder(
     units=2048,
     prec_params=prec_params,
@@ -100,7 +110,7 @@ em_sent = encoder(sent)
 print("creating relational network")
 relation_matrix = RelationalProduct()([em_sent, em_features])
 print(relation_matrix.shape)
-g = ConvolutionalPerceptron(relation_matrix.shape[1:], [1024, 1024, 1024, 1024])
+g = ConvolutionalPerceptron(relation_matrix.shape[1:], [1024, 1024])
 em_relations = g(relation_matrix)
 relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=feature_mask)
 
@@ -108,12 +118,10 @@ relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=featu
 prec_params = [
     (1024, "relu"),
     (512, "relu"),
-    (256, "relu"),
     (128, "relu"),
     (64, "relu"),
-    (32, "relu"),
     (16, "relu"),
-    (1, "sigmoid"),
+    (2, "softmax"),
 ]
 f = Perceptron(relation_out.shape[1], prec_params)
 pred = f(relation_out)
@@ -121,7 +129,7 @@ pred = f(relation_out)
 # compile model
 print("compiling model")
 model = Model(inputs=[features, sides, sent], outputs=pred)
-model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
+model.compile("adam", loss="categorical_crossentropy", metrics=["accuracy"])
 
 # callbacks
 checkpoint = ModelCheckpoint(

@@ -80,6 +80,7 @@ class DataGenerator(Sequence):
             _shuffle(self.examples)
 
     def __len__(self):
+        return 10
         "Denotes the number of batches per epoch"
         return self.batch_num
 
@@ -97,7 +98,8 @@ class DataGenerator(Sequence):
 
         OBJ = read_features(imgL, imgR)
         OBJ["sent"] = np.asarray(sent)
-        OBJ["label"] = (ex["label"][0] == 'T')
+        OBJ["label"] = [0.0,0.0]
+        OBJ["label"][int(ex["label"][0] == 'T')] = 1.0
 
         OBJ["ID"] = ID
         OBJ["synset"] = ex["synset"]
@@ -122,9 +124,9 @@ class DataGenerator(Sequence):
             labels.append(OBJ["label"])
             sents.append(OBJ["sent"]) 
         
-        features = np.asarray(features)
-        sides = np.asanyarray(sides)
-        labels = np.asarray(labels,dtype=np.dtype('int32'))
+        features = np.asarray(features,dtype=np.dtype('float32'))
+        sides = np.asanyarray(sides,dtype=np.dtype('float32'))
+        labels = np.asarray(labels,dtype=np.dtype('float32'))
         sents = np.asarray(sents,dtype=np.dtype('int32'))
 
         return [features , sides, sents], labels
