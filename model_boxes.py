@@ -4,31 +4,22 @@ import numpy as np
 
 assert len(sys.argv) > 2
 
-if len(sys.argv) > 1:
-    if sys.argv[1] == "J":
-        orig_dir = "/specific/netapp5/joberant/home/ofermagen/"
-        train_data = (
-            orig_dir + "nlvr/nlvr2/data/train.json",
-            orig_dir + "pretrained_cnn_objects/train/",
-        )
-        dev_data = (
-            orig_dir + "nlvr/nlvr2/data/dev.json",
-            orig_dir + "pretrained_cnn_objects/dev/",
-        )
-        model_path = "/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5"
-    elif sys.argv[1] == "O":
-        train_data_dir = "/home/ofermagen/data/semiformatted_images/train/"
-        model_path = "/home/ofermagen/checkpoint_best/model.h5"
-    else:
-        raise NotImplementedError
+orig_dir = "/specific/netapp5/joberant/home/ofermagen/"
+train_data = (
+    orig_dir + "nlvr/nlvr2/data/train.json",
+    orig_dir + "pretrained_cnn_objects/train/",
+)
+dev_data = (
+    orig_dir + "nlvr/nlvr2/data/dev.json",
+    orig_dir + "pretrained_cnn_objects/dev/",
+)
+model_path = "/specific/disk1/home/gamir/ofer/" + sys.argv[1] + "/model.h5"
 
-    for p in [train_data, dev_data]:
-        assert os.path.isdir(p[1])
-        assert os.path.isfile(p[0])
+for p in [train_data, dev_data]:
+    assert os.path.isdir(p[1])
+    assert os.path.isfile(p[0])
 
-else:
-    # raise NotImplementedError
-    pass
+
 
 from utils import tensorflow as tf
 from tensorflow.keras.models import Model
