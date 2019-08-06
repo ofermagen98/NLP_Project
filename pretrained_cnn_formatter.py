@@ -4,8 +4,8 @@ import shutil
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-SDIR = '/home/joberant/home/ofermagen/objects/train/'
-IMG_DIR = '/home/joberant/home/ofermagen/unformatted_images/train/'
+SDIR = '/home/joberant/home/ofermagen/objects/train'
+IMG_DIR = '/home/joberant/home/ofermagen/unformatted_images/train'
 HASH_FILE = "/home/joberant/home/ofermagen/nlvr/nlvr2/util/hashes/train_hashes.json"
 RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/train'
 SIZE = 299
@@ -13,7 +13,6 @@ SIZE = 299
 assert os.path.isdir(SDIR)
 assert os.path.isdir(IMG_DIR)
 assert os.path.isfile(HASH_FILE)
-print(os.path.dirname(RDIR))
 assert os.path.isdir(os.path.dirname(RDIR))
 if os.path.isdir(RDIR): shutil.rmtree(RDIR)
 os.mkdir(RDIR)
