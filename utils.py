@@ -6,7 +6,7 @@ import random
 import sys
 
 DROPOUT_BOOL = True
-DROPOUT_RATE = 0.1
+DROPOUT_RATE = 0.3
 LAYER_NORM_EPSION = 1e-6
 L2_REG = 4e-8
 
