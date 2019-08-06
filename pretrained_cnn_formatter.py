@@ -93,7 +93,6 @@ print("formatting")
 for path in objs:
     with open(path,'rb') as f:
         OBJ = pickle.load(f)
-    print(OBJ.keys())
 
     img = id2path[OBJ['ID']]
     img = read_img(img)
