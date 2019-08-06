@@ -3,7 +3,7 @@ from utils import DROPOUT_RATE, DROPOUT_BOOL
 
 from utils import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv1D, Dense, Input, Dropout,Multiply, Concatenate
+from tensorflow.keras.layers import Conv1D, Dense, Input, Dropout,Multiply, Concatenate, BatchNormalization
 
 class ReduceMean(tf.keras.layers.Layer):
     def __init__(self, axis):
@@ -47,8 +47,10 @@ class ConvolutionalPerceptron(tf.keras.layers.Layer):
                 )
             else:
                 self.model.add(Conv1D(filters=dim, kernel_size=1))
+            self.model.add(BatchNormalization())
             if dropout:
                 self.model.add(Dropout(rate=DROPOUT_RATE))
+            
 
 
     def call(self, x):
@@ -67,6 +69,7 @@ class Perceptron(tf.keras.layers.Layer):
                 self.model.add(Dropout(rate=DROPOUT_RATE))
             if i == 0:
                 self.model.add(Dense(units=dim, input_shape=(input_dim,), activation=activation))
+            self.model.add(BatchNormalization())
             else:
                 self.model.add(Dense(units=dim, activation=activation))
             
