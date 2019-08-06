@@ -1,5 +1,5 @@
 from utils import tensorflow as tf
-from tensorflow.keras.layers import LSTM,Bidirectional,TimeDistributed,Dense
+from tensorflow.keras.layers import LSTM,Bidirectional,TimeDistributed,Dense,Reshape
 from tensorflow.keras.models import Sequential
 from utils import DROPOUT_RATE
 
