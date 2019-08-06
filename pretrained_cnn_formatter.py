@@ -73,8 +73,8 @@ def read_img(path):
 
 base_model = tf.keras.applications.InceptionV3(input_shape=(SIZE,SIZE,3),
                                                include_top=False,
-                                               weights=weight_path)
-
+                                               weights=None)
+base_model.load_weights(weight_path)
 exit()
 id2path = dict()
 for root, _, files in os.walk(IMG_DIR):
