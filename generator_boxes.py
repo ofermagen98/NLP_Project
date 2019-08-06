@@ -97,8 +97,8 @@ class DataGenerator(Sequence):
 
         OBJ = read_features(imgL, imgR)
         OBJ["sent"] = np.asarray(sent)
-        OBJ["label"] = [0.0,0.0]
-        OBJ["label"][int(ex["label"][0] == 'T')] = 1.0
+        #OBJ["label"] = [0.0,0.0]
+        OBJ["label"] = int(ex["label"][0] == 'T')
 
         OBJ["ID"] = ID
         OBJ["synset"] = ex["synset"]

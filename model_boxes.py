@@ -121,7 +121,7 @@ prec_params = [
     (128, "relu"),
     (64, "relu"),
     (16, "relu"),
-    (2, "softmax"),
+    (1, "sigmoid"),
 ]
 f = Perceptron(relation_out.shape[1], prec_params,dropout=False)
 pred = f(relation_out)
