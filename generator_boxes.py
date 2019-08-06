@@ -74,7 +74,7 @@ class DataGenerator(Sequence):
         self.examples = [json.loads(s) for s in open(json_file).readlines()]
         
         if sys.argv[1] == "checkpoints_single":
-            self.examples = list(filter(lambda ex: ex['sysnet'] == 'gorilla',self.examples))
+            self.examples = list(filter(lambda ex: ex['synset'] == 'gorilla',self.examples))
         self.batch_num = (len(self.examples) + batch_size - 1) // batch_size
 
         with open(os.path.join(ddir, "ID2Path.json"), "r") as f:
