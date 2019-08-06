@@ -126,12 +126,11 @@ for path in objs:
     features = base_model.predict(np.stack(sub_images))
     features = np.mean(features,axis=1)
     features = np.mean(features,axis=1)
-    
+    features = np.concatenate([features,np.stack(boxes),np.stack(scores)])
+
     new_OBJ = dict()
     new_OBJ['ID'] = OBJ['ID']
     new_OBJ['features'] = features
-    new_OBJ['scores'] = np.stack(scores)
-    new_OBJ['boxes'] = np.stack(boxes)
     new_path = os.path.join(RDIR,os.path.basename(path))
 
     with open(new_path,'wb') as f:
