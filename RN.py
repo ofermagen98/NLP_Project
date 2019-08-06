@@ -63,12 +63,13 @@ class Perceptron(tf.keras.layers.Layer):
         self._input_dim = input_dim
         self.model = Sequential()
         for i, (dim,activation) in enumerate(layer_dims):
+            if DROPOUT_RATE*dim > 1 and dropout:
+                self.model.add(Dropout(rate=DROPOUT_RATE))
             if i == 0:
                 self.model.add(Dense(units=dim, input_shape=(input_dim,), activation=activation))
             else:
                 self.model.add(Dense(units=dim, activation=activation))
-            if dropout:
-                self.model.add(Dropout(rate=DROPOUT_RATE))
+            
 
     def call(self, x):
         assert len(x.shape) == 2
