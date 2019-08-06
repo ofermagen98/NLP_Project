@@ -44,7 +44,7 @@ def read_features(imgL, imgR, size=30):
 
     if len(OBJ["features"]) > size:
         perm = list(range(len(OBJ["features"])))
-        perm.sort(key=lambda i: OBJ["scores"][i], reverse=True)
+        perm.sort(key=lambda i: OBJ["features"][i][-1], reverse=True)
         perm = perm[:size]
         for key in OBJ.keys():
             OBJ[key] = OBJ[key][perm]
