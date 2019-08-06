@@ -146,8 +146,8 @@ callbacks = [checkpoint, lrate, saver]
 print("creating generators")
 #sampled_images = smaple_images(train_data_dir, 1000)
 #sampled_images = np.stack([np.array(Image.open(path)) for path in sampled_images])
-train_gen = DataGenerator(*train_data,batch_size=8)
-val_gen = DataGenerator(*dev_data,batch_size=8)
+train_gen = DataGenerator(*train_data,batch_size=16)
+val_gen = DataGenerator(*dev_data,batch_size=16)
 
 print("training model")
 model.fit_generator(
