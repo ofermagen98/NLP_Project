@@ -27,7 +27,7 @@ class RelationalProduct(tf.keras.layers.Layer):
         O1 = tf.tile(O1, multiples=(1, n2, 1, 1))
         O2 = tf.expand_dims(x2, axis=2)
         O2 = tf.tile(O2, multiples=(1, 1, n1, 1))
-        relation_matrix = Concatenate(axis=-1)([O1, O2])
+        relation_matrix = Multiply()([O1, O2])
         d = int(relation_matrix.shape[3])
         relation_matrix = tf.reshape(
             relation_matrix, shape=(-1, n1 * n2, d), name="relation_matrix"
@@ -103,11 +103,11 @@ class MaskedReduceMean(tf.keras.layers.Layer):
         mask = tf.math.logical_and(O1,O2)
         mask = tf.reshape(mask,shape=(-1,n1*n2))
         mask = tf.cast(mask,tf.float32)
-        sums = tf.reduce_sum(mask, axis=-1)
-        sums = tf.expand_dims(sums, axis=-1)
+        #sums = tf.reduce_sum(mask, axis=-1)
+        #sums = tf.expand_dims(sums, axis=-1)
         mask = tf.expand_dims(mask, axis=-1)
 
         X = X*mask
         X = tf.reduce_sum(X, axis=1)
-        X = X / sums
+        #X = X / sums
         return X
