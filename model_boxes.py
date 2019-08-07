@@ -73,7 +73,7 @@ class FeatureEmbeddor(tf.keras.layers.Layer):
         em_features = tf.keras.backend.reshape(em_features, (-1, features_dim + 1))
 
         # embedd features
-        prec_params = [(1024, "relu"),(512, "relu")]
+        prec_params = [(1024, "sigmoid"),(1024, "sigmoid")]
         prec = Perceptron(features_dim + 1, prec_params)
         em_features = prec(em_features)
         n_dim = prec_params[-1][0]
@@ -87,9 +87,9 @@ em_features = FeatureEmbeddor()([features,sides])
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
-prec_params = [(1024, "relu"),(512, "relu")]
+prec_params = [(1024, "sigmoid"),(1024, "sigmoid")]
 encoder = Encoder(
-    units=512,
+    units=1024,
     prec_params=prec_params,
     input_vocab_size=GloVe_embeddings.shape[0],
     word_dim=300,  # also the word embedding dim
