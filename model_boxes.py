@@ -87,7 +87,7 @@ em_features = FeatureEmbeddor()([features,sides])
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
-prec_params = [(1024, "relu"),(512, "relu")]
+prec_params = [(1024, "relu"),(1024, "relu"),(512, "relu")]
 encoder = Encoder(
     units=512,
     prec_params=prec_params,
@@ -101,13 +101,14 @@ em_sent = encoder(sent)
 print("creating relational network")
 relation_matrix = RelationalProduct()([em_sent, em_features])
 print(relation_matrix.shape)
-prec_params = [(1024, "relu"),(512, "relu")]
+prec_params = [(1024, "relu"),(1024, "relu"),(1024, "relu")]
 g = ConvolutionalPerceptron(relation_matrix.shape[1:], prec_params)
 em_relations = g(relation_matrix)
 relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=feature_mask)
 
 # getting prediction from averaged relation
 prec_params = [
+    (1024, "relu"),
     (512, "relu"),
     (256, "relu"),
     (128, "relu"),
