@@ -4,6 +4,8 @@ from utils import DROPOUT_RATE, DROPOUT_BOOL
 from utils import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv1D, Dense, Input, Dropout,Multiply, Concatenate, BatchNormalization
+from tensorflow.keras.layers import PReLU
+
 
 class ReduceMean(tf.keras.layers.Layer):
     def __init__(self, axis):
@@ -56,6 +58,7 @@ class ConvolutionalPerceptron(tf.keras.layers.Layer):
 
             else:
                 self.model.add(Conv1D(filters=dim, kernel_size=1))
+            self.model.add(PReLU(alpha=0.05))
             
             
 
@@ -77,10 +80,11 @@ class Perceptron(tf.keras.layers.Layer):
             if dim >= 128 and dropout:
                 self.model.add(Dropout(rate=DROPOUT_RATE))
             if i == 0:
-                self.model.add(Dense(units=dim, input_shape=(input_dim,), activation=activation))
+                self.model.add(Dense(units=dim, input_shape=(input_dim,)))
             
             else:
-                self.model.add(Dense(units=dim, activation=activation))
+                self.model.add(Dense(units=dim))
+            self.model.add(PReLU(alpha=0.05))
             
             
 
