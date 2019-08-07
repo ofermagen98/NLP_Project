@@ -35,6 +35,11 @@ from RN import (
 from LSTM import Encoder
 
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
+from tensorflow.keras.layers import PReLU
+from tensorflow.keras.activations import sigmoid
+
+activation = PReLU(alpha_initializer=Constant(0.05))
+
 from utils import HistorySaver
 from generator_boxes import DataGenerator
 
@@ -73,7 +78,7 @@ class FeatureEmbeddor(tf.keras.layers.Layer):
         em_features = tf.keras.backend.reshape(em_features, (-1, features_dim + 1))
 
         # embedd features
-        prec_params = [(1024, "sigmoid"),(1024, "sigmoid")]
+        prec_params = [(1024, activation),(1024, activation)]
         prec = Perceptron(features_dim + 1, prec_params)
         em_features = prec(em_features)
         n_dim = prec_params[-1][0]
@@ -87,7 +92,7 @@ em_features = FeatureEmbeddor()([features,sides])
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
-prec_params = [(1024, "sigmoid"),(1024, "sigmoid")]
+prec_params = [(1024, activation),(1024, activation)]
 encoder = Encoder(
     units=1024,
     prec_params=prec_params,
@@ -101,17 +106,17 @@ em_sent = encoder(sent)
 print("creating relational network")
 relation_matrix = RelationalProduct()([em_sent, em_features])
 print(relation_matrix.shape)
-g = ConvolutionalPerceptron(relation_matrix.shape[1:], [1024, 512])
+g = ConvolutionalPerceptron(relation_matrix.shape[1:], [(1024,activation), (512,activation)])
 em_relations = g(relation_matrix)
 relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=feature_mask)
 
 # getting prediction from averaged relation
 prec_params = [
-    (512, "relu"),
-    (256, "relu"),
-    (128, "relu"),
-    (16, "relu"),
-    (1, "sigmoid"),
+    (512, activation),
+    (256, activation),
+    (128, activation),
+    (16, activation),
+    (1, sigmoid()),
 ]
 f = Perceptron(relation_out.shape[1], prec_params,dropout=False)
 pred = f(relation_out)
