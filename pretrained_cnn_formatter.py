@@ -2,14 +2,22 @@ import ssl
 import os
 import shutil
 
+from Imagenet_class2name import D
 ssl._create_default_https_context = ssl._create_unverified_context
-
+'''
 SDIR = '/home/joberant/home/ofermagen/objects/dev'
 IMG_DIR = '/home/joberant/home/ofermagen/unformatted_images/dev'
 HASH_FILE = "/home/joberant/home/ofermagen/nlvr/nlvr2/util/hashes/dev_hashes.json"
 RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/dev'
-SIZE = 299
 weight_path = "/home/joberant/home/ofermagen/models/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5"
+'''
+
+SDIR = '/Users/ofermagen/Coding/NLP_Project_Data/home/ofermagen/data/objects/dev'
+IMG_DIR = '/Users/ofermagen/Coding/NLP_Project_Data/data/unformatted_images/dev'
+HASH_FILE = "/Users/ofermagen/Coding/NLP_Project_Data/data/nlvr/nlvr2/util/hashes/dev_hashes.json"
+RDIR = '/Users/ofermagen/Coding/NLP_Project_Data/pretrained_cnn_objects/dev'
+
+SIZE = 299
 
 assert os.path.isdir(SDIR)
 assert os.path.isdir(IMG_DIR)
@@ -73,9 +81,8 @@ def read_img(path):
         return None
 
 base_model = tf.keras.applications.InceptionV3(input_shape=(SIZE,SIZE,3),
-                                               include_top=False,
-                                               weights=None)
-base_model.load_weights(weight_path)
+                                               include_top=True)
+#base_model.load_weights(weight_path)
 print("loaded weights")
 
 id2path = dict()
@@ -102,6 +109,7 @@ for path in objs:
     boxes = []
     scores = []
 
+    
     for i,(xm,ym,xM,yM) in enumerate(OBJ['boxes']):
         if OBJ['classes'][i] == 0:
             xm = 0
@@ -119,10 +127,21 @@ for path in objs:
         sub_img = resize(sub_img)
         sub_img = cv2.cvtColor(sub_img, cv2.COLOR_BGR2RGB)
 
+        C = np.stack([preprocess_input(sub_img)])
+        C = base_model.predict(C)
+        C = np.argmax(C)
+        C = D[C]
+
+        cv2.imshow('img',sub_img)
+        print(C)
+        cv2.waitKey()
+        
+        continue 
         sub_images.append(preprocess_input(sub_img))
         boxes.append(np.asarray([xm/SIZE,ym/SIZE,xM/SIZE,yM/SIZE]))
         scores.append(OBJ['scores'][i] )
     
+    continue
     features = base_model.predict(np.stack(sub_images))
     features = np.mean(features,axis=1)
     features = np.mean(features,axis=1)

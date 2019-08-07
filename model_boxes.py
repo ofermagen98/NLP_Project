@@ -4,31 +4,22 @@ import numpy as np
 
 assert len(sys.argv) > 2
 
-if len(sys.argv) > 1:
-    if sys.argv[1] == "J":
-        orig_dir = "/specific/netapp5/joberant/home/ofermagen/"
-        train_data = (
-            orig_dir + "nlvr/nlvr2/data/train.json",
-            orig_dir + "pretrained_cnn_objects/train/",
-        )
-        dev_data = (
-            orig_dir + "nlvr/nlvr2/data/dev.json",
-            orig_dir + "pretrained_cnn_objects/dev/",
-        )
-        model_path = "/specific/disk1/home/gamir/ofer/checkpoint_best/model.h5"
-    elif sys.argv[1] == "O":
-        train_data_dir = "/home/ofermagen/data/semiformatted_images/train/"
-        model_path = "/home/ofermagen/checkpoint_best/model.h5"
-    else:
-        raise NotImplementedError
+orig_dir = "/specific/netapp5/joberant/home/ofermagen/"
+train_data = (
+    orig_dir + "nlvr/nlvr2/data/train.json",
+    orig_dir + "pretrained_cnn_objects/train/",
+)
+dev_data = (
+    orig_dir + "nlvr/nlvr2/data/dev.json",
+    orig_dir + "pretrained_cnn_objects/dev/",
+)
+model_path = "/specific/disk1/home/gamir/ofer/" + sys.argv[1] + "/model.h5"
 
-    for p in [train_data, dev_data]:
-        assert os.path.isdir(p[1])
-        assert os.path.isfile(p[0])
+for p in [train_data, dev_data]:
+    assert os.path.isdir(p[1])
+    assert os.path.isfile(p[0])
 
-else:
-    # raise NotImplementedError
-    pass
+
 
 from utils import tensorflow as tf
 from tensorflow.keras.models import Model
@@ -82,7 +73,7 @@ class FeatureEmbeddor(tf.keras.layers.Layer):
         em_features = tf.keras.backend.reshape(em_features, (-1, features_dim + 1))
 
         # embedd features
-        prec_params = [(1024, "relu"),(1024, "relu"),(1024, "relu")]
+        prec_params = [(1024, "relu"),(512, "relu")]
         prec = Perceptron(features_dim + 1, prec_params)
         em_features = prec(em_features)
         n_dim = prec_params[-1][0]
@@ -96,9 +87,9 @@ em_features = FeatureEmbeddor()([features,sides])
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
-prec_params = [(1024, "relu"),(1024, "relu"),(1024, "relu")]
+prec_params = [(1024, "relu"),(512, "relu")]
 encoder = Encoder(
-    units=2048,
+    units=512,
     prec_params=prec_params,
     input_vocab_size=GloVe_embeddings.shape[0],
     word_dim=300,  # also the word embedding dim
@@ -110,16 +101,15 @@ em_sent = encoder(sent)
 print("creating relational network")
 relation_matrix = RelationalProduct()([em_sent, em_features])
 print(relation_matrix.shape)
-g = ConvolutionalPerceptron(relation_matrix.shape[1:], [1024, 1024, 1024])
+g = ConvolutionalPerceptron(relation_matrix.shape[1:], [1024, 512])
 em_relations = g(relation_matrix)
 relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=feature_mask)
 
 # getting prediction from averaged relation
 prec_params = [
-    (1024, "relu"),
     (512, "relu"),
+    (256, "relu"),
     (128, "relu"),
-    (64, "relu"),
     (16, "relu"),
     (1, "sigmoid"),
 ]
