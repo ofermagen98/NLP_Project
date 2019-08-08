@@ -74,7 +74,7 @@ em_sides = CastSides()(sides)
 em_features = Concatenate(axis=-1)([features, em_sides])
     
 # embedd features
-prec_params = [(1024, "relu"),(1024, "relu")]
+prec_params = [(1024, "sigmoid"),(1024, "sigmoid")]
 prec = TimedPerceptron((size,features_dim+1), prec_params)
 em_features = prec(em_features)
 
@@ -82,7 +82,7 @@ em_features = prec(em_features)
 print("creating transformer encoder")
 GloVe_embeddings = np.load("word_embeddings/embedding.npy")
 print(GloVe_embeddings.shape)
-prec_params = [(1024, "relu"),(1024, "relu"),(1024, "relu")]
+prec_params = [(1024, "sigmoid"),(1024, "sigmoid"),(1024, "sigmoid")]
 encoder = Encoder(
     units=512,
     prec_params=prec_params,
