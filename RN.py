@@ -38,8 +38,8 @@ class RelationalProduct(tf.keras.layers.Layer):
         O2 = tf.expand_dims(x2, axis=2)
         O2 = tf.tile(O2, multiples=(1, 1, n1, 1))
 
-        # relation_matrix = Multiply()([O1, O2])
-        relation_matrix = Concatenate(axis=-1)([O1, O2])
+        relation_matrix = Multiply()([O1, O2])
+        #relation_matrix = Concatenate(axis=-1)([O1, O2])
 
         d = int(relation_matrix.shape[3])
         relation_matrix = tf.reshape(
