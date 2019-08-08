@@ -29,7 +29,7 @@ from RN import (
     ReduceMean,
     MaskedReduceMean,
     RelationalProduct,
-    ConvolutionalPerceptron,
+    TimedPerceptron,
     Perceptron,
 )
 from LSTM import Encoder
@@ -60,28 +60,23 @@ sent = Input(shape=(40,), name="sent", dtype="int32")
 feature_mask = tf.math.not_equal(sides, 0)
 sent_mask = tf.math.not_equal(sent, 0)
 
-class FeatureEmbeddor(tf.keras.layers.Layer):
+class CastSides(tf.keras.layers.Layer):
     def __init__(self):
-        super(FeatureEmbeddor,self).__init__()
+        super(CastSides,self).__init__()
 
-    def call(self,X):
-        features,sides = X
-        # generate features
+    def call(self,sides):
         em_sides = tf.keras.backend.cast(sides, "float32")
         em_sides = tf.keras.backend.expand_dims(em_sides,-1)
-        em_features = Concatenate(axis=-1)([features, em_sides])
-        em_features = tf.keras.backend.reshape(em_features, (-1, features_dim + 1))
+        return em_sides
 
-        # embedd features
-        prec_params = [(1024, "relu"),(512, "relu")]
-        prec = Perceptron(features_dim + 1, prec_params)
-        em_features = prec(em_features)
-        n_dim = prec_params[-1][0]
-        em_features = tf.keras.backend.reshape(em_features, (-1, size, n_dim))
-
-        return em_features
-
-em_features = FeatureEmbeddor()([features,sides])
+#generate features
+em_sides = CastSides()(sides)
+em_features = Concatenate(axis=-1)([features, em_sides])
+    
+# embedd features
+prec_params = [(1024, "relu"),(512, "relu")]
+prec = TimedPerceptron((size,features_dim+1), prec_params)
+em_features = prec(em_features)
 
 # embedding sentence
 print("creating transformer encoder")
@@ -102,7 +97,7 @@ print("creating relational network")
 relation_matrix = RelationalProduct()([em_sent, em_features])
 print(relation_matrix.shape)
 prec_params = [(1024, "relu"),(1024, "relu"),(1024, "relu")]
-g = ConvolutionalPerceptron(relation_matrix.shape[1:], prec_params)
+g = TimedPerceptron(relation_matrix.shape[1:], prec_params)
 em_relations = g(relation_matrix)
 relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=feature_mask)
 

@@ -11,8 +11,8 @@ from tensorflow.keras.layers import (
     Multiply,
     Concatenate,
     BatchNormalization,
+    TimeDistributed,
 )
-from tensorflow.keras.layers import PReLU
 
 
 class ReduceMean(tf.keras.layers.Layer):
@@ -38,7 +38,7 @@ class RelationalProduct(tf.keras.layers.Layer):
         O2 = tf.expand_dims(x2, axis=2)
         O2 = tf.tile(O2, multiples=(1, 1, n1, 1))
 
-        #relation_matrix = Multiply()([O1, O2])
+        # relation_matrix = Multiply()([O1, O2])
         relation_matrix = Concatenate(axis=-1)([O1, O2])
 
         d = int(relation_matrix.shape[3])
@@ -48,11 +48,12 @@ class RelationalProduct(tf.keras.layers.Layer):
         return relation_matrix
 
 
-class ConvolutionalPerceptron(tf.keras.layers.Layer):
+class TimedPerceptron(tf.keras.layers.Layer):
     def __init__(self, input_shape, layer_dims, dropout=DROPOUT_BOOL):
-        super(ConvolutionalPerceptron, self).__init__()
+        super(TimedPerceptron, self).__init__()
         self._input_shape = input_shape
         self.model = Sequential()
+
         for i, (dim, activation) in enumerate(layer_dims):
             self.model.add(BatchNormalization())
 
@@ -61,18 +62,13 @@ class ConvolutionalPerceptron(tf.keras.layers.Layer):
 
             if i == 0:
                 self.model.add(
-                    Conv1D(
-                        filters=dim,
-                        kernel_size=1,
-                        input_shape=input_shape,
-                        activation=activation,
+                    TimeDistributed(
+                        Dense(units=dim, activation=activation), input_shape=input_shape
                     )
                 )
 
             else:
-                self.model.add(
-                    Conv1D(filters=dim, kernel_size=1, activation=activation)
-                )
+                self.model.add(TimeDistributed(Dense(units=dim, activation=activation)))
 
     def call(self, x):
         assert len(x.shape) == 3
