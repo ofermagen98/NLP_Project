@@ -123,7 +123,7 @@ checkpoint = ModelCheckpoint(
     filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
-saver = HistorySaver("/specific/netapp5/joberant/home/ofermagen/train_loss.json")
+saver = HistorySaver("./metrics.json")
 callbacks = [checkpoint, lrate, saver]
 
 # generators
