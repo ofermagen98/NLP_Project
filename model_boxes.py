@@ -136,7 +136,7 @@ val_gen = DataGenerator(*dev_data, batch_size=32)
 print("training model")
 model.fit_generator(
     train_gen,
-    epochs=200,
+    epochs=NUM_EPOCHS,
     verbose=1,
     workers=4,
     callbacks=callbacks,
