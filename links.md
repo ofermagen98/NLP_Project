@@ -14,6 +14,10 @@ https://www.cs.tau.ac.il/system/node/289
 #Creating condav
 conda3 create --prefix /specific/netapp5_2/gamir/advml19/ofer/venv python=3.6
 
+
+#rack-gamir-g07 IP
+132.67.248.190
+
 #Running conda
 ssh ofermagen@gate.tau.ac.il
 ssh nova.cs.tau.ac.il
