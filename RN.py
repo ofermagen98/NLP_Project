@@ -1,10 +1,10 @@
 """This class include the basic Relational Neural Network Model"""
 from utils import DROPOUT_RATE, DROPOUT_BOOL
-
+from utils import L2_REG
 from utils import tensorflow as tf
 from tensorflow.keras.models import Sequential
+from tensorflow.keras.regularizers import l2
 from tensorflow.keras.layers import (
-    Conv1D,
     Dense,
     Input,
     Dropout,
@@ -39,7 +39,7 @@ class RelationalProduct(tf.keras.layers.Layer):
         O2 = tf.tile(O2, multiples=(1, 1, n1, 1))
 
         relation_matrix = Multiply()([O1, O2])
-        #relation_matrix = Concatenate(axis=-1)([O1, O2])
+        # relation_matrix = Concatenate(axis=-1)([O1, O2])
 
         d = int(relation_matrix.shape[3])
         relation_matrix = tf.reshape(
@@ -63,12 +63,25 @@ class TimedPerceptron(tf.keras.layers.Layer):
             if i == 0:
                 self.model.add(
                     TimeDistributed(
-                        Dense(units=dim, activation=activation), input_shape=input_shape
+                        Dense(
+                            units=dim,
+                            activation=activation,
+                            kernel_regularizer=l2(L2_REG),
+                        ),
+                        input_shape=input_shape,
                     )
                 )
 
             else:
-                self.model.add(TimeDistributed(Dense(units=dim, activation=activation)))
+                self.model.add(
+                    TimeDistributed(
+                        Dense(
+                            units=dim,
+                            activation=activation,
+                            kernel_regularizer=l2(L2_REG),
+                        )
+                    )
+                )
 
     def call(self, x):
         assert len(x.shape) == 3
@@ -88,11 +101,20 @@ class Perceptron(tf.keras.layers.Layer):
                 self.model.add(Dropout(rate=DROPOUT_RATE))
             if i == 0:
                 self.model.add(
-                    Dense(units=dim, input_shape=(input_dim,), activation=activation)
+                    Dense(
+                        units=dim,
+                        input_shape=(input_dim,),
+                        activation=activation,
+                        kernel_regularizer=l2(L2_REG),
+                    )
                 )
 
             else:
-                self.model.add(Dense(units=dim, activation=activation))
+                self.model.add(
+                    Dense(
+                        units=dim, activation=activation, kernel_regularizer=l2(L2_REG)
+                    )
+                )
 
     def call(self, x):
         assert len(x.shape) == 2
