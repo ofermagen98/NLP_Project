@@ -86,6 +86,7 @@ class DataGenerator(Sequence):
             _shuffle(self.examples)
 
     def __len__(self):
+        return 10
         "Denotes the number of batches per epoch"
         return self.batch_num
 
