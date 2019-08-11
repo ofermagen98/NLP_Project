@@ -104,7 +104,7 @@ relation_out = MaskedReduceMean()(em_relations, O1_mask=sent_mask, O2_mask=featu
 # getting prediction from averaged relation
 prec_params = [
     (512, "relu"),
-    (512, "relu"),
+    #(512, "relu"),
     (256, "relu"),
     (128, "relu"),
     (16, "relu"),
