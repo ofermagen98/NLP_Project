@@ -57,7 +57,6 @@ def params_number():
         shape = variable.get_shape()
         variable_parameters = 1
         for dim in shape:
-            print(dim)
             variable_parameters *= dim.value
         res += variable_parameters
     return res
