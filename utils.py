@@ -52,7 +52,7 @@ tensorflow = import_tensorflow()
 
 def params_number():
     res = 0
-    for variable in tf.trainable_variables():
+    for variable in tensorflow.trainable_variables():
         # shape is an array of tf.Dimension
         shape = variable.get_shape()
         variable_parameters = 1
