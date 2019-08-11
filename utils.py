@@ -7,9 +7,8 @@ import sys
 
 
 DROPOUT_BOOL = True
-DROPOUT_RATE = 0.5
-LAYER_NORM_EPSION = 1e-6
-L2_REG = 1e-4
+DROPOUT_RATE = 0.4
+L2_REG = 5e-6
 
 def smaple_images(dir, num, seed=1234):
     samples = []
@@ -51,6 +50,17 @@ def import_tensorflow():
 
 tensorflow = import_tensorflow()
 
+def params_number():
+    res = 0
+    for variable in tf.trainable_variables():
+        # shape is an array of tf.Dimension
+        shape = variable.get_shape()
+        variable_parameters = 1
+        for dim in shape:
+            print(dim)
+            variable_parameters *= dim.value
+        res += variable_parameters
+    return res
 
 class HistorySaver(tensorflow.keras.callbacks.Callback):
     def __init__(self, fname, save_every=32, *a, **kw):

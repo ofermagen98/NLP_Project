@@ -35,7 +35,7 @@ from RN import (
 from LSTM import Encoder
 
 from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
-from utils import HistorySaver
+from utils import HistorySaver, params_number
 from generator_boxes import DataGenerator
 
 NUM_EPOCHS = 200
@@ -133,6 +133,7 @@ val_gen = DataGenerator(*dev_data, batch_size=32)
 
 # loading weights
 # training
+print("paramater number",params_number())
 print("training model")
 model.fit_generator(
     train_gen,
