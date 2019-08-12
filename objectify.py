@@ -26,7 +26,6 @@ def objectify(OBJ):
     )
     return res
 
-paths = ['/specific/disk1/home/gamir/ofer/data/object_boxes/test1/test1-0-0-img0.pickle']
 for path in progressbar(paths):
     with open(path, "rb") as f:
         OBJ = pickle.load(f)
