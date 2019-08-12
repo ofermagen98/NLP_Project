@@ -117,7 +117,7 @@ paths = map(lambda p: os.path.join(IMG_DIR,p), paths)
 paths = filter(non_existing,paths)
 paths = list(paths)
 
-img_num = len(non_existing)
+img_num = len(paths)
 count = 0
 # 36,40
 for out_paths, images in get_batches(paths):
