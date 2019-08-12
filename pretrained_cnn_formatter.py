@@ -105,7 +105,6 @@ for path in objs:
     sub_images = []
     boxes = []
     scores = []
-
     
     for i,(xm,ym,xM,yM) in enumerate(OBJ['boxes']):
         if OBJ['classes'][i] == 0:
