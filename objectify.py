@@ -18,13 +18,13 @@ def objectify(OBJ):
     print(A.shape)
 
     res["scores"] = np.concatenate(
-        [np.asarray([1.0]), OBJ["detection_scores"]], axis=-1
+        [np.asarray([1.0]), OBJ["detection_scores"]], axis=0
     )
     res["classes"] = np.concatenate(
-        [np.asarray([0]), OBJ["detection_classes"] + 1], axis=-1
+        [np.asarray([0]), OBJ["detection_classes"] + 1], axis=0
     )
     res["boxes"] = np.concatenate(
-        [A, OBJ["detection_boxes"]], axis=-1
+        [A, OBJ["detection_boxes"]], axis=0
     )
     exit()
     return res
