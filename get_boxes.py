@@ -116,6 +116,8 @@ paths = os.listdir(IMG_DIR)
 paths = map(lambda p: os.path.join(IMG_DIR,p), paths)
 paths = filter(non_existing,paths)
 paths = list(paths)
+print(paths)
+exit()
 
 img_num = len(paths)
 count = 0
