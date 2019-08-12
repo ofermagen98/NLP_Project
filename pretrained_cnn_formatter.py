@@ -4,18 +4,12 @@ import shutil
 
 from Imagenet_class2name import D
 ssl._create_default_https_context = ssl._create_unverified_context
-'''
-SDIR = '/home/joberant/home/ofermagen/objects/dev'
-IMG_DIR = '/home/joberant/home/ofermagen/unformatted_images/dev'
-HASH_FILE = "/home/joberant/home/ofermagen/nlvr/nlvr2/util/hashes/dev_hashes.json"
-RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/dev'
-weight_path = "/home/joberant/home/ofermagen/models/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5"
-'''
 
-SDIR = '/Users/ofermagen/Coding/NLP_Project_Data/home/ofermagen/data/objects/dev'
-IMG_DIR = '/Users/ofermagen/Coding/NLP_Project_Data/data/unformatted_images/dev'
-HASH_FILE = "/Users/ofermagen/Coding/NLP_Project_Data/data/nlvr/nlvr2/util/hashes/dev_hashes.json"
-RDIR = '/Users/ofermagen/Coding/NLP_Project_Data/pretrained_cnn_objects/dev'
+SDIR = '/specific/disk1/home/gamir/ofer/data/test1/'
+IMG_DIR = '/specific/disk1/home/gamir/ofer/data/unformatted_images/test1/'
+HASH_FILE = "/specific/disk1/home/gamir/ofer/data/nlvr/nlvr2/util/hashes/test1_hashes.json"
+RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/test1/'
+weight_path = "/home/joberant/home/ofermagen/models/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5"
 
 SIZE = 299
 
