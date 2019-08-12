@@ -43,7 +43,7 @@ NUM_EPOCHS = 200
 
 def lr_schedualer(epoch, *a, **kw):
     global NUM_EPOCHS
-    base = 5e-5
+    base = 2e-4
     x = float(epoch) / NUM_EPOCHS
     frac = pow(2, -4 * x)
     return base * frac
