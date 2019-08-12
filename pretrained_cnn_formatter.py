@@ -124,21 +124,10 @@ for path in objs:
         sub_img = resize(sub_img)
         sub_img = cv2.cvtColor(sub_img, cv2.COLOR_BGR2RGB)
 
-        C = np.stack([preprocess_input(sub_img)])
-        C = base_model.predict(C)
-        C = np.argmax(C)
-        C = D[C]
-
-        cv2.imshow('img',sub_img)
-        print(C)
-        cv2.waitKey()
-        
-        continue 
         sub_images.append(preprocess_input(sub_img))
         boxes.append(np.asarray([xm/SIZE,ym/SIZE,xM/SIZE,yM/SIZE]))
-        scores.append(OBJ['scores'][i] )
+        scores.append(OBJ['scores'][i])
     
-    continue
     features = base_model.predict(np.stack(sub_images))
     features = np.mean(features,axis=1)
     features = np.mean(features,axis=1)
