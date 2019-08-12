@@ -1,21 +1,36 @@
 import os
+from tqdm import tqdm as progressbar
+import pickle
+import numpy as np
 
+DIR = "/specific/disk1/home/gamir/ofer/data/object_boxes/test1/"
 
-IMG_DIR = '/specific/disk1/home/gamir/ofer/data/unformatted_images/test1/'
-RES_DIR = '/specific/disk1/home/gamir/ofer/data/object_boxes/test1/'
-
-def to_res_dir(p):
-    name = os.path.basename(p)
-    name = os.path.splitext(name)[0]
-    name = os.path.splitext(name)[0]
-    return os.path.join(RES_DIR,name+'.pickle')
-
-paths = os.listdir(IMG_DIR)
+paths = os.listdir(DIR)
 paths = filter(lambda p: ".pickle" in p, paths)
-paths = map(lambda p: os.path.join(IMG_DIR,p), paths)
+paths = map(lambda p: os.path.join(DIR, p), paths)
 paths = list(paths)
 
-for path in paths:
-    print(path)
-    res = to_res_dir(path)
-    os.rename(path, res)
+
+def objectify(OBJ):
+    res = dict()
+    res["scores"] = np.concatenate(
+        [np.asarray([1.0]), OBJ["detection_scores"]], axis=-1
+    )
+    res["classes"] = np.concatenate(
+        [np.asarray([0]), OBJ["detection_classes"] + 1], axis=-1
+    )
+    res["boxes"] = np.concatenate(
+        [np.asanyarray([[0.0, 0.0, 1.0, 1.0]]), OBJ["detection_boxes"]], axis=-1
+    )
+    exit()
+    return res
+
+for path in progressbar(paths):
+    with open(path, "rb") as f:
+        OBJ = pickle.load(f)
+
+    OBJ = objectify(OBJ)
+
+    with open(path, "wb") as f:
+        OBJ = pickle.load(f)
+

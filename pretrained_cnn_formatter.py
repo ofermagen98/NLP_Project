@@ -106,7 +106,7 @@ for path in objs:
     boxes = []
     scores = []
     
-    for i,(xm,ym,xM,yM) in enumerate(OBJ['detection_boxes']):
+    for i,(xm,ym,xM,yM) in enumerate(OBJ['boxes']):
         if OBJ['classes'][i] == 0:
             xm = 0
             ym = 0
@@ -125,7 +125,7 @@ for path in objs:
 
         sub_images.append(preprocess_input(sub_img))
         boxes.append(np.asarray([xm/SIZE,ym/SIZE,xM/SIZE,yM/SIZE]))
-        scores.append(OBJ['detection_scores'][i])
+        scores.append(OBJ['scores'][i])
     
     features = base_model.predict(np.stack(sub_images))
     features = np.mean(features,axis=1)
