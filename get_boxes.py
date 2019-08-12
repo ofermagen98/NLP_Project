@@ -5,9 +5,7 @@ import numpy as np
 import os
 from utils import tensorflow as tf
 from PIL import Image
-
 import cv2
-
 from tqdm import tqdm as progressbar
 import json
 import pickle
@@ -15,9 +13,8 @@ from time import time
 
 IMG_DIR = '/specific/disk1/home/gamir/ofer/data/unformatted_images/test1/'
 RES_DIR = '/specific/disk1/home/gamir/ofer/data/object_boxes/test1/'
-GPU_DEVICE = None
+GPU_DEVICE = '/device:XLA_GPU:0'
 MODELS_DIR = '/specific/disk1/home/gamir/ofer/models'
-raise NotImplementedError
 
 def path2output(p):
     name = os.path.basename(p)
