@@ -75,8 +75,9 @@ def read_img(path):
         return None
 
 base_model = tf.keras.applications.InceptionV3(input_shape=(SIZE,SIZE,3),
+                                               weights=None,
                                                include_top=True)
-#base_model.load_weights(weight_path)
+base_model.load_weights(weight_path)
 print("loaded weights")
 
 id2path = dict()
