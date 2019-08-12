@@ -20,7 +20,7 @@ def objectify(OBJ):
         [np.asarray([0]), OBJ["detection_classes"] + 1], axis=-1
     )
     res["boxes"] = np.concatenate(
-        [np.asanyarray([[0.0, 0.0, 1.0, 1.0]]), OBJ["detection_boxes"]], axis=-1
+        [np.asarray([[0.0, 0.0, 1.0, 1.0]]), OBJ["detection_boxes"]], axis=-1
     )
     exit()
     return res
