@@ -7,6 +7,7 @@ RES_DIR = '/specific/disk1/home/gamir/ofer/data/object_boxes/test1/'
 def to_res_dir(p):
     name = os.path.basename(p)
     name = os.path.splitext(name)[0]
+    name = os.path.splitext(name)[0]
     print(name)
     exit()
     return os.path.join(RES_DIR,name+'.pickle')

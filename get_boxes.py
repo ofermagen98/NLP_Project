@@ -133,4 +133,3 @@ for out_paths, images in get_batches(paths):
             pickle.dump(res, f, pickle.HIGHEST_PROTOCOL)
 
     count += len(images)
-
