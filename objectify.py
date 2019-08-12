@@ -33,5 +33,5 @@ for path in progressbar(paths):
     OBJ = objectify(OBJ)
 
     with open(path, "wb") as f:
-        OBJ = pickle.load(f)
+        pickle.dump(OBJ, f, pickle.HIGHEST_PROTOCOL)
 
