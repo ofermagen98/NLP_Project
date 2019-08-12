@@ -5,9 +5,7 @@ import numpy as np
 import os
 from utils import tensorflow as tf
 from PIL import Image
-
 import cv2
-
 from tqdm import tqdm as progressbar
 import json
 import pickle
