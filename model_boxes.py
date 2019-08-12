@@ -15,6 +15,9 @@ dev_data = (
 )
 model_path = "/specific/disk1/home/gamir/ofer/" + sys.argv[1] + "/model.h5"
 
+if not os.path.isdir(os.path.dirname(model_path)): 
+    os.mkdir(os.path.dirname(model_path))
+
 for p in [train_data, dev_data]:
     assert os.path.isdir(p[1])
     assert os.path.isfile(p[0])
