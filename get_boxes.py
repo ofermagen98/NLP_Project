@@ -130,6 +130,7 @@ for out_paths, images in get_batches(paths):
     out_paths = map(lambda p: os.path.join(RES_DIR,p), out_paths)
     for res, out_path in zip(output_dict, out_paths):
         with open(out_path, "wb") as f:
+            print(out_path)
             pickle.dump(res, f, pickle.HIGHEST_PROTOCOL)
 
     count += len(images)
