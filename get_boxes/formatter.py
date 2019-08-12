@@ -6,7 +6,6 @@ from tqdm import tqdm as progressbar
 from PIL import Image
 import imagehash
 
-
 def resize(im, desired_size=256):
     old_size = im.shape[:2]  # old_size is in (height, width) format
     ratio = float(desired_size) / max(old_size)
@@ -50,11 +49,11 @@ def read_img(path):
 
 #####################
 
-orig_dir = "/Users/ofermagen/Coding/NLP_Project_Data/data/"
+orig_dir = "/specific/disk1/home/gamir/ofer/data/"
 assert os.path.isdir(orig_dir)
-json_file = orig_dir + "nlvr/nlvr2/data/train.json"
-imgs_dir = orig_dir + "unformatted_images/train"
-hash_file = orig_dir + "nlvr/nlvr2/util/hashes/train_hashes.json"
+json_file = orig_dir + "nlvr/nlvr2/data/test1.json"
+imgs_dir = orig_dir + "unformatted_images/test1/"
+hash_file = orig_dir + "nlvr/nlvr2/util/hashes/test1_hashes.json"
 synset2num_path = orig_dir + "/synset2num.json"
 
 DDIR = orig_dir + "pretraining_data_formatted/train"
@@ -122,6 +121,7 @@ for ID in progressbar(id2path):
 
     res_dict[ID] = path
     cv2.imwrite(path, img)
+
 with open(os.path.join(DDIR, "ID2path.json"), "w") as f:
     json.dump(res_dict, f)
 
