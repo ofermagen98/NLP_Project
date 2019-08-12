@@ -5,7 +5,7 @@ import shutil
 from Imagenet_class2name import D
 ssl._create_default_https_context = ssl._create_unverified_context
 
-SDIR = '/specific/disk1/home/gamir/ofer/data/test1/'
+SDIR = '/specific/disk1/home/gamir/ofer/data/object_boxes/test1/'
 IMG_DIR = '/specific/disk1/home/gamir/ofer/data/unformatted_images/test1/'
 HASH_FILE = "/specific/disk1/home/gamir/ofer/data/nlvr/nlvr2/util/hashes/test1_hashes.json"
 RDIR = '/home/joberant/home/ofermagen/pretrained_cnn_objects/test1/'
