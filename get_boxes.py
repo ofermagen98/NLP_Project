@@ -16,7 +16,7 @@ MODELS_DIR = '/specific/disk1/home/gamir/ofer/models'
 def path2output(p):
     name = os.path.basename(p)
     name = os.path.splitext(name)[0]
-    return os.path.join(RES_DIR,p+'.pickle')
+    return os.path.join(RES_DIR,name+'.pickle')
 
 def get_batches(paths, desired_size = 256, batch_size=16):
     color = [128, 128, 128]
@@ -127,7 +127,6 @@ for out_paths, images in get_batches(paths):
     output_dict = run_inference(images, detection_graph, GPU_DEVICE)
     print("took", time() - start)
 
-    out_paths = map(lambda p: os.path.join(RES_DIR,p), out_paths)
     for res, out_path in zip(output_dict, out_paths):
         with open(out_path, "wb") as f:
             print(out_path)
