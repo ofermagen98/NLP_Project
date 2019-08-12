@@ -127,7 +127,7 @@ for out_paths, images in get_batches(paths):
     output_dict = run_inference(images, detection_graph, GPU_DEVICE)
     print("took", time() - start)
 
-    out_paths = map(lambda p: os.path.join(RES_DIR,p))
+    out_paths = map(lambda p: os.path.join(RES_DIR,p), out_paths)
     for res, out_path in zip(output_dict, out_paths):
         with open(out_path, "wb") as f:
             pickle.dump(res, f, pickle.HIGHEST_PROTOCOL)
