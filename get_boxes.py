@@ -18,7 +18,7 @@ def path2output(p):
     name = os.path.splitext(name)[0]
     return os.path.join(RES_DIR,p+'.pickle')
 
-def get_batches(paths, desired_size = 256, batch_size=35):
+def get_batches(paths, desired_size = 256, batch_size=16):
     color = [128, 128, 128]
 
     images = []
