@@ -98,8 +98,7 @@ for path in objs:
         OBJ = pickle.load(f)
 
     ID = os.path.basename(path)
-    ID = os.path.splitext(ID)[0]
-    #ID = "-".join(ID.split("-")[:3])
+    ID = os.path.splitext(ID)[0] + ".png"
 
     img = id2path[ID]
     img = read_img(img)
