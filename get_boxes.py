@@ -1,6 +1,3 @@
-import sys
-sys.path.append("..")
-
 import numpy as np
 import os
 from utils import tensorflow as tf
