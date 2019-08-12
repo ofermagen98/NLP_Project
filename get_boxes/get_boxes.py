@@ -1,32 +1,67 @@
+import sys
+sys.path.append("..")
+
 import numpy as np
 import os
-import sys
-import tensorflow as tf
+from utils import tensorflow as tf
 from PIL import Image
 
-# import cv2
+import cv2
 
-from progressbar import progressbar
+from tqdm import tqdm as progressbar
 import json
 import pickle
 from time import time
 
-INDEX = 0
-if len(sys.argv) > 1:
-    INDEX = int(sys.argv[0])
-CONFIG_PATH = "/home/ofermagen/config.json"
-MODELS_DIR = "/home/ofermagen/models/"
-with open(CONFIG_PATH, "r") as f:
-    CONFIG = json.load(f)
-    OBJ = CONFIG["OBJS"][INDEX]
-    CONFIG.pop("OBJS", None)
+IMG_DIR = '/specific/disk1/home/gamir/ofer/data/unformatted_images/test1/'
+RES_DIR = '/specific/disk1/home/gamir/ofer/data/object_boxes/test1/'
+GPU_DEVICE = '/device:XLA_GPU:0'
+MODELS_DIR = '/specific/disk1/home/gamir/ofer/models'
+raise NotImplementedError
 
-print(CONFIG["DDIR"])
-assert os.path.isdir(CONFIG["SDIR"])
-assert os.path.isdir(CONFIG["DDIR"])
+def path2output(p):
+    name = os.path.basename(p)
+    name = os.path.splitext(name)[0]
+    return os.path.join(RES_DIR,p+'.pickle')
+
+def get_batches(paths, desired_size = 256, batch_size=35):
+    color = [128, 128, 128]
+
+    images = []
+    names = []
+    for path in progressbar(paths):
+        im = Image.open(path)
+        if im.mode != "RGB":
+            im = im.convert("RGB")
+        im = np.asarray(im)
+        im = cv2.cvtColor(im, cv2.COLOR_RGB2BGR)
+        old_size = im.shape[:2]  # old_size is in (height, width) format
+        ratio = float(desired_size) / max(old_size)
+        new_size = tuple([int(x * ratio) for x in old_size])
+        im = cv2.resize(im, (new_size[1], new_size[0]))
+
+        delta_w = desired_size - new_size[1]
+        delta_h = desired_size - new_size[0]
+        top, bottom = delta_h // 2, delta_h - (delta_h // 2)
+        left, right = delta_w // 2, delta_w - (delta_w // 2)
+
+        im = cv2.copyMakeBorder(im, top, bottom, left, right, cv2.BORDER_CONSTANT, value=color)
+        im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+
+        images.append(im)
+        names.append(path2output(path))
+
+        if len(images) > batch_size:
+            yield names, images
+            images = []
+            names = []
+    
+    if len(images) > 0:
+        yield names, images
+        images = []
+        names = []
 
 # This is needed since the notebook is stored in the object_detection folder.
-sys.path.append("..")
 MODEL_NAME = "faster_rcnn_inception_resnet_v2_atrous_oid_v4_2018_12_12"
 MODEL_PATH = os.path.join(MODELS_DIR, MODEL_NAME)
 PATH_TO_FROZEN_GRAPH = os.path.join(MODEL_PATH, "frozen_inference_graph.pb")
@@ -82,37 +117,26 @@ def run_inference(images, graph, device):
 
     return res
 
+non_existing = lambda p: not os.path.isfile(path2output(p))
+paths = os.listdir(IMG_DIR)
+paths = map(lambda p: os.path.join(IMG_DIR,p), paths)
+paths = filter(non_existing,paths)
+paths = list(paths)
 
-non_existing = lambda i: not os.path.isfile(
-    os.path.join(CONFIG["DDIR"], OBJ["out_paths"][i])
-)
-non_existing = list(filter(non_existing, range(len(OBJ["in_paths"]))))
-OBJ["in_paths"] = [OBJ["in_paths"][i] for i in non_existing]
-OBJ["out_paths"] = [OBJ["out_paths"][i] for i in non_existing]
 img_num = len(non_existing)
-
-# 36,40
-batch_size = 35
-in_paths = [OBJ["in_paths"][i : i + batch_size] for i in range(0, img_num, batch_size)]
-out_paths = [
-    OBJ["out_paths"][i : i + batch_size] for i in range(0, img_num, batch_size)
-]
-in_paths = progressbar(in_paths)
 count = 0
-
-for in_batch, out_batch in zip(in_paths, out_paths):
+# 36,40
+for out_paths, images in get_batches(paths):
     print("\nremaining", img_num - count)
     start = time()
-    imgs = [Image.open(os.path.join(CONFIG["SDIR"], path)) for path in in_batch]
-    imgs = np.stack(imgs)
-
     print("estimating")
-    output_dict = run_inference(imgs, detection_graph, OBJ["device"])
+    output_dict = run_inference(images, detection_graph, GPU_DEVICE)
+    print("took", time() - start)
 
-    for res, out_path in zip(output_dict, out_batch):
-        with open(os.path.join(CONFIG["DDIR"], out_path), "wb") as f:
+    out_paths = map(lambda p: os.path.join(RES_DIR,p))
+    for res, out_path in zip(output_dict, out_paths):
+        with open(out_path, "wb") as f:
             pickle.dump(res, f, pickle.HIGHEST_PROTOCOL)
 
-    print("took", time() - start)
-    count += len(in_batch)
+    count += len(images)
 
