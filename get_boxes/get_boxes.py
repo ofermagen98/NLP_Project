@@ -17,7 +17,6 @@ IMG_DIR = '/specific/disk1/home/gamir/ofer/data/unformatted_images/test1/'
 RES_DIR = '/specific/disk1/home/gamir/ofer/data/object_boxes/test1/'
 GPU_DEVICE = '/device:XLA_GPU:0'
 MODELS_DIR = '/specific/disk1/home/gamir/ofer/models'
-raise NotImplementedError
 
 def path2output(p):
     name = os.path.basename(p)
