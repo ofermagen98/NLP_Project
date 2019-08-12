@@ -10,8 +10,7 @@ paths = filter(lambda p: ".pickle" in p, paths)
 paths = map(lambda p: os.path.join(DIR, p), paths)
 paths = list(paths)
 
-print(paths[0])
-exit()
+
 def objectify(OBJ):
     res = dict()
     A = np.asarray([[0.0, 0.0, 1.0, 1.0]])
