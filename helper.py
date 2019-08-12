@@ -18,4 +18,4 @@ paths = list(paths)
 for path in paths:
     print(path)
     res = to_res_dir(path)
-    #os.rename(path, res)
+    os.rename(path, res)
