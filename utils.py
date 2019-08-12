@@ -8,7 +8,7 @@ import sys
 
 DROPOUT_BOOL = True
 DROPOUT_RATE = 0.6
-L2_REG = 8e-6
+L2_REG = 1e-5
 
 def smaple_images(dir, num, seed=1234):
     samples = []
