@@ -99,7 +99,6 @@ for path in objs:
 
     ID = os.path.basename(path)
     ID = os.path.splitext(ID)[0] + ".png"
-
     img = id2path[ID]
     img = read_img(img)
 
