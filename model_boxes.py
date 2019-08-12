@@ -52,7 +52,6 @@ def lr_schedualer(epoch, *a, **kw):
     frac = pow(2, -6 * x)
     return base * frac
 
-
 # defining model's inputs
 size = 30
 features_dim = 2048 + 4 + 1  # image embedding + box + score
