@@ -97,7 +97,11 @@ for path in objs:
     with open(path,'rb') as f:
         OBJ = pickle.load(f)
 
-    img = id2path[OBJ['ID']]
+    ID = os.path.basename(path)
+    ID = os.path.splitext(ID)[0]
+    ID = "-".join(ID.split("-")[:3])
+
+    img = id2path[ID]
     img = read_img(img)
 
     sub_images = []
@@ -145,7 +149,7 @@ for path in objs:
     features = np.concatenate([features,np.stack(boxes),scores],axis=-1)
 
     new_OBJ = dict()
-    new_OBJ['ID'] = OBJ['ID']
+    new_OBJ['ID'] = ID
     new_OBJ['features'] = features
     new_path = os.path.join(RDIR,os.path.basename(path))
 
