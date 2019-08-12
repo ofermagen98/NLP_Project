@@ -18,6 +18,7 @@ RES_DIR = '/specific/disk1/home/gamir/ofer/data/object_boxes/test1/'
 GPU_DEVICE = '/device:XLA_GPU:0'
 MODELS_DIR = '/specific/disk1/home/gamir/ofer/models'
 
+
 def path2output(p):
     name = os.path.basename(p)
     name = os.path.splitext(name)[0]
