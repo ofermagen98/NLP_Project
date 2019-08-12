@@ -13,6 +13,8 @@ paths = list(paths)
 
 def objectify(OBJ):
     res = dict()
+    print(OBJ["detection_boxes"].shape)
+    print(np.asarray([[0.0, 0.0, 1.0, 1.0]]).shape)
     res["scores"] = np.concatenate(
         [np.asarray([1.0]), OBJ["detection_scores"]], axis=-1
     )
@@ -20,7 +22,7 @@ def objectify(OBJ):
         [np.asarray([0]), OBJ["detection_classes"] + 1], axis=-1
     )
     res["boxes"] = np.concatenate(
-        [np.asarray([[0.0, 0.0, 1.0, 1.0]]), OBJ["detection_boxes"]], axis=-1
+        [, OBJ["detection_boxes"]], axis=-1
     )
     exit()
     return res
