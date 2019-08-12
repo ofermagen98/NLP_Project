@@ -16,5 +16,6 @@ paths = map(lambda p: os.path.join(IMG_DIR,p), paths)
 paths = list(paths)
 
 for path in paths:
+    print(path)
     res = to_res_dir(path)
     #os.rename(path, res)
