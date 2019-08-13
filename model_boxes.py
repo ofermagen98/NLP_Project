@@ -13,7 +13,11 @@ dev_data = (
     orig_dir + "nlvr/nlvr2/data/dev.json",
     orig_dir + "pretrained_cnn_objects/dev/",
 )
-model_path = "/specific/disk1/home/gamir/ofer/" + sys.argv[1] + "/model.h5"
+
+RES_DIR = "/specific/disk1/home/gamir/ofer/" + sys.argv[1]
+if not os.path.isdir(RES_DIR): os.mkdir(RES_DIR)
+model_path =  os.path.join(RES_DIR,"model.h5")
+history_path = os.path.join(RES_DIR,"metrics.json")
 
 if not os.path.isdir(os.path.dirname(model_path)): 
     os.mkdir(os.path.dirname(model_path))
@@ -126,7 +130,7 @@ checkpoint = ModelCheckpoint(
     filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
 )
 lrate = LearningRateScheduler(lr_schedualer)
-saver = HistorySaver("/specific/disk1/home/gamir/ofer/history/metrics.json")
+saver = HistorySaver(history_path)
 callbacks = [checkpoint, lrate, saver]
 
 # generators
