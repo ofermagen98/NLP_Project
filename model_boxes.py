@@ -138,6 +138,7 @@ print("creating generators")
 train_gen = DataGenerator(*train_data, batch_size=32)
 val_gen = DataGenerator(*dev_data, batch_size=32)
 
+
 # loading weights
 # training
 print("paramater number",params_number())
