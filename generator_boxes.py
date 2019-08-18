@@ -111,7 +111,7 @@ class DataGenerator(Sequence):
 
         OBJ = read_features(imgL, imgR)
         OBJ["label"] = int(ex["label"][0] == 'T')
-
+        OBJ["sent"] = sent
         OBJ["ID"] = ID
         OBJ["synset"] = ex["synset"]
         return OBJ
