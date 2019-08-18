@@ -1,7 +1,7 @@
 import os
 import sys
 import numpy as np
-
+from math import cos,pi
 assert len(sys.argv) > 2
 
 orig_dir = "/specific/netapp5/joberant/home/ofermagen/"
@@ -50,10 +50,10 @@ NUM_EPOCHS = 200
 
 def lr_schedualer(epoch, *a, **kw):
     a = 0.5e-4
-    b = 1e-4
-    step = 10
+    b = 1.5e-4
+    step = 25
     x = (epoch % step) / step
-    if (epoch % (2*step)) >= step: x = 1-x
+    x = cos(pi*x)
     x *= (b-a) 
     x += a
     return x
