@@ -16,7 +16,7 @@ dev_data = (
 
 RES_DIR = "/specific/disk1/home/gamir/ofer/" + sys.argv[1]
 if not os.path.isdir(RES_DIR): os.mkdir(RES_DIR)
-model_path =  os.path.join(RES_DIR,"model.h5")
+model_path =  os.path.join(RES_DIR,"model{epoch:08d}.h5")
 history_path = os.path.join(RES_DIR,"metrics.json")
 
 if not os.path.isdir(os.path.dirname(model_path)): 
@@ -46,16 +46,14 @@ from utils import HistorySaver, params_number
 from generator_boxes import DataGenerator
 
 NUM_EPOCHS = 200
-
+PERRIOD = 40
 
 def lr_schedualer(epoch, *a, **kw):
-    a = 0.5e-4
     b = 1.5e-4
-    step = 25
-    x = (epoch % step) / step
-    x = (1+cos(pi*x))/2
-    x *= (b-a) 
-    x += a
+    if epoch == 0: return b
+    epoch -= 1
+    x = (epoch % PERRIOD) / PERRIOD
+    x = b/2 * (1+cos(pi*x))
     return x
 
 # defining model's inputs
@@ -129,7 +127,7 @@ model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
 # callbacks
 checkpoint = ModelCheckpoint(
-    filepath=model_path, monitor="val_acc", verbose=1, save_best_only=True, mode="max"
+    filepath=model_path, verbose=1, mode="max",period=PERRIOD
 )
 lrate = LearningRateScheduler(lr_schedualer)
 saver = HistorySaver(history_path)
