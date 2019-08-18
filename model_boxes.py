@@ -53,7 +53,7 @@ def lr_schedualer(epoch, *a, **kw):
     b = 1.5e-4
     step = 25
     x = (epoch % step) / step
-    x = cos(pi*x)
+    x = (1+cos(pi*x))/2
     x *= (b-a) 
     x += a
     return x
