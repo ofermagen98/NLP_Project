@@ -49,7 +49,7 @@ NUM_EPOCHS = 200
 
 
 def lr_schedualer(epoch, *a, **kw):
-    if epoch > 20: return 1e-7
+    if epoch > 30: return 1e-7
     global NUM_EPOCHS
     base = 0.8e-4
     x = float(epoch) / NUM_EPOCHS
@@ -135,8 +135,8 @@ callbacks = [checkpoint, lrate, saver]
 
 # generators
 print("creating generators")
-train_gen = DataGenerator(*train_data, batch_size=32)
-val_gen = DataGenerator(*dev_data, batch_size=32)
+train_gen = DataGenerator(*train_data, batch_size=32,augment=True)
+val_gen = DataGenerator(*dev_data, batch_size=32,augment=False)
 
 
 # loading weights

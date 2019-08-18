@@ -7,6 +7,7 @@ import imagehash
 import numpy as np
 from tqdm import tqdm as progressbar
 from random import shuffle as _shuffle
+from random import randint
 import pickle
 import sys
 
@@ -62,13 +63,19 @@ def read_features(imgL, imgR, size=30):
     return OBJ
 
 
+
+RIGHT = 31
+LEFT = 91
+SWAPPER = {RIGHT:LEFT,LEFT:RIGHT}
+
 class DataGenerator(Sequence):
     """
     """
 
-    def __init__(self, json_file, ddir, batch_size=16, shuffle=True):
+    def __init__(self, json_file, ddir, batch_size=16, shuffle=True, augment=True):
         assert os.path.isdir(ddir)
         super(DataGenerator, self).__init__()
+        self.augment = augment
         self.ddir = ddir
         self.batch_size = batch_size
         self.examples = [json.loads(s) for s in open(json_file).readlines()]
@@ -95,10 +102,14 @@ class DataGenerator(Sequence):
         imgL = self.ddir + os.path.basename(imgL)
         imgR = self.ID2path[ID + "-img1.png"]
         imgR = self.ddir + os.path.basename(imgR)
+        sent = np.asarray(sent)
+
+        if self.augment and bool(randint(0,1)):
+            replace = lambda w: SWAPPER.get(w,w)
+            sent = list(map(replace,sent))
+            imgL,imgR = imgR,imgL
 
         OBJ = read_features(imgL, imgR)
-        OBJ["sent"] = np.asarray(sent)
-        #OBJ["label"] = [0.0,0.0]
         OBJ["label"] = int(ex["label"][0] == 'T')
 
         OBJ["ID"] = ID
