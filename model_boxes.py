@@ -49,7 +49,14 @@ NUM_EPOCHS = 200
 
 
 def lr_schedualer(epoch, *a, **kw):
-    return 0.72e-4
+    a = 0.5e-4
+    b = 1e-4
+    step = 10
+    x = (epoch % step) / step
+    if (epoch % (2*step)) >= step: x = 1-x
+    x *= (b-a) 
+    x += a
+    return x
 
 # defining model's inputs
 size = 30
