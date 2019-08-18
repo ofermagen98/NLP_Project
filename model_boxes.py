@@ -45,8 +45,8 @@ from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from utils import HistorySaver, params_number
 from generator_boxes import DataGenerator
 
-NUM_EPOCHS = 90
-PERRIOD = 15
+PERRIOD = 18
+NUM_EPOCHS = PERRIOD * 6
 
 def lr_schedualer(epoch, *a, **kw):
     b = 1.5e-4
