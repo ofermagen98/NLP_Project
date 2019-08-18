@@ -49,12 +49,7 @@ NUM_EPOCHS = 200
 
 
 def lr_schedualer(epoch, *a, **kw):
-    if epoch > 30: return 1e-7
-    global NUM_EPOCHS
-    base = 0.8e-4
-    x = float(epoch) / NUM_EPOCHS
-    frac = pow(2, -4 * x)
-    return base * frac
+    return 0.72e-4
 
 # defining model's inputs
 size = 30
