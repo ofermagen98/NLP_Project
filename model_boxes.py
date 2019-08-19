@@ -46,7 +46,6 @@ from utils import HistorySaver, params_number
 from generator_boxes import DataGenerator
 
 NUM_EPOCHS = 200
-
 def lr_schedualer(epoch, *a, **kw):
     b = 7.2e-4
     x = epoch / NUM_EPOCHS
