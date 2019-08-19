@@ -130,7 +130,7 @@ callbacks = [checkpoint, lrate, saver]
 
 # generators
 print("creating generators")
-train_gen = DataGenerator(*train_data, batch_size=32,augment=True)
+train_gen = DataGenerator(*train_data, batch_size=32,augment=False)
 val_gen = DataGenerator(*dev_data, batch_size=32,augment=False)
 
 
