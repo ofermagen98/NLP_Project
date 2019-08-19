@@ -47,7 +47,7 @@ from generator_boxes import DataGenerator
 
 NUM_EPOCHS = 200
 def lr_schedualer(epoch, *a, **kw):
-    b = 7.2e-4
+    b = 1.2e-4
     x = epoch / NUM_EPOCHS
     return b * exp(-4*x)
 
