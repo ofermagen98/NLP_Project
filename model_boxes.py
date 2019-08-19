@@ -1,7 +1,7 @@
 import os
 import sys
 import numpy as np
-from math import cos,pi
+from math import cos,pi,exp
 assert len(sys.argv) > 2
 
 orig_dir = "/specific/netapp5/joberant/home/ofermagen/"
@@ -45,19 +45,12 @@ from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from utils import HistorySaver, params_number
 from generator_boxes import DataGenerator
 
-PERRIOD = 15
-NUM_EPOCHS = PERRIOD * 12
+NUM_EPOCHS = 200
 
 def lr_schedualer(epoch, *a, **kw):
-    b = 1.2e-4
-    a = 0.4e-4
-    if epoch == 0: return b
-    epoch -= 1
-    x = (epoch % PERRIOD) / PERRIOD
-    if (epoch % (2*PERRIOD)) >= PERRIOD: 
-        x = 1-x
-    x = x * (b-a) + a
-    return x
+    b = 7.2e-4
+    x = epoch / NUM_EPOCHS
+    return b * exp(-4*x)
 
 # defining model's inputs
 size = 30
@@ -130,7 +123,7 @@ model.compile("adam", loss="binary_crossentropy", metrics=["accuracy"])
 
 # callbacks
 checkpoint = ModelCheckpoint(
-    filepath=model_path, verbose=1, mode="max",period=PERRIOD
+    filepath=model_path, monitor='val_loss', verbose=1, mode="max",save_best_only=True
 )
 lrate = LearningRateScheduler(lr_schedualer)
 saver = HistorySaver(history_path)
